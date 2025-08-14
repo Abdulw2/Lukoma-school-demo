@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+
+
+<head>
+    <title>Education Master Template</title>
+    <!-- META TAGS -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Education master is one of the best educational html template, it's suitable for all education websites like university,college,school,online education,tution center,distance education,computer education">
+    <meta name="keyword" content="education html template, university template, college template, school template, online education template, tution center template">
+    <!-- FAV ICON(BROWSER TAB ICON) -->
+    <link rel="shortcut icon" href="images/fav.ico" type="image/x-icon">
+    <!-- GOOGLE FONT -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700%7CJosefin+Sans:600,700" rel="stylesheet">
+    <!-- FONTAWESOME ICONS -->
+    <link rel="stylesheet" href="css/font-awesome.min.css">
+    <!-- ALL CSS FILES -->
+    <link href="css/materialize.css" rel="stylesheet">
+    <link href="css/bootstrap.css" rel="stylesheet" />
+    <link href="css/style.css" rel="stylesheet" />
+    <!-- RESPONSIVE.CSS ONLY FOR MOBILE AND TABLET VIEWS -->
+    <link href="css/style-mob.css" rel="stylesheet" />
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+	<script src="js/html5shiv.js"></script>
+	<script src="js/respond.min.js"></script>
+	<![endif]-->
+</head>
+
+<body>
+
+    <!-- MOBILE MENU -->
+    <section>
+        <div class="ed-mob-menu">
+            <div class="ed-mob-menu-con">
+                <div class="ed-mm-left">
+                    <div class="wed-logo">
+                        <a href="index.php"><img src="images/logo.png" alt="" />
+						</a>
+                    </div>
+                </div>
+                <div class="ed-mm-right">
+                    <div class="ed-mm-menu">
+                        <a href="#!" class="ed-micon"><i class="fa fa-bars"></i></a>
+                        <div class="ed-mm-inn">
+                            <a href="#!" class="ed-mi-close"><i class="fa fa-times"></i></a>
+                           
+                            
+                            <h4>User Account</h4>
+                            <ul>
+                                <li><a href="#!" data-toggle="modal" data-target="#modal1">Sign In</a></li>
+                                
+                            </ul>
+                            <h4>All Pages</h4>
+                            <ul>
+                                <li><a href="index.php">Home</a></li>
+                                <li><a href="about.php">About us</a></li>
+                               
+                               
+                                <li><a href="events.php">Events</a></li>
+                                
+                                <li><a href="contact-us.php">Contact us</a></li>
+                            </ul>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!--HEADER SECTION-->
+    <section>
+        <!-- TOP BAR -->
+        <div class="ed-top">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="ed-com-t1-left">
+                            <ul>
+                                <li><a href="#">Contact: Lake Road, Suite 180 Farmington Hills, U.S.A.</a>
+                                </li>
+                                <li><a href="#">Phone: +101-1231-1231</a>
+                                </li>
+                            </ul>
+                        </div>
+                        
+                        <div class="ed-com-t1-social">
+                            <ul>
+                                <li><a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+                                
+                                <li><a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- LOGO AND MENU SECTION -->
+        <div class="top-logo" data-spy="affix" data-offset-top="250">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="wed-logo">
+                            <a href="index.php"><img src="images/logo.png" alt="" />
+                            </a>
+                        </div>
+                        <div class="main-menu">
+                            <ul>
+                                <li><a href="index.php">Home</a>
+                                </li>
+                                <li><a href="about.php">About</a>
+                                </li>
+                                <li><a href="admission.php">Admission</a>
+                                </li>
+                                <li><a href="events.php">News & Events</a>
+                                </li>
+                                <li><a href="webmail.php">Webmail</a>
+                                </li>
+                                <li><a href="contact-us.php">Contact Us</a>
+                                </li>
+                                
+                                
+                               
+                                
+                               
+                               
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="all-drop-down-menu">
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="search-top">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="search-form">
+                            <form>
+                                <div class="sf-type">
+                                    <div class="sf-input">
+                                        <input type="text" id="sf-box" placeholder="Search">
+                                    </div>
+                                   
+                                </div>
+                                <div class="sf-submit">
+                                    <input type="submit" value="Search">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--END HEADER SECTION-->
+
+    <!--SECTION START-->
+    <section>
+        <div class="container com-sp pad-bot-70">
+            <div class="row">
+                <div class="cor about-sp">
+                    <div class="ed-about-tit">
+                        <div class="con-title">
+                            <h2>About <span> Us</span></h2>
+                            <p>Fusce id sem at ligula laoreet hendrerit venenatis sed purus. Ut pellentesque maximus lacus, nec pharetra augue.</p>
+                        </div>
+                    </div>
+                    <div class="ed-about-sec1">
+                        <div class="ed-advan">
+                        <p><strong>2.0 EXECUTIVE SUMMARY</strong></p>
+<p><strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </strong></p>
+<p>Alhidaayah foundation proposes for the establishment and operation of a model secondary school to ensure access of quality and balance Islamic and Secular education. The school will be distinct in:</p>
+<p>&nbsp;</p>
+<ol>
+<li>Providing quality education focusing on both Islamic and secular secondary education</li>
+<li>Ensuring quality and standards with consistent monitoring through periodical reports; providing educational material/manuals/ lesson planners along with curriculum and technical assistance by highly qualified staff.</li>
+<li>Providing free or subsidized education to the deprived children of members</li>
+</ol>
+<p>&nbsp;</p>
+<p>Initially the proposed school will start with the admission of few number of students and hiring of few teachers and progressively increasing every year until the target number is achieved.</p>
+<p>&nbsp;</p>
+
+<p><strong>3.0 BACKGROUND AND RATIONALE OF THE PROJECT</strong></p>
+<p>Access to quality and balanced education are major issues particularly in many Muslim communities in Uganda. There are limitations in the existing educational system. The public sector is inefficient with poor planning, implementation and monitoring mechanisms.&nbsp; This is also in a number of private institutions.</p>
+<p>&nbsp;</p>
+<p>The emergent consensus articulates that country&rsquo;s sustained economic growth can be achieved with higher emphasis on the quality of its human capital. This has necessitated that the stakeholders must intensify efforts to bring improvement in literacy rates and quality of education. The overall literacy rate in Uganda has been improving but at a very low pace and much slower among Muslim children given the economic and social marginalization of Muslims in the previous decades leading to the inability of Muslim parents to give their children proper education.</p>
+<p>&nbsp;</p>
+<p>There are millions of Muslim destitutes in the rural Uganda. One way to tackle the issue is the realization that the poverty alleviation through quality education at affordable cost is possible. We believe in changing the life of the poor Muslims through objective education to enable them to compete equitably with the rest of the society.</p>
+<p>&nbsp;</p>
+
+                        </div>
+                    </div>
+                    <div class="ed-about-sec1">
+                        <div class="col-md-6"></div>
+                        <div class="col-md-6"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--SECTION END-->
+
+
+   
+
+    <!--HEADER SECTION-->
+    <section class="wed-hom-footer">
+        <div class="container">
+            <!--<div class="row">
+				<div class="col-md-12">
+				<h4>About Wedding Planner</h4>
+				<p>There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum</p>
+				<p>more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text</p>
+				<p>Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old.</p>
+				<p></p>
+			  </div>
+			  </div>-->
+            <div class="row wed-foot-link">
+                
+                
+                <div class="col-md-4">
+                    <h4>HELP & SUPPORT</h4>
+                    <ul>
+                        <li><a href="#">24x7 Live help</a>
+                        </li>
+                        <li><a href="#">Contact us</a>
+                        </li>
+                        <li><a href="#">Feedback</a>
+                        </li>
+                        <li><a href="#">FAQs</a>
+                        </li>
+                        <li><a href="#">Safety Tips</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="row wed-foot-link-1">
+                <div class="col-md-4 foot-tc-mar-t-o">
+                    <h4>Get In Touch</h4>
+                    <p>Address: 28800 Orchard Lake Road, Suite 180 Farmington Hills, U.S.A.</p>
+                    <p>Phone: <a href="#!">+101-1231-4321</a></p>
+                    <p>Email: <a href="#!">info@edu.com</a></p>
+                </div>
+                <!-- google app links will be/were here -->
+                <div class="col-md-4">
+                    <h4>SOCIAL MEDIA</h4>
+                    <ul>
+                        <li><a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a>
+                        </li>
+                        <li><a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a>
+                        </li>
+                        
+                        <li><a href="#"><i class="fa fa-youtube" aria-hidden="true"></i></a>
+                        </li>
+                        <li><a href="#"><i class="fa fa-whatsapp" aria-hidden="true"></i></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--END HEADER SECTION-->
+
+    
+
+    <!--SECTION LOGIN, REGISTER AND FORGOT PASSWORD-->
+    <section>
+        <!-- LOGIN SECTION -->
+        <div id="modal1" class="modal fade" role="dialog">
+            <div class="log-in-pop">
+                <div class="log-in-pop-left">
+                    <h1>Hello...</h1>
+                    <p>Don't have an account? Create your account. It's take less then a minutes</p>
+                    <h4>Login with social media</h4>
+                    <ul>
+                        <li><a href="#"><i class="fa fa-facebook"></i> Facebook</a>
+                        </li>
+                        
+                        <li><a href="#"><i class="fa fa-twitter"></i> Twitter</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="log-in-pop-right">
+                    <a href="#" class="pop-close" data-dismiss="modal"><img src="images/cancel.png" alt="" />
+                    </a>
+                    <h4>Login</h4>
+                    <p>Don't have an account? Create your account. It's take less then a minutes</p>
+                    <form class="s12">
+                        <div>
+                            <div class="input-field s12">
+                                <input type="text" data-ng-model="name" class="validate">
+                                <label>User name</label>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="input-field s12">
+                                <input type="password" class="validate">
+                                <label>Password</label>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="s12 log-ch-bx">
+                                <p>
+                                    <input type="checkbox" id="test5" />
+                                    <label for="test5">Remember me</label>
+                                </p>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="input-field s4">
+                                <input type="submit" value="Login" class="waves-effect waves-light log-in-btn"> </div>
+                        </div>
+                        <div>
+                            <div class="input-field s12"> <a href="#" data-dismiss="modal" data-toggle="modal" data-target="#modal3">Forgot password</a> | <a href="#" data-dismiss="modal" data-toggle="modal" data-target="#modal2">Create a new account</a> </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- REGISTER SECTION -->
+        <div id="modal2" class="modal fade" role="dialog">
+            <div class="log-in-pop">
+                <div class="log-in-pop-left">
+                    <h1>Hello...</h1>
+                    <p>Don't have an account? Create your account. It's take less then a minutes</p>
+                    <h4>Login with social media</h4>
+                    <ul>
+                        <li><a href="#"><i class="fa fa-facebook"></i> Facebook</a>
+                        </li>
+                        
+                        <li><a href="#"><i class="fa fa-twitter"></i> Twitter</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="log-in-pop-right">
+                    <a href="#" class="pop-close" data-dismiss="modal"><img src="images/cancel.png" alt="" />
+                    </a>
+                    <h4>Create an Account</h4>
+                    <p>Don't have an account? Create your account. It's take less then a minutes</p>
+                    <form class="s12">
+                        <div>
+                            <div class="input-field s12">
+                                <input type="text" data-ng-model="name1" class="validate">
+                                <label>User name</label>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="input-field s12">
+                                <input type="email" class="validate">
+                                <label>Email id</label>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="input-field s12">
+                                <input type="password" class="validate">
+                                <label>Password</label>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="input-field s12">
+                                <input type="password" class="validate">
+                                <label>Confirm password</label>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="input-field s4">
+                                <input type="submit" value="Register" class="waves-effect waves-light log-in-btn"> </div>
+                        </div>
+                        <div>
+                            <div class="input-field s12"> <a href="#" data-dismiss="modal" data-toggle="modal" data-target="#modal1">Are you a already member ? Login</a> </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- FORGOT SECTION -->
+        <div id="modal3" class="modal fade" role="dialog">
+            <div class="log-in-pop">
+                <div class="log-in-pop-left">
+                    <h1>Hello... </h1>
+                    <p>Don't have an account? Create your account. It's take less then a minutes</p>
+                    <h4>Login with social media</h4>
+                    <ul>
+                        <li><a href="#"><i class="fa fa-facebook"></i> Facebook</a>
+                        </li>
+                        <li><a href="#"><i class="fa fa-google"></i> Google+</a>
+                        </li>
+                        <li><a href="#"><i class="fa fa-twitter"></i> Twitter</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="log-in-pop-right">
+                    <a href="#" class="pop-close" data-dismiss="modal"><img src="images/cancel.png" alt="" />
+                    </a>
+                    <h4>Forgot password</h4>
+                    <p>Don't have an account? Create your account. It's take less then a minutes</p>
+                    <form class="s12">
+                        <div>
+                            <div class="input-field s12">
+                                <input type="text" data-ng-model="name3" class="validate">
+                                <label>User name or email id</label>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="input-field s4">
+                                <input type="submit" value="Submit" class="waves-effect waves-light log-in-btn"> </div>
+                        </div>
+                        <div>
+                            <div class="input-field s12"> <a href="#" data-dismiss="modal" data-toggle="modal" data-target="#modal1">Are you a already member ? Login</a> | <a href="#" data-dismiss="modal" data-toggle="modal" data-target="#modal2">Create a new account</a> </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <div class="icon-float">
+            <ul>
+                <li><a href="#" class="sh">1k <br> Share</a> </li>
+                <li><a href="#" class="fb1"><i class="fa fa-facebook" aria-hidden="true"></i></a> </li>
+                
+                <li><a href="#" class="tw1"><i class="fa fa-twitter" aria-hidden="true"></i></a> </li>
+                <li><a href="#" class="li1"><i class="fa fa-linkedin" aria-hidden="true"></i></a> </li>
+                <li><a href="#" class="wa1"><i class="fa fa-whatsapp" aria-hidden="true"></i></a> </li>
+                <li><a href="#" class="sh1"><i class="fa fa-envelope-o" aria-hidden="true"></i></a> </li>
+            </ul>
+        </div>
+    </section>
+
+    <!--Import jQuery before materialize.js-->
+    <script src="js/main.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/materialize.min.js"></script>
+    <script src="js/custom.js"></script>
+</body>
+
+
+</html>
