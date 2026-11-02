@@ -291,6 +291,18 @@ fieldset.foods .hint { font-size: .8rem; color: var(--muted); }
 .csv-report h3 { font-size: 1rem; }
 .csv-report ul { gap: 4px; }
 .csv-report .lbl { font-weight: 700; }
+/* backtest */
+.bt-rows { display: grid; gap: 8px; }
+.bt-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.2fr) auto; gap: 8px; align-items: end; padding: 8px 10px; border: 1px solid var(--line); border-radius: 10px; }
+.bt-row label { display: grid; gap: 2px; font-size: .75rem; color: var(--muted); font-weight: 700; }
+.bt-row select { width: 100%; min-width: 0; padding: 8px; border: 1px solid var(--line); border-radius: 8px; background: var(--bg); font-family: var(--f-data); font-size: .9rem; color: var(--ink); }
+.bt-row.ex { border-style: dashed; }
+.bt-flag { background: var(--watch-t); border-left: 4px solid var(--watch); padding: 10px 12px; border-radius: 6px; font-weight: 700; }
+table.matrix th, table.matrix td { text-align: center; vertical-align: middle; }
+table.matrix td { font-size: .95rem; }
+table.matrix td b { display: block; font-family: var(--f-display); font-size: 1.6rem; line-height: 1.1; }
+table.matrix td.good { background: var(--normal-t); }
+table.matrix td.badc { background: var(--crisis-t); }
 code { font-family: var(--f-data); font-size: .85em; background: var(--bg); padding: 1px 5px; border-radius: 4px; overflow-wrap: anywhere; }
 .bars-lines { position: absolute; top: -4px; bottom: -4px; left: calc(7.5rem + 8px); right: calc(3.75rem + 8px); pointer-events: none; }
 .bars-lines i { position: absolute; top: 0; bottom: 0; width: 0; }
@@ -338,6 +350,7 @@ table.mini th, table.mini td { padding: 4px 8px; }
   .bars li { grid-template-columns: 6rem minmax(0, 1fr) 3.5rem; }
   .bars-lines { left: calc(6rem + 8px); right: calc(3.5rem + 8px); }
   .plan-row { grid-template-columns: minmax(0, 1fr) 7rem; }
+  .bt-row { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
   .cell { height: 32px; font-size: .6rem; }
   .cell small { display: none; }
   .year-row { grid-template-columns: minmax(0, 1fr); gap: 4px; }
@@ -705,6 +718,43 @@ table.mini th, table.mini td { padding: 4px 8px; }
         <div class="table-wrap"><table id="ruleTable"></table></div>
       </section>
     </div>
+
+    <section class="panel" id="backtest">
+      <div class="panel-head">
+        <h2>Backtest: did our alerts match FEWS NET?</h2>
+        <span class="pill" id="btBadge"></span>
+      </div>
+      <p>FEWS NET and the IPC give each area a food security phase for each season: <strong>1 Minimal, 2 Stressed, 3 Crisis, 4 Emergency, 5 Famine</strong>. Look up the phases for your region on <a href="https://fews.net/east-africa/uganda" target="_blank" rel="noopener">fews.net</a> and enter one row per season. The app then compares its own alerts with them, month by month.</p>
+      <p class="bt-flag" id="btFlag" hidden></p>
+      <div class="bt-rows" id="btRows"></div>
+      <div class="row-btns">
+        <button class="btn" type="button" id="btAdd">Add a season</button>
+        <button class="btn" type="button" id="btExample">Fill with example phases (made up)</button>
+        <button class="btn ghost" type="button" id="btClear">Clear the table</button>
+      </div>
+      <div class="two">
+        <div style="display:grid;gap:10px;min-width:0">
+          <h3>Food basket alerts compared with FEWS NET</h3>
+          <div class="table-wrap"><table class="matrix" id="btMatrix"></table></div>
+          <p id="btSentence"></p>
+        </div>
+        <div style="display:grid;gap:10px;min-width:0">
+          <h3>Maize only or food basket: which warned better?</h3>
+          <div class="table-wrap"><table id="btCompare"></table></div>
+          <p id="btVerdict"></p>
+        </div>
+      </div>
+      <details class="qa">
+        <summary>How we count hits, misses and false alarms</summary>
+        <ul style="margin-top:8px">
+          <li>We only count months that have a phase in the table.</li>
+          <li><strong>A real crisis</strong> means FEWS NET says Phase 3 (Crisis) or worse in that month or in the next 2 months. We look 2 months ahead because an early warning should come before the crisis, not during it.</li>
+          <li><strong>The app warned</strong> means the app was at Warning or Crisis that month.</li>
+          <li><strong>Hit:</strong> the app warned and a crisis came. <strong>Miss:</strong> a crisis came but the app did not warn. <strong>False alarm:</strong> the app warned but no crisis came. <strong>Correct normal:</strong> no warning and no crisis.</li>
+          <li>"Maize only" uses the same rules but watches maize alone, like version 4 of our app.</li>
+        </ul>
+      </details>
+    </section>
 
     <section class="panel">
       <h2>How the thresholds change the result</h2>
@@ -1083,6 +1133,8 @@ table.mini th, table.mini td { padding: 4px 8px; }
 
   let state = load() || { months: clone(SAMPLE), settings: clone(DEFAULTS), team: {}, checks: {}, visitors: 0 };
   state.team = state.team || {}; state.checks = state.checks || {}; state.visitors = state.visitors || 0;
+  state.backtest = state.backtest && Array.isArray(state.backtest.rows) ? state.backtest : { rows: [] };
+  state.backtest.rows = state.backtest.rows.filter(s => s && s.from >= 0 && s.to >= s.from && s.phase >= 0 && s.phase <= 5);
   let demo = null, selected = null, soundOn = false, audio = null;
 
   // =====================================================================
@@ -1189,6 +1241,34 @@ table.mini th, table.mini td { padding: 4px 8px; }
     return log;
   }
   // ====================== END OF THE SCORING RULES ======================
+
+  // ================= BACKTEST: compare our alerts with FEWS NET / IPC phases =================
+  // seasons: [{ from, to, phase }] where from and to are month numbers (see monthNo) and phase is 1 to 5.
+  const LEAD = 2;   // a warning is a hit if the crisis comes this month or within the next 2 months
+  function phaseByMonth(seasons) {
+    const map = {};
+    seasons.forEach(s => { if (s.phase >= 1) for (let k = s.from; k <= s.to; k++) map[k] = Math.max(map[k] || 0, s.phase); });
+    return map;
+  }
+  function backtest(rows, seasons) {
+    const phase = phaseByMonth(seasons);
+    const c = { hit: 0, miss: 0, falseAlarm: 0, normal: 0, months: [] };
+    rows.forEach(r => {
+      const no = monthNo(r);
+      if (!phase[no]) return;                                    // no phase entered: not counted
+      let crisis = false;
+      for (let k = 0; k <= LEAD; k++) if (phase[no + k] >= 3) crisis = true;   // Phase 3 or worse
+      const warned = r.score >= 2;                               // app at Warning or Crisis
+      const kind = warned ? (crisis ? 'hit' : 'falseAlarm') : (crisis ? 'miss' : 'normal');
+      c[kind]++;
+      c.months.push({ r, kind });
+    });
+    c.total = c.hit + c.miss + c.falseAlarm + c.normal;
+    return c;
+  }
+  // Made-up example phases so students can see how the backtest works. NOT real FEWS NET data.
+  const EXAMPLE_SEASONS = [[2024, 1, 2024, 4, 1], [2024, 5, 2024, 8, 1], [2024, 9, 2025, 0, 1], [2025, 1, 2025, 4, 2], [2025, 5, 2025, 8, 3], [2025, 9, 2026, 0, 2]]
+    .map(a => ({ from: a[0] * 12 + a[1], to: a[2] * 12 + a[3], phase: a[4], ex: true }));
 
   function nextOf(months) {
     if (!months.length) return { y: 2024, m: 0 };
@@ -1596,6 +1676,7 @@ table.mini th, table.mini td { padding: 4px 8px; }
     renderWorking(rows);
     renderRuleTable();
     renderSensitivity();
+    renderBacktest(rows);
     renderCalc();
   }
 
@@ -1667,6 +1748,100 @@ table.mini th, table.mini td { padding: 4px 8px; }
     });
     $('sensTable').innerHTML = h + '</tbody>';
   }
+
+  // ----- backtest table on the Testing tab -----
+  const PHASES = ['— not entered', '1 Minimal', '2 Stressed', '3 Crisis', '4 Emergency', '5 Famine'];
+  const noLabel = k => MONTHS[k % 12] + ' ' + Math.floor(k / 12);
+  const plural = (n, one, many) => n + ' ' + (n === 1 ? one : many);
+  let btSig = null;
+  function btRange() {
+    const bt = state.backtest, data = state.months.map(monthNo), rowsNo = bt.rows.flatMap(s => [s.from, s.to]);
+    if (!data.length && !rowsNo.length) return [2024 * 12, 2026 * 12 + 11];
+    const all = data.concat(rowsNo);
+    return [Math.min.apply(null, all), Math.max.apply(null, all.concat(data.length ? [Math.max.apply(null, data) + 3] : []))];
+  }
+  function renderBacktestRows() {
+    const bt = state.backtest, range = btRange();
+    btSig = range.join('-');
+    const opts = val => { let h = ''; for (let k = range[0]; k <= range[1]; k++) h += '<option value="' + k + '"' + (k === val ? ' selected' : '') + '>' + noLabel(k) + '</option>'; return h; };
+    $('btRows').innerHTML = bt.rows.length ? bt.rows.map((s, i) => '<div class="bt-row' + (s.ex ? ' ex' : '') + '" data-i="' + i + '">' +
+      '<label>From<select data-k="from" aria-label="Season ' + (i + 1) + ': first month">' + opts(s.from) + '</select></label>' +
+      '<label>To<select data-k="to" aria-label="Season ' + (i + 1) + ': last month">' + opts(s.to) + '</select></label>' +
+      '<label>IPC phase' + (s.ex ? ' (example)' : '') + '<select data-k="phase" aria-label="Season ' + (i + 1) + ': IPC phase">' + PHASES.map((p, k) => '<option value="' + k + '"' + (k === s.phase ? ' selected' : '') + '>' + p + '</option>').join('') + '</select></label>' +
+      '<button class="btn ghost" type="button" data-del="' + i + '" aria-label="Remove season ' + (i + 1) + '">Remove</button></div>').join('')
+      : '<p class="note">No seasons yet. Press "Add a season", or fill the table with made-up example phases to see how it works.</p>';
+  }
+  function renderBacktest(rows) {
+    const bt = state.backtest;
+    if (btSig !== btRange().join('-')) renderBacktestRows();
+    const exCount = bt.rows.filter(s => s.ex).length;
+    $('btFlag').hidden = !exCount;
+    $('btFlag').textContent = 'Example phases: ' + (exCount === bt.rows.length ? 'all the seasons are' : exCount + ' of ' + bt.rows.length + ' seasons are') + ' made up to show how the backtest works. They are not real FEWS NET data. Replace them with real phases before you present any result.';
+    const b = backtest(rows, bt.rows);
+    const mRows = analyseWith(state.months, maizeOnly(state.settings));
+    const m = backtest(mRows, bt.rows);
+    const badge = $('btBadge');
+    badge.textContent = !b.total ? 'No phases entered yet' : exCount ? 'Example phases only' : plural(b.hit, 'hit', 'hits') + ', ' + plural(b.miss, 'miss', 'misses') + ', ' + plural(b.falseAlarm, 'false alarm', 'false alarms');
+    badge.className = 'pill ' + (!b.total || exCount ? 'lv-watch' : 'lv-normal');
+    $('btMatrix').innerHTML = '<thead><tr><th></th><th>Crisis came<br>(Phase 3 or worse)</th><th>No crisis</th></tr></thead><tbody>' +
+      '<tr><th>App warned</th><td class="good"><b>' + b.hit + '</b>' + (b.hit === 1 ? 'hit' : 'hits') + '</td><td class="badc"><b>' + b.falseAlarm + '</b>' + (b.falseAlarm === 1 ? 'false alarm' : 'false alarms') + '</td></tr>' +
+      '<tr><th>App did not warn</th><td class="badc"><b>' + b.miss + '</b>' + (b.miss === 1 ? 'miss' : 'misses') + '</td><td class="good"><b>' + b.normal + '</b>correct normal</td></tr></tbody>';
+    $('btSentence').textContent = !b.total ? 'Enter at least one season with a phase to see how the alerts compare.' :
+      'Out of ' + plural(b.total, 'month', 'months') + ' with a phase, a crisis came (or was up to 2 months away) in ' + (b.hit + b.miss) + ': the app warned in ' + b.hit + ' of them and missed ' + b.miss + ', and in the ' + (b.falseAlarm + b.normal) + ' months with no crisis coming it gave ' + plural(b.falseAlarm, 'false alarm', 'false alarms') + '.';
+    $('btCompare').innerHTML = '<thead><tr><th></th><th class="r">Maize only</th><th class="r">Food basket</th></tr></thead><tbody>' +
+      [['Hits', 'hit'], ['Misses', 'miss'], ['False alarms', 'falseAlarm'], ['Correct normal', 'normal']].map(([t, k]) => '<tr><td>' + t + '</td><td class="r num">' + m[k] + '</td><td class="r num">' + b[k] + '</td></tr>').join('') + '</tbody>';
+    let v;
+    const hasMaize = state.months.some(mo => mo.foods.maize && mo.foods.maize.price > 0);
+    if (!b.total) v = 'Enter phases to compare the two.';
+    else if (!hasMaize) v = 'There are no maize prices in this data, so "maize only" cannot be compared.';
+    else {
+      const dh = b.hit - m.hit, df = b.falseAlarm - m.falseAlarm;
+      const parts = [];
+      if (dh) parts.push(plural(Math.abs(dh), dh > 0 ? 'more hit' : 'fewer hit', dh > 0 ? 'more hits' : 'fewer hits'));
+      if (df) parts.push(plural(Math.abs(df), df < 0 ? 'fewer false alarm' : 'more false alarm', df < 0 ? 'fewer false alarms' : 'more false alarms'));
+      if (!dh && !df) v = 'On this data, the food basket and maize only gave the same result. Tracking more foods did not improve the warnings here.';
+      else if (dh >= 0 && df <= 0) v = 'On this data, the food basket did better: ' + parts.join(' and ') + '.';
+      else if (dh <= 0 && df >= 0) v = 'On this data, the food basket did worse: ' + parts.join(' and ') + '. Say this honestly on your poster.';
+      else v = 'On this data it is a trade-off: the food basket had ' + parts.join(' but ') + '.';
+    }
+    const diff = rows.map((r, i) => ({ r, o: mRows[i] })).filter(d => d.r.score !== d.o.score);
+    if (diff.length && hasMaize) v += ' The two give different levels in ' + plural(diff.length, 'month', 'months') + ': ' + diff.slice(0, 6).map(d => label(d.r) + ' (maize only ' + d.o.level.name + ', basket ' + d.r.level.name + ')').join(', ') + (diff.length > 6 ? ' and more' : '') + '.';
+    $('btVerdict').innerHTML = (exCount && b.total ? '<strong>These phases are made-up examples, so this proves nothing yet.</strong> ' : '') + esc(v);
+  }
+  function btChanged() { save(); renderBacktest(analyse(state.months)); }
+  $('btRows').addEventListener('change', e => {
+    const row = e.target.closest('.bt-row'); if (!row) return;
+    const s = state.backtest.rows[+row.dataset.i];
+    s[e.target.dataset.k] = +e.target.value;
+    s.ex = false;
+    if (s.from > s.to) { const t = s.from; s.from = s.to; s.to = t; }
+    renderBacktestRows(); btChanged();
+  });
+  $('btRows').addEventListener('click', e => {
+    const del = e.target.closest('[data-del]'); if (!del) return;
+    state.backtest.rows.splice(+del.dataset.del, 1);
+    renderBacktestRows(); btChanged();
+    const next = $('btRows').querySelector('[data-del]'); (next || $('btAdd')).focus();
+  });
+  $('btAdd').onclick = () => {
+    const rows = state.backtest.rows, first = state.months.length ? monthNo(state.months[0]) : 2024 * 12;
+    const from = rows.length ? rows[rows.length - 1].to + 1 : first;
+    rows.push({ from, to: from + 3, phase: 0, ex: false });
+    renderBacktestRows(); btChanged();
+    const sels = $('btRows').querySelectorAll('select[data-k="phase"]'); if (sels.length) sels[sels.length - 1].focus();
+  };
+  $('btExample').onclick = () => {
+    if (state.backtest.rows.some(s => !s.ex)) { toast('Clear the table first, so you do not lose phases you typed in.'); return; }
+    state.backtest.rows = clone(EXAMPLE_SEASONS);
+    renderBacktestRows(); btChanged(); toast('Example phases added. They are made up, not real FEWS NET data.');
+  };
+  let btClearArmed = false;
+  $('btClear').onclick = () => {
+    if (!btClearArmed) { btClearArmed = true; $('btClear').textContent = 'Click again to clear every season'; setTimeout(() => { btClearArmed = false; $('btClear').textContent = 'Clear the table'; }, 4000); return; }
+    btClearArmed = false; $('btClear').textContent = 'Clear the table';
+    state.backtest.rows = [];
+    renderBacktestRows(); btChanged();
+  };
 
   function renderCalc() {
     const h = +$('cHouse').value || 0, l = +$('cLang').value || 1, a = +$('cAlerts').value || 0, p = +$('cPrice').value || 0;
