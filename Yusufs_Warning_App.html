@@ -13,17 +13,19 @@
   --bg: #F1F4EE;
   --surface: #FFFFFF;
   --ink: #17211B;
-  --muted: #586860;
+  --muted: #536259;
   --line: #D6DDD3;
   --accent: #2D6A4D;
   --accent-ink: #FFFFFF;
   --accent-t: #DCEBE2;
   --rain: #2C6CA3;
   --gold: #A86E10;
-  --normal: #2E8550; --normal-t: #DDEFE3;
-  --watch: #9A7500;  --watch-t: #FAF0C8;
-  --warning: #C85F0C; --warning-t: #FBE1C9;
-  --crisis: #C2302A; --crisis-t: #F7D4D1;
+  /* level colours darkened slightly in v5 so small text passes WCAG AA (4.5:1) */
+  --normal: #297647; --normal-t: #DDEFE3;
+  --watch: #886700;  --watch-t: #FAF0C8;
+  --warning: #A24D0A; --warning-t: #FBE1C9;
+  --crisis: #B22C27; --crisis-t: #F7D4D1;
+  --alert-ink: #FFFFFF;
   --shadow: 0 1px 2px rgba(23,33,27,.06), 0 8px 24px rgba(23,33,27,.06);
   --f-display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
   --f-body: "Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
@@ -37,6 +39,7 @@
     --watch: #E6C232; --watch-t: #39321A;
     --warning: #F2923F; --warning-t: #3D2918;
     --crisis: #F0625A; --crisis-t: #42201E;
+    --alert-ink: #0E1411;
     --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.25);
     color-scheme: dark;
   }
@@ -48,6 +51,7 @@
   --watch: #E6C232; --watch-t: #39321A;
   --warning: #F2923F; --warning-t: #3D2918;
   --crisis: #F0625A; --crisis-t: #42201E;
+  --alert-ink: #0E1411;
   --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.25);
   color-scheme: dark;
 }
@@ -77,6 +81,10 @@ button, input, select, textarea { font: inherit; color: inherit; }
 button { cursor: pointer; }
 :focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
 a { color: var(--accent); }
+.skip { position: absolute; left: 16px; top: -60px; z-index: 100; background: var(--accent); color: var(--accent-ink); border: 0; border-radius: 8px; padding: 10px 16px; font-weight: 700; }
+.skip:focus { top: 12px; }
+main:focus { outline: none; }
+.view-tools { display: flex; justify-content: flex-end; gap: 8px; flex-wrap: wrap; }
 
 /* top bar */
 .top { display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: center; justify-content: space-between; padding-block: 20px 0; }
@@ -93,8 +101,8 @@ a { color: var(--accent); }
 .btn:disabled { opacity: .5; cursor: default; }
 
 /* tabs */
-.tabs { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: var(--bg); padding-block: 8px; margin-inline: -4px; overflow-x: auto; scrollbar-width: thin; }
-.tabs ol { list-style: none; padding: 0 4px; margin: 0; display: flex; gap: 6px; width: max-content; }
+.tabs { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: var(--bg); padding-block: 8px; margin-inline: -6px; overflow-x: auto; scrollbar-width: thin; }
+.tabs ol { list-style: none; padding: 0 6px; margin: 0; display: flex; gap: 6px; width: max-content; }
 .tabs a { display: flex; flex-direction: column; gap: 0; text-decoration: none; color: var(--ink); padding: 8px 14px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface); font-weight: 700; font-size: .9rem; white-space: nowrap; }
 .tabs a small { font-weight: 400; font-size: .7rem; color: var(--muted); }
 .tabs a[aria-current="page"] { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
@@ -108,6 +116,9 @@ a { color: var(--accent); }
 .demo-text { font-weight: 700; }
 .demo-text span { font-weight: 400; opacity: .8; }
 .demo-caption { font-size: 1.05rem; border-top: 1px solid color-mix(in srgb, var(--bg) 25%, transparent); padding-top: 10px; }
+.demo :focus-visible { outline-color: var(--bg); }
+.demo-keys { font-size: .85rem; opacity: .9; }
+kbd { font-family: var(--f-data); font-size: .8rem; border: 1px solid currentColor; border-bottom-width: 2px; border-radius: 4px; padding: 0 5px; }
 
 /* hero status */
 .status { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); background: var(--surface); border-radius: 14px; box-shadow: var(--shadow); overflow: hidden; }
@@ -323,8 +334,8 @@ table.mini th, table.mini td { padding: 4px 8px; }
 /* alert overlay */
 .overlay { position: fixed; inset: 0; background: rgba(10,14,12,.55); display: grid; place-items: center; padding: 20px max(16px, env(safe-area-inset-right, 0px)) 20px max(16px, env(safe-area-inset-left, 0px)); z-index: 50; overflow-y: auto; }
 .alert-card { width: min(540px, 100%); background: var(--surface); border-radius: 16px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,.35); }
-.alert-top { background: var(--lvl); color: #fff; padding: 18px 22px; display: grid; gap: 4px; }
-.alert-top .eyebrow { color: rgba(255,255,255,.85); }
+.alert-top { background: var(--lvl); color: var(--alert-ink); padding: 18px 22px; display: grid; gap: 4px; }
+.alert-top .eyebrow { color: inherit; }
 .alert-top h2 { font-size: 1.8rem; }
 .alert-body { padding: 20px 22px; display: grid; gap: 14px; }
 .sms { background: var(--bg); border: 1px solid var(--line); border-radius: 12px 12px 12px 2px; padding: 10px 12px; font-size: .95rem; display: grid; gap: 4px; }
@@ -351,15 +362,55 @@ table.mini th, table.mini td { padding: 4px 8px; }
   .bars-lines { left: calc(6rem + 8px); right: calc(3.5rem + 8px); }
   .plan-row { grid-template-columns: minmax(0, 1fr) 7rem; }
   .bt-row { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  /* larger text on a phone: food name on its own line, then price and crop */
+  html.big .food-row { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 4px 8px; }
+  html.big .food-row label { grid-column: 1 / -1; }
+  html.big .food-head { display: none; }
+  html.big .bars li { grid-template-columns: 5.5rem minmax(0, 1fr) 3.5rem; }
+  html.big .bars-lines { left: calc(5.5rem + 8px); right: calc(3.5rem + 8px); }
   .cell { height: 32px; font-size: .6rem; }
   .cell small { display: none; }
   .year-row { grid-template-columns: minmax(0, 1fr); gap: 4px; }
   .people, .stem, .calc-grid, .choices { grid-template-columns: minmax(0, 1fr); }
 }
 @media (prefers-reduced-motion: reduce) { .pulse { animation: none; } }
+
+/* ===== PRINT: one tab per A4 page set, for the display board ===== */
+@media print {
+  @page { size: A4; margin: 12mm; }
+  :root:not([data-print-x]) {
+    --bg: #FFFFFF; --surface: #FFFFFF; --ink: #111111; --muted: #444444; --line: #BBBBBB;
+    --accent: #2D6A4D; --accent-ink: #FFFFFF; --accent-t: #E6F0EA; --rain: #2C6CA3; --gold: #A86E10;
+    --normal: #297647; --normal-t: #E3F2E8; --watch: #886700; --watch-t: #FBF3D5;
+    --warning: #A24D0A; --warning-t: #FCE7D4; --crisis: #B22C27; --crisis-t: #F9DEDC; --alert-ink: #FFFFFF;
+    color-scheme: light;
+  }
+  * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  html, html.big { font-size: 10.5pt; }
+  body { background: #fff; padding: 0; }
+  body::before, .top-actions, .tabs, .demo, .overlay, .toast, .view-tools, .skip, .row-btns, .bt-row button, footer .sources { display: none !important; }
+  .wrap, .view { gap: 10px; max-width: none; }
+  .top { padding: 0 0 6px; border-bottom: 2px solid var(--accent); }
+  .panel { box-shadow: none; border: 1px solid var(--line); padding: 12px 14px; gap: 10px; break-inside: auto; }
+  .two, .cols { display: block; }
+  .two > * + *, .cols > * + * { margin-top: 12px; }
+  h2, h3, .panel-head { break-after: avoid; }
+  tr, .working > div, details.qa, .bt-row, .result, .flow .step, blockquote, .fact, .stem > div, .value3 > div, .csv-report { break-inside: avoid; }
+  .table-wrap { overflow: visible; }
+  table.wide { min-width: 0; }
+  table.wide th, table.wide td { white-space: normal; }
+  th, td { padding: 4px 6px; }
+  pre.csv { white-space: pre-wrap; overflow: visible; }
+  a { color: inherit; text-decoration: none; }
+  select { appearance: none; -webkit-appearance: none; border: 1px solid var(--line); background: #fff; }
+  details.qa summary { list-style: none; }
+  details.qa summary::-webkit-details-marker { display: none; }
+  .stat { font-size: 1.6rem; }
+}
 </style>
 
 <div class="wrap">
+  <button class="skip" type="button" id="skipBtn">Skip to the content</button>
   <header class="top">
     <div class="brand">
       <svg class="mark" viewBox="0 0 40 40" aria-hidden="true">
@@ -374,7 +425,7 @@ table.mini th, table.mini td { padding: 4px 8px; }
       </div>
     </div>
     <div class="top-actions">
-      <button class="btn primary" id="demoBtn" type="button">Replay the 2025 drought</button>
+      <button class="btn primary" id="demoBtn" type="button" aria-keyshortcuts="R" title="Shortcut: R">Replay the 2025 drought</button>
       <button class="btn" id="soundBtn" type="button" aria-pressed="false">Alert sound: off</button>
       <button class="btn" id="bigBtn" type="button" aria-pressed="false">Larger text</button>
     </div>
@@ -397,16 +448,17 @@ table.mini th, table.mini td { padding: 4px 8px; }
     <div class="demo-row">
       <p class="demo-text" id="demoText"></p>
       <div class="row-btns">
-        <button class="btn primary" id="demoNext" type="button">Next month</button>
+        <button class="btn primary" id="demoNext" type="button" aria-keyshortcuts="N">Next month</button>
         <button class="btn" id="demoAuto" type="button">Auto-play</button>
         <button class="btn" id="demoExit" type="button">End demo</button>
       </div>
     </div>
     <p class="demo-caption" id="demoCaption"></p>
+    <p class="demo-keys">Presenter keys: <kbd>N</kbd> next month · <kbd>R</kbd> restart the replay · <kbd>Esc</kbd> close the alert</p>
   </div>
 
   <!-- ===================== EARLY WARNING (live tool) ===================== -->
-  <main class="view" id="view-dashboard">
+  <main class="view" id="view-dashboard" tabindex="-1">
     <section class="status" id="status" aria-live="polite"></section>
 
     <section class="panel">
@@ -579,7 +631,7 @@ table.mini th, table.mini td { padding: 4px 8px; }
   </main>
 
   <!-- ===================== THE PROBLEM ===================== -->
-  <main class="view" id="view-problem" hidden>
+  <main class="view" id="view-problem" tabindex="-1" hidden>
     <section class="panel">
       <span class="crit">Problem and Zero Hunger relevance</span>
       <h2>Hunger arrives slowly, then all at once</h2>
@@ -621,7 +673,8 @@ table.mini th, table.mini td { padding: 4px 8px; }
   </main>
 
   <!-- ===================== HOW IT WORKS ===================== -->
-  <main class="view" id="view-how-it-works" hidden>
+  <main class="view" id="view-how-it-works" tabindex="-1" hidden>
+    <div class="view-tools"><button class="btn" type="button" data-print>Print this page</button></div>
     <section class="panel">
       <span class="crit">Solution and innovation</span>
       <h2>What makes Yusuf's Warning useful</h2>
@@ -761,7 +814,8 @@ table.mini th, table.mini td { padding: 4px 8px; }
   </main>
 
   <!-- ===================== TESTING ===================== -->
-  <main class="view" id="view-testing" hidden>
+  <main class="view" id="view-testing" tabindex="-1" hidden>
+    <div class="view-tools"><button class="btn" type="button" data-print>Print this page</button></div>
     <section class="panel">
       <span class="crit">Testing and improvement</span>
       <div class="panel-head">
@@ -837,7 +891,7 @@ table.mini th, table.mini td { padding: 4px 8px; }
           <li><span class="v">v2</span><span>Web app: works offline, live charts, drought replay for demonstrations.</span></li>
           <li><span class="v">v3</span><span>Price compared with the same month last year. Symbols added next to colours for colour-blind visitors.</span></li>
           <li><span class="v">v4</span><span>Short SMS alert, real-data import, automatic tests and this testing page.</span></li>
-          <li><span class="v">v5</span><span>Food basket: seven local foods instead of maize only, region presets, each food with its own unit and crop condition.</span></li>
+          <li><span class="v">v5</span><span>Food basket: seven local foods instead of maize only, region presets, each food with its own unit and crop condition. A CSV checker for real data, a backtest against FEWS NET phases, 35 automatic tests, presenter keys and printable pages.</span></li>
         </ol>
       </section>
       <section class="panel">
@@ -857,7 +911,7 @@ table.mini th, table.mini td { padding: 4px 8px; }
   </main>
 
   <!-- ===================== RUNNING IT ===================== -->
-  <main class="view" id="view-running-costs" hidden>
+  <main class="view" id="view-running-costs" tabindex="-1" hidden>
     <section class="panel">
       <span class="crit">Business perspective and sustainability</span>
       <h2>Who uses it</h2>
@@ -922,7 +976,8 @@ table.mini th, table.mini td { padding: 4px 8px; }
   </main>
 
   <!-- ===================== ISLAMIC PERSPECTIVE ===================== -->
-  <main class="view" id="view-faith" hidden>
+  <main class="view" id="view-faith" tabindex="-1" hidden>
+    <div class="view-tools"><button class="btn" type="button" data-print>Print this page</button></div>
     <section class="panel">
       <span class="crit">Islamic perspective</span>
       <h2>Feeding others and avoiding waste</h2>
@@ -968,7 +1023,7 @@ table.mini th, table.mini td { padding: 4px 8px; }
   </main>
 
   <!-- ===================== VISITOR CHALLENGE ===================== -->
-  <main class="view" id="view-challenge" hidden>
+  <main class="view" id="view-challenge" tabindex="-1" hidden>
     <section class="panel">
       <div class="panel-head">
         <h2>Can you spot a famine early?</h2>
@@ -983,11 +1038,12 @@ table.mini th, table.mini td { padding: 4px 8px; }
         <button class="btn" type="button" id="chRestart">Start again for a new visitor</button>
       </div>
       <p class="note" id="chVisitors"></p>
+      <p class="note">The challenge goes back to question 1 for the next visitor after 60 seconds with no taps.</p>
     </section>
   </main>
 
   <!-- ===================== TEAM ===================== -->
-  <main class="view" id="view-team" hidden>
+  <main class="view" id="view-team" tabindex="-1" hidden>
     <section class="panel">
       <span class="crit">Teamwork and stall presentation</span>
       <h2>Our team</h2>
@@ -1518,6 +1574,9 @@ table.mini th, table.mini td { padding: 4px 8px; }
   }
 
   // ----- charts (drawn as SVG by our own code, no library) -----
+  // On phones the chart is drawn narrower, so its labels are not shrunk too small.
+  const narrowMq = window.matchMedia ? window.matchMedia('(max-width: 520px)') : null;
+  const chartW = () => (narrowMq && narrowMq.matches ? 360 : 640);
   function niceMax(v) {
     if (!(v > 0)) return 10;
     const p = Math.pow(10, Math.floor(Math.log10(v))), f = v / p;
@@ -1530,7 +1589,7 @@ table.mini th, table.mini td { padding: 4px 8px; }
   }
   function chart(rows, aKey, bKey, cls) {
     if (!rows.length) return '<p class="note">No data yet.</p>';
-    const W = 640, H = 230, L = 54, R = 28, T = 12, B = 30;
+    const W = chartW(), H = 230, L = 54, R = 28, T = 12, B = 30;
     const vals = rows.flatMap(r => [r[aKey], r[bKey]]).filter(v => v !== null && !isNaN(v));
     const max = niceMax(Math.max.apply(null, vals) * 1.05);
     const iw = W - L - R, ih = H - T - B;
@@ -1553,7 +1612,8 @@ table.mini th, table.mini td { padding: 4px 8px; }
     return s + '</svg>';
   }
   function xLabels(rows, x, H) {
-    const every = rows.length > 12 ? 3 : 1;
+    const narrow = chartW() < 640;
+    const every = rows.length > 12 ? (narrow ? 6 : 3) : (narrow && rows.length > 6 ? 2 : 1);
     let s = '';
     rows.forEach((r, i) => { if (i % every === 0 || i === rows.length - 1) s += '<text x="' + x(i) + '" y="' + (H - 10) + '" text-anchor="middle">' + short(r) + '</text>'; });
     return s;
@@ -1566,7 +1626,7 @@ table.mini th, table.mini td { padding: 4px 8px; }
   // Line chart of % change: thick line = basket average, thin grey lines = each food.
   function pctChart(rows) {
     if (!rows.length) return '<p class="note">No data yet.</p>';
-    const W = 640, H = 230, L = 54, R = 28, T = 12, B = 30, pt = state.settings.priceT;
+    const W = chartW(), H = 230, L = 54, R = 28, T = 12, B = 30, pt = state.settings.priceT;
     const vals = [0, pt];
     rows.forEach(r => { if (r.basket !== null) vals.push(r.basket); r.items.forEach(it => { if (it.change !== null) vals.push(it.change); }); });
     const step = niceMax((Math.max.apply(null, vals) - Math.min.apply(null, vals)) / 4 || 0.1);
@@ -1666,10 +1726,17 @@ table.mini th, table.mini td { padding: 4px 8px; }
     $('overlay').hidden = false;
     top.classList.remove('pulse'); void top.offsetWidth; top.classList.add('pulse');
     beep(r.score);
+    if ($('overlay').contains(document.activeElement) === false) lastFocus = document.activeElement;
     $('closeAlert').focus();
     if (demo && demo.timer) stopAuto();
   }
-  function closeAlert() { $('overlay').hidden = true; }
+  let lastFocus = null;
+  function closeAlert() {
+    if ($('overlay').hidden) return;
+    $('overlay').hidden = true;
+    if (lastFocus && document.contains(lastFocus) && lastFocus.offsetParent !== null) lastFocus.focus();
+    lastFocus = null;
+  }
 
   function beep(score) {
     if (!soundOn || !audio) return;
@@ -2132,10 +2199,18 @@ table.mini th, table.mini td { padding: 4px 8px; }
   }
   function renderVisitors() { $('chVisitors').textContent = state.visitors + (state.visitors === 1 ? ' visitor has' : ' visitors have') + ' completed the challenge on this device.'; }
   $('chNext').onclick = () => { ch.i++; ch.picked = false; renderChallenge(); };
+  // Go back to question 1 for the next visitor after 60 seconds with no taps.
+  const CH_IDLE_MS = 60000;
+  let chTimer = null;
+  function chTouched() {
+    clearTimeout(chTimer);
+    if (ch.i > 0 || ch.picked) chTimer = setTimeout(() => { ch = { i: 0, score: 0, picked: false }; renderChallenge(); }, CH_IDLE_MS);
+  }
+  ['click', 'keydown'].forEach(ev => $('view-challenge').addEventListener(ev, () => setTimeout(chTouched, 0)));
   $('chRestart').onclick = () => { ch = { i: 0, score: 0, picked: false }; renderChallenge(); };
 
   // ================= TEAM =================
-  const CHECKS = ['Poster has the title, SDG 2 logo and Surah Yusuf 12:47', 'Flowchart and a worked example printed large', 'Testing results and limitations on the board', 'App open on the laptop, demo reset', 'Offline copy on a second device and a USB stick', 'Printed screenshots in case the power fails', 'Laptop charged, charger and extension cable', 'Both of us can explain every part', 'Practised the judges\' questions at least 5 times'];
+  const CHECKS = ['Poster has the title, SDG 2 logo and Surah Yusuf 12:47', 'Flowchart and a worked example printed large', 'Testing results and limitations on the board', 'App open on the laptop, demo reset', 'Offline copy on a second device and a USB stick', 'Printed screenshots in case the power fails', 'Laptop charged, charger and extension cable', 'Both of us can explain every part', 'Practised the judges\' questions at least 5 times', 'Printed the How it works, Testing and Islamic perspective tabs (Print this page button)'];
   const QA = [
     ['Is the data real?', 'The drought replay uses made-up (illustrative) rainfall and prices for seven foods, and it is labelled. The app can load real data from WFP and CHIRPS, and it shows the source under the charts.'],
     ['Why track several foods, not just maize?', 'When one food gets expensive, families switch to another. Watching only maize can miss hunger when the main food of a region gets expensive, or exaggerate it when only maize rises.'],
@@ -2454,7 +2529,38 @@ table.mini th, table.mini td { padding: 4px 8px; }
   $('demoExit').onclick = endDemo;
   $('closeAlert').onclick = closeAlert;
   $('overlay').addEventListener('click', e => { if (e.target === $('overlay')) closeAlert(); });
-  document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('overlay').hidden) closeAlert(); });
+  // Presenter keys: N = next month in the replay, R = restart the replay, Esc = close the alert.
+  document.addEventListener('keydown', e => {
+    const overlayOpen = !$('overlay').hidden;
+    if (e.key === 'Escape' && overlayOpen) { e.preventDefault(); closeAlert(); return; }
+    if (e.key === 'Tab' && overlayOpen) {
+      // keep keyboard focus inside the alert while it is open
+      const f = Array.from($('overlay').querySelectorAll('button, textarea')).filter(el => !el.hidden && el.offsetParent !== null);
+      if (!f.length) return;
+      const i = f.indexOf(document.activeElement);
+      if (e.shiftKey && i <= 0) { e.preventDefault(); f[f.length - 1].focus(); }
+      else if (!e.shiftKey && (i === f.length - 1 || i < 0)) { e.preventDefault(); f[0].focus(); }
+      return;
+    }
+    if (e.ctrlKey || e.metaKey || e.altKey || e.repeat) return;
+    const t = e.target;
+    if (t && (t.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName))) return;
+    const k = (e.key || '').toLowerCase();
+    if (k === 'n') {
+      e.preventDefault();
+      if (!demo) toast('Press R to start the drought replay first.');
+      else if (!demo.queue.length) { closeAlert(); toast('All months replayed. Press R to start again.'); }
+      else demoNext();
+    } else if (k === 'r') {
+      e.preventDefault(); startDemo(); toast('Replay restarted. Press N for the next month.');
+    }
+  });
+  $('skipBtn').onclick = () => { const v = document.querySelector('main.view:not([hidden])'); if (v) v.focus(); };
+  // Print buttons. Question answers are opened while printing so they appear on paper.
+  document.querySelectorAll('[data-print]').forEach(b => b.addEventListener('click', () => window.print()));
+  let openedForPrint = [];
+  window.addEventListener('beforeprint', () => { openedForPrint = Array.from(document.querySelectorAll('main:not([hidden]) details:not([open])')); openedForPrint.forEach(d => { d.open = true; }); });
+  window.addEventListener('afterprint', () => { openedForPrint.forEach(d => { d.open = false; }); openedForPrint = []; });
   $('copyBtn').onclick = () => {
     const text = $('alertText').value;
     const fallback = () => { const ta = $('alertText'); ta.hidden = false; ta.focus(); ta.select(); $('copyBtn').textContent = 'Select the text and copy it'; };
@@ -2487,6 +2593,7 @@ table.mini th, table.mini td { padding: 4px 8px; }
     });
   }
   window.addEventListener('hashchange', () => { route(); window.scrollTo({ top: 0 }); });
+  if (narrowMq) { const redraw = () => render(); if (narrowMq.addEventListener) narrowMq.addEventListener('change', redraw); else if (narrowMq.addListener) narrowMq.addListener(redraw); }
 
   initSettings();
   initTeam();
