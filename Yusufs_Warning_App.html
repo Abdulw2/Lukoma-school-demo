@@ -683,6 +683,72 @@ table.mini th, table.mini td { padding: 4px 8px; }
       <div class="working" id="working"></div>
     </section>
 
+    <section class="panel" id="aboutCode">
+      <h2>About the code</h2>
+      <p class="lead">The whole app is one HTML file: HTML builds the page, CSS styles it, and JavaScript does the thinking. It uses no libraries and no server, so it works offline.</p>
+      <div class="two">
+        <div style="display:grid;gap:10px;min-width:0">
+          <h3>The parts of the code</h3>
+          <p class="note">Open the file in a text editor and search for these headings.</p>
+          <div class="table-wrap"><table class="mini">
+            <thead><tr><th>Heading in the code</th><th>What it does</th></tr></thead>
+            <tbody>
+              <tr><td><code>THE FOODS WE CAN TRACK</code></td><td>The seven foods, their units, and the region presets.</td></tr>
+              <tr><td><code>ILLUSTRATIVE SAMPLE DATA</code></td><td>The made-up drought used in the replay.</td></tr>
+              <tr><td><code>SAVED DATA</code></td><td>Saves everything in this browser (localStorage) and upgrades old maize-only saves.</td></tr>
+              <tr><td><code>THE SCORING RULES</code></td><td>The three signs and the alert rule. This is the brain of the app.</td></tr>
+              <tr><td><code>BACKTEST</code></td><td>Compares our alerts with FEWS NET phases.</td></tr>
+              <tr><td><code>RENDERING</code></td><td>Draws the screen: the status, the month strip, the table and the charts.</td></tr>
+              <tr><td><code>ALERTS AND SMS</code></td><td>Shows the alert and writes an SMS of 160 characters or fewer.</td></tr>
+              <tr><td><code>DEMO MODE</code></td><td>Replays the drought one month at a time.</td></tr>
+              <tr><td><code>AUTOMATIC TESTS</code></td><td>Feeds made-up months into the scoring rules and checks the answers.</td></tr>
+              <tr><td><code>DATA IMPORT</code></td><td>Reads a CSV file and checks every row.</td></tr>
+            </tbody>
+          </table></div>
+        </div>
+        <div style="display:grid;gap:10px;min-width:0">
+          <h3>How one month is stored</h3>
+<pre class="csv">{ y: 2025, m: 3, rain: 110,
+  foods: {
+    maize: { price: 1300, unit: 'kg', crop: 'Fair' },
+    beans: { price: 4650, unit: 'kg', crop: 'Fair' },
+    matooke: { price: 23900, unit: 'bunch', crop: 'Fair' }
+  } }</pre>
+          <p class="note"><code>m: 3</code> means April, because JavaScript counts from 0 (January is 0). To find the same month last year, the code turns each month into one number, <code>year × 12 + month</code>, and subtracts 12.</p>
+        </div>
+      </div>
+      <h3>Worked example: April 2025 with three foods</h3>
+      <p class="note">Illustrative sample data, basket of maize, beans and cassava, main staple maize. An automatic test checks that the code gives these same numbers.</p>
+      <div class="working">
+        <div><p><strong>Rain:</strong> 110 mm. Normal for April is 175 mm.<br><span class="calc">80% × 175 = 140. Is 110 &lt; 140? Yes → 1 point</span></p></div>
+        <div><div style="display:grid;gap:6px"><p><strong>Prices:</strong> each food compared with April 2024, in the same unit.</p>
+          <div class="table-wrap"><table class="mini">
+            <thead><tr><th>Food</th><th class="r">Apr 2025</th><th class="r">Apr 2024</th><th class="r">Change</th></tr></thead>
+            <tbody>
+              <tr><td>Maize</td><td class="r num">1,300</td><td class="r num">1,060</td><td class="r num">(1,300 − 1,060) ÷ 1,060 = +22.6%</td></tr>
+              <tr><td>Beans</td><td class="r num">4,650</td><td class="r num">3,750</td><td class="r num">(4,650 − 3,750) ÷ 3,750 = +24.0%</td></tr>
+              <tr><td>Cassava</td><td class="r num">1,280</td><td class="r num">1,050</td><td class="r num">(1,280 − 1,050) ÷ 1,050 = +21.9%</td></tr>
+            </tbody>
+          </table></div>
+          <p><span class="calc">Basket = (22.6 + 24.0 + 21.9) ÷ 3 = 22.8%. Is 22.8% &gt; 20%? Yes → 1 point</span></p></div></div>
+        <div><p><strong>Crops:</strong> maize Fair, beans Fair, cassava Good. 0 of 3 Poor.<br><span class="calc">Is 0 ≥ 1.5 (half of 3)? No. Is maize (main staple) Poor? No → 0 points</span></p></div>
+        <div><p><strong>Total:</strong> <span class="calc">1 + 1 + 0 = 2</span> → <span class="pill lv-warning">!! Warning</span>. March 2025 was Watch, so the level rose to Warning and an alert is sent. Beans rose fastest, so the SMS names beans.</p></div>
+      </div>
+      <h3>10 questions judges could ask about the code</h3>
+      <div>
+        <details class="qa"><summary>1. Which languages did you use, and why no libraries?</summary><p>HTML for the page, CSS for the look, JavaScript for the logic. With no libraries, everything is in one file that works offline and that we can explain line by line.</p></details>
+        <details class="qa"><summary>2. Where is the data saved? Is it sent anywhere?</summary><p>It is saved in the browser on this device using localStorage. Nothing is sent to a server. To back it up, we press "Copy current data as CSV".</p></details>
+        <details class="qa"><summary>3. Where in the code is the alert level decided?</summary><p>In the section called THE SCORING RULES. The function <code>analyseWith</code> adds up <code>rainSign</code>, <code>priceSign</code> and <code>cropSign</code> to get a score from 0 to 3, then picks Normal, Watch, Warning or Crisis.</p></details>
+        <details class="qa"><summary>4. How does the code find the same month last year?</summary><p>It turns each month into one number: year × 12 + month. April 2025 is 2025 × 12 + 3 = 24303. The same month last year is 24303 − 12 = 24291, which is April 2024.</p></details>
+        <details class="qa"><summary>5. How can you average a price per kg and a price per bunch?</summary><p>We never average prices. Each food is compared only with itself in the same unit, which gives a percentage change. Percentages have no units, so we can average them. If a food's unit changed, the code will not compare the old and new prices.</p></details>
+        <details class="qa"><summary>6. What happens if a food has no price for last year?</summary><p>The code compares it with the average of its 3 months before. If those are missing too, that food is left out of the basket this month. There are automatic tests for both cases.</p></details>
+        <details class="qa"><summary>7. Why is 80 mm not a warning sign when the limit is 80 mm?</summary><p>The rule uses "less than" (<code>&lt;</code>), not "less than or equal". Rain exactly at the limit is not a warning sign. We test exactly at the limit and just below it.</p></details>
+        <details class="qa"><summary>8. Why do you round to one decimal place?</summary><p>So that the code gets the same answer as a person working it out by hand. Computers also store some decimals slightly wrong (0.1 + 0.2 gives 0.30000000000000004), and rounding stops that tiny error from changing a result.</p></details>
+        <details class="qa"><summary>9. Why doesn't the app send an alert every month that is at Warning?</summary><p>The function <code>buildLog</code> only sends an alert when the level rises and reaches Warning or Crisis. If people got the same alert every month, they would stop paying attention.</p></details>
+        <details class="qa"><summary>10. How do you know the code works?</summary><p>The Testing tab runs <span id="testCount">the</span> automatic tests through the same scoring functions every time the app opens, including edge cases like values exactly at the limit. We also compare our alerts with FEWS NET phases in the backtest.</p></details>
+      </div>
+    </section>
+
     <section class="panel">
       <h2>The STEM inside the project</h2>
       <div class="stem">
@@ -1004,6 +1070,19 @@ table.mini th, table.mini td { padding: 4px 8px; }
 <div class="toast" id="toast" hidden></div>
 
 <script>
+// =====================================================================
+//  YUSUF'S WARNING: how this code is organised (search for the headings)
+//   THE FOODS WE CAN TRACK ...... the seven foods, units, region presets
+//   ILLUSTRATIVE SAMPLE DATA .... made-up drought for the replay
+//   SAVED DATA .................. saving in the browser, upgrading old saves
+//   THE SCORING RULES ........... the three signs and the alert rule (the brain)
+//   BACKTEST .................... comparing our alerts with FEWS NET phases
+//   RENDERING ................... drawing the screen and the charts
+//   ALERTS AND SMS .............. the alert card and the 160-character SMS
+//   DEMO MODE ................... the drought replay and presenter keys
+//   AUTOMATIC TESTS ............. checks that the rules give the right answers
+//   DATA IMPORT ................. reading and checking a CSV file
+// =====================================================================
 (function () {
   'use strict';
   const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
@@ -1201,23 +1280,30 @@ table.mini th, table.mini td { padding: 4px 8px; }
   }
 
   // SCORE EVERY MONTH: add the three signs. 0 Normal, 1 Watch, 2 Warning, 3 Crisis.
+  // months = the data, s = the settings (limits, normal rain, which foods to track).
   function analyseWith(months, s, rule) {
+    // A quick way to find any month by its number (used for "last year").
     const byNo = {};
     months.forEach(mo => { byNo[monthNo(mo)] = mo; });
     const tracked = FOODS.filter(f => s.foods[f.id] && s.foods[f.id].on);
     return months.map(mo => {
+      // Sign 1: rain
       const normal = s.normals[mo.m];
       const rain = rainSign(mo.rain, normal, s.rainT);
-      // one item for each tracked food that has a price this month
+      // Sign 2: prices. Make one item for each tracked food that has a price this month,
+      // and work out its % change.
       const items = tracked.filter(f => mo.foods[f.id] && mo.foods[f.id].price > 0).map(f => {
         const e = mo.foods[f.id];
         return Object.assign({ id: f.id, name: f.name, unit: e.unit, price: e.price, crop: e.crop, weight: s.foods[f.id].weight }, compareFood(f.id, mo, byNo, rule));
       });
       const basket = basketAverage(items);
+      const priceScore = priceSign(basket, s.priceT);
+      // The food rising fastest (named in the SMS)
       const counted = items.filter(it => it.change !== null && it.weight > 0);
       const fastest = counted.length ? counted.reduce((a, b) => (b.change > a.change ? b : a)) : null;
-      const priceScore = priceSign(basket, s.priceT);
+      // Sign 3: crops
       const crop = cropSign(items.map(it => ({ id: it.id, crop: it.crop })), s.staple);
+      // Add the points. The score (0 to 3) picks the level from the LEVELS list.
       const score = rain.point + priceScore + crop.point;
       return Object.assign({}, mo, { normal, rainLimit: rain.limit, rainScore: rain.point, items, counted: counted.length, basket, fastest, priceScore, crop, cropScore: crop.point, score, level: LEVELS[score] });
     });
@@ -1903,6 +1989,7 @@ table.mini th, table.mini td { padding: 4px 8px; }
     const sum = $('testSummary');
     sum.textContent = passed + ' of ' + tests.length + ' tests passed';
     sum.className = 'pill ' + (passed === tests.length ? 'lv-normal' : 'lv-crisis');
+    $('testCount').textContent = tests.length;
     return { passed, total: tests.length };
   }
 
