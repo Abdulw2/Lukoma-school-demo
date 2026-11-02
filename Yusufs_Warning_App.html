@@ -1,3 +1,5 @@
+<!doctype html>
+<html lang="en">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Yusuf's Warning</title>
@@ -257,6 +259,47 @@ input[type=range] { width: 100%; accent-color: var(--accent); }
 .sources { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: .85rem; }
 pre.csv { margin: 0; background: var(--bg); padding: 10px 12px; border-radius: 8px; font-family: var(--f-data); font-size: .85rem; overflow-x: auto; }
 
+/* food basket: data entry rows (one row per food) */
+fieldset.foods { border: 0; padding: 0; margin: 0; display: grid; gap: 8px; min-width: 0; }
+fieldset.foods legend { font-weight: 700; font-size: .9rem; padding: 0; margin-bottom: 6px; }
+fieldset.foods .hint { font-size: .8rem; color: var(--muted); }
+.food-head, .food-row { display: grid; grid-template-columns: minmax(0, 1fr) 7rem 6rem; gap: 8px; align-items: center; }
+.food-head { font-size: .7rem; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); font-weight: 700; }
+.food-rows { display: grid; gap: 8px; }
+.food-row label { font-weight: 700; font-size: .9rem; line-height: 1.2; overflow-wrap: anywhere; }
+.food-row label small { display: block; font-weight: 400; font-size: .75rem; color: var(--muted); margin-top: 2px; }
+.food-row input, .food-row select, .fs-row select, .fs-row input[type=number], .plan-row input { width: 100%; min-width: 0; padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--bg); font-family: var(--f-data); font-size: 1rem; }
+/* food basket: settings */
+.basket-set { display: grid; gap: 12px; margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--line); }
+.basket-top { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.fs-head, .fs-row { display: grid; grid-template-columns: minmax(0, 1fr) 6.5rem 5rem; gap: 8px; align-items: center; }
+.fs-head { font-size: .7rem; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); font-weight: 700; }
+.fs-row label { display: flex; gap: 10px; align-items: center; font-weight: 700; }
+.fs-row input[type=checkbox] { width: 20px; height: 20px; accent-color: var(--accent); flex: none; margin: 0; }
+/* food basket: bar list of each food's change */
+.bars { position: relative; list-style: none; padding: 0; margin: 0; display: grid; gap: 6px; }
+.bars li { display: grid; grid-template-columns: 7.5rem minmax(0, 1fr) 3.75rem; gap: 8px; align-items: center; font-size: .85rem; }
+.bar-name { font-weight: 700; overflow-wrap: anywhere; line-height: 1.15; }
+.bar-track { position: relative; height: 18px; }
+.bar-fill { position: absolute; top: 2px; bottom: 2px; background: var(--gold); border-radius: 4px; min-width: 2px; }
+.bar-val { text-align: right; }
+.bars + .note { margin-top: 10px; }
+.bars-lines { position: absolute; top: -4px; bottom: -4px; left: calc(7.5rem + 8px); right: calc(3.75rem + 8px); pointer-events: none; }
+.bars-lines i { position: absolute; top: 0; bottom: 0; width: 0; }
+.bars-lines .lim { border-left: 2px dashed var(--muted); }
+.bars-lines .avg { border-left: 2px solid var(--ink); }
+.bars-lines .zero { border-left: 1px solid var(--line); }
+.legend i.ink { background: var(--ink); }
+svg.c .s-food { stroke: var(--muted); fill: none; stroke-width: 1.25; opacity: .5; }
+svg.c .zero { stroke: var(--muted); stroke-width: 1; }
+table.mini { font-size: .85rem; }
+table.mini th, table.mini td { padding: 4px 8px; }
+.ct { font-size: .7rem; margin-left: 4px; color: var(--muted); font-family: var(--f-data); }
+.ct.p { color: var(--crisis); font-weight: 700; }
+.plan-foods { display: grid; gap: 8px; }
+.plan-row { display: grid; grid-template-columns: minmax(0, 1fr) 9rem; gap: 8px; align-items: end; }
+.plan-row label { display: grid; gap: 4px; font-size: .85rem; font-weight: 700; }
+
 /* alert overlay */
 .overlay { position: fixed; inset: 0; background: rgba(10,14,12,.55); display: grid; place-items: center; padding: 20px max(16px, env(safe-area-inset-right, 0px)) 20px max(16px, env(safe-area-inset-left, 0px)); z-index: 50; overflow-y: auto; }
 .alert-card { width: min(540px, 100%); background: var(--surface); border-radius: 16px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,.35); }
@@ -281,6 +324,12 @@ pre.csv { margin: 0; background: var(--bg); padding: 10px 12px; border-radius: 8
 }
 @media (max-width: 520px) {
   .normals { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .food-head, .food-row { grid-template-columns: minmax(0, 1fr) 6rem 5.25rem; }
+  .basket-top { grid-template-columns: minmax(0, 1fr); }
+  .fs-head, .fs-row { grid-template-columns: minmax(0, 1fr) 5.75rem 4.25rem; }
+  .bars li { grid-template-columns: 6rem minmax(0, 1fr) 3.5rem; }
+  .bars-lines { left: calc(6rem + 8px); right: calc(3.5rem + 8px); }
+  .plan-row { grid-template-columns: minmax(0, 1fr) 7rem; }
   .cell { height: 32px; font-size: .6rem; }
   .cell small { display: none; }
   .year-row { grid-template-columns: minmax(0, 1fr); gap: 4px; }
@@ -361,19 +410,12 @@ pre.csv { margin: 0; background: var(--bg); padding: 10px 12px; border-radius: 8
               <input id="fRain" type="number" inputmode="decimal" min="0" max="1000" step="1" placeholder="e.g. 110">
               <span class="hint" id="rainHint"></span>
             </div>
-            <div class="field">
-              <label for="fPrice">Maize price (UGX per kg)</label>
-              <input id="fPrice" type="number" inputmode="numeric" min="50" max="20000" step="10" placeholder="e.g. 1300">
+            <fieldset class="foods">
+              <legend>Food basket: price and crop for each food</legend>
+              <div class="food-head" aria-hidden="true"><span>Food</span><span>Price (UGX)</span><span>Crop</span></div>
+              <div class="food-rows" id="foodRows"></div>
               <span class="hint" id="priceHint"></span>
-            </div>
-            <div class="field">
-              <label for="fCrop">Crop condition</label>
-              <select id="fCrop">
-                <option>Good</option>
-                <option>Fair</option>
-                <option>Poor</option>
-              </select>
-            </div>
+            </fieldset>
             <div class="preview" id="preview" hidden></div>
             <p class="form-error" id="formError" hidden></p>
             <div class="row-btns">
@@ -403,16 +445,22 @@ pre.csv { margin: 0; background: var(--bg); padding: 10px 12px; border-radius: 8
           <div id="chartRain"></div>
         </div>
         <div class="chart">
-          <h3>Maize price against its comparison price</h3>
-          <div class="legend"><span><i style="background:var(--gold)"></i>Maize price (UGX/kg)</span><span><i class="dash"></i>Same month last year, or 3-month average if no data</span></div>
+          <h3>Food prices: change compared with last year</h3>
+          <div class="legend"><span><i style="background:var(--gold)"></i>Basket average</span><span><i style="background:var(--muted);opacity:.6"></i>Each food</span><span><i class="dash"></i>Price limit (<span id="limitLegend"></span>)</span></div>
           <div id="chartPrice"></div>
+          <p class="note">Each food is compared with the same food in the same month last year, or with its 3-month average when there is no price for last year.</p>
+        </div>
+        <div class="chart">
+          <h3 id="barsTitle">Each food this month</h3>
+          <div class="legend"><span><i style="background:var(--gold)"></i>Change on last year</span><span><i class="ink"></i>Basket average</span><span><i class="dash"></i>Price limit</span></div>
+          <div id="chartBars"></div>
         </div>
         <p class="source-line" id="sourceLine2"></p>
       </section>
     </div>
 
     <section class="panel">
-      <div class="panel-head"><h2>All months</h2><span class="note">Newest first</span></div>
+      <div class="panel-head"><h2>All months</h2><span class="note">Newest first. Each food shows its price and crop: G Good, F Fair, P Poor.</span></div>
       <div class="table-wrap"><table class="wide" id="table"></table></div>
     </section>
 
@@ -429,9 +477,27 @@ pre.csv { margin: 0; background: var(--bg); padding: 10px 12px; border-radius: 8
             <input id="sRain" type="range" min="50" max="100" step="5">
           </div>
           <div class="field">
-            <label for="sPrice">Price warning: more than <span class="num" id="sPriceOut"></span> above comparison price</label>
+            <label for="sPrice">Price warning: basket average more than <span class="num" id="sPriceOut"></span> above last year</label>
             <input id="sPrice" type="range" min="5" max="50" step="5">
           </div>
+        </div>
+        <div class="basket-set">
+          <p style="font-weight:700">Food basket</p>
+          <div class="basket-top">
+            <div class="field">
+              <label for="sPreset">Region preset</label>
+              <select id="sPreset"></select>
+              <span class="hint">Starting suggestions for you to check with farmers, market traders or FEWS NET reports. They are not facts.</span>
+            </div>
+            <div class="field">
+              <label for="sStaple">Main staple food</label>
+              <select id="sStaple"></select>
+              <span class="hint">If this food's crop is Poor, the crop sign scores 1 point.</span>
+            </div>
+          </div>
+          <div class="fs-head" aria-hidden="true"><span>Track this food</span><span>Unit</span><span>Weight</span></div>
+          <div id="foodSettings" style="display:grid;gap:8px"></div>
+          <p class="note">Weight 2 counts twice as much as weight 1 in the basket average. Weight 0 leaves a food out of the average. Prices are only compared in the same unit, so changing a unit starts a fresh comparison for that food.</p>
         </div>
         <div class="field" style="margin-top:16px">
           <label for="sSource">Data source (shown under the charts)</label>
@@ -448,13 +514,11 @@ pre.csv { margin: 0; background: var(--bg); padding: 10px 12px; border-radius: 8
         </div>
         <div style="margin-top:20px;display:grid;gap:10px">
           <p style="font-weight:700">Load real data</p>
-          <p class="note">Paste rows in this format, one month per line, oldest first. Download real figures from WFP (maize prices) and CHIRPS (rainfall) on the Humanitarian Data Exchange, then type or paste them here.</p>
-          <pre class="csv">month,rain_mm,maize_ugx_per_kg,crop
-Jan 2024,62,1050,Good
-Feb 2024,58,1080,Fair</pre>
+          <p class="note">Paste rows in this format, one month per line. Download real figures from WFP (food prices) and CHIRPS (rainfall) on the Humanitarian Data Exchange, then type or paste them here.</p>
+          <pre class="csv" id="csvTemplate"></pre>
           <div class="field">
             <label for="csvText">Your data</label>
-            <textarea id="csvText" style="font-family:var(--f-data);min-height:120px" placeholder="month,rain_mm,maize_ugx_per_kg,crop"></textarea>
+            <textarea id="csvText" style="font-family:var(--f-data);min-height:120px"></textarea>
           </div>
           <div class="row-btns">
             <label class="btn" for="csvFile" style="cursor:pointer">Choose a CSV file</label>
@@ -529,11 +593,39 @@ Feb 2024,58,1080,Fair</pre>
       <span class="crit">STEM knowledge and application</span>
       <h2>From data to action</h2>
       <div class="flow">
-        <div class="step"><b>1. Collect</b><span>Rainfall (mm), maize price (UGX/kg), crop condition</span></div>
-        <div class="step"><b>2. Compare</b><span>Rain vs normal for that month. Price vs the same month last year.</span></div>
+        <div class="step"><b>1. Collect</b><span>Rainfall (mm), and a price and crop condition for each food in the basket</span></div>
+        <div class="step"><b>2. Compare</b><span>Rain vs normal for that month. Each food's price vs the same month last year, then the basket average.</span></div>
         <div class="step"><b>3. Score</b><span>1 point for each warning sign. Total 0 to 3.</span></div>
         <div class="step"><b>4. Alert level</b><span>0 Normal · 1 Watch · 2 Warning · 3 Crisis</span></div>
         <div class="step"><b>5. Act</b><span>SMS, radio and mosque announcement with the recommended action</span></div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Why we watch a basket of foods, not just maize</h2>
+      <div class="two">
+        <div style="display:grid;gap:12px">
+          <p>Families do not eat only maize. When one food gets expensive, many families switch to another food that is cheaper. So watching only maize can get hunger wrong in two ways.</p>
+          <ul>
+            <li><strong>It can miss hunger.</strong> Matooke is an important food in Central Uganda, and sorghum in Karamoja. If those get expensive while maize stays cheap, a maize-only warning stays quiet.</li>
+            <li><strong>It can exaggerate hunger.</strong> If only maize jumps but other foods stay cheap, families can switch, so the danger is smaller than maize alone suggests.</li>
+          </ul>
+          <p><strong>We never mix units.</strong> Each food is compared only with itself a year ago, in the same unit: a kilo with a kilo, a bunch with a bunch. That gives a percentage change. Percentages have no units, so we can average them fairly.</p>
+          <p><strong>Crops:</strong> the crop sign scores 1 point if half or more of the foods we track have a Poor crop, or if the region's main staple has a Poor crop.</p>
+        </div>
+        <div class="result" style="gap:10px">
+          <p class="eyebrow">Example with made-up numbers</p>
+          <div class="table-wrap"><table class="mini">
+            <thead><tr><th>Food</th><th class="r">Change on last year</th></tr></thead>
+            <tbody>
+              <tr><td>Maize</td><td class="r num">+30%</td></tr>
+              <tr><td>Beans</td><td class="r num">+10%</td></tr>
+              <tr><td>Matooke</td><td class="r num">+5%</td></tr>
+              <tr><th>Basket average</th><th class="r num">(30 + 10 + 5) ÷ 3 = 15%</th></tr>
+            </tbody>
+          </table></div>
+          <p><strong>Maize only:</strong> +30% is above the 20% limit, so 1 point.<br><strong>Food basket:</strong> +15% is below the limit, so 0 points. Families can switch to beans and matooke for now.</p>
+        </div>
       </div>
     </section>
 
@@ -599,6 +691,7 @@ Feb 2024,58,1080,Fair</pre>
           <li><span class="v">v2</span><span>Web app: works offline, live charts, drought replay for demonstrations.</span></li>
           <li><span class="v">v3</span><span>Price compared with the same month last year. Symbols added next to colours for colour-blind visitors.</span></li>
           <li><span class="v">v4</span><span>Short SMS alert, real-data import, automatic tests and this testing page.</span></li>
+          <li><span class="v">v5</span><span>Food basket: seven local foods instead of maize only, region presets, each food with its own unit and crop condition.</span></li>
         </ol>
       </section>
       <section class="panel">
@@ -607,7 +700,9 @@ Feb 2024,58,1080,Fair</pre>
           <li>The sample replay data is made up. Real results depend on real data.</li>
           <li>Only three warning signs. Professional systems also use vegetation from satellites and livestock condition.</li>
           <li>Data is typed in by hand once a month, so mistakes are possible.</li>
-          <li>Crop condition (Good, Fair, Poor) is a judgement, not a measurement.</li>
+          <li>Crop condition (Good, Fair, Poor) for each food is a judgement, not a measurement.</li>
+          <li>The basket counts every food equally unless we set weights. Real diets differ from family to family.</li>
+          <li>The region presets are suggestions we still need to check with local people.</li>
           <li>One region and one market at a time.</li>
           <li>The app does not send SMS by itself. A person copies and shares the alert.</li>
         </ul>
@@ -709,15 +804,20 @@ Feb 2024,58,1080,Fair</pre>
 
     <section class="panel">
       <h2>Yusuf storage planner</h2>
-      <p class="muted">How much grain should a family set aside in the good months to get through a hard season?</p>
+      <p class="muted">How much food should a family set aside in the good months to get through a hard season? Plan for two or three foods, for example maize flour and beans.</p>
       <div class="calc-grid">
         <div class="field"><label for="pPeople">People in the household</label><input id="pPeople" type="number" min="1" max="50" value="6"></div>
-        <div class="field"><label for="pKg">Maize per person per month (kg)</label><input id="pKg" type="number" min="1" max="50" value="10"><span class="hint">Example value. Adjust for your family.</span></div>
         <div class="field"><label for="pHard">Hard months to prepare for</label><input id="pHard" type="number" min="1" max="24" value="3"></div>
         <div class="field"><label for="pGood">Good months to save over</label><input id="pGood" type="number" min="1" max="24" value="6"></div>
       </div>
+      <div class="plan-foods">
+        <div class="plan-row"><label for="pF0">Food 1<input id="pF0" type="text" maxlength="30" value="Maize flour"></label><label for="pK0">kg per person per month<input id="pK0" type="number" min="0" max="50" step="0.5" value="6"></label></div>
+        <div class="plan-row"><label for="pF1">Food 2<input id="pF1" type="text" maxlength="30" value="Beans"></label><label for="pK1">kg per person per month<input id="pK1" type="number" min="0" max="50" step="0.5" value="2"></label></div>
+        <div class="plan-row"><label for="pF2">Food 3 (optional)<input id="pF2" type="text" maxlength="30" placeholder="e.g. sorghum"></label><label for="pK2">kg per person per month<input id="pK2" type="number" min="0" max="50" step="0.5" placeholder="0"></label></div>
+        <p class="hint note">The amounts are example values, not a recommendation. Adjust them for your family.</p>
+      </div>
       <div class="result" id="planResult"></div>
-      <p class="note">Store grain dry and off the floor so it does not spoil. Spoiled grain is also Israf.</p>
+      <p class="note">Store grain, flour and beans dry and off the floor so they do not spoil. Spoiled food is also Israf.</p>
     </section>
   </main>
 
@@ -728,7 +828,7 @@ Feb 2024,58,1080,Fair</pre>
         <h2>Can you spot a famine early?</h2>
         <span class="note" id="chProgress"></span>
       </div>
-      <p class="muted">Read the month's warning signs and choose the alert level. Rule: 1 point each for rain below 80% of normal, maize more than 20% above last year, and Poor crops.</p>
+      <p class="muted">Read the month's warning signs and choose the alert level. Rule: 1 point each for rain below 80% of normal, the food basket average more than 20% above last year, and Poor crops (half or more of the foods Poor, or the main staple Poor).</p>
       <div class="scenario" id="chScenario"></div>
       <div class="choices" id="chChoices"></div>
       <div class="result" id="chFeedback" hidden></div>
@@ -786,10 +886,10 @@ Feb 2024,58,1080,Fair</pre>
   </main>
 
   <footer style="display:grid;gap:10px">
-    <p class="note"><strong>About the data:</strong> the 2024–2025 figures and normal rainfall values loaded at the start are illustrative sample data, made up to show a typical drought pattern. Load real figures in Settings before presenting results as fact. Entries are saved in this browser only.</p>
+    <p class="note"><strong>About the data:</strong> the 2024–2025 figures (rainfall, and prices and crop conditions for seven foods) and the normal rainfall values loaded at the start are illustrative sample data, made up to show a typical drought pattern. They are not real prices. Load real figures in Settings before presenting results as fact. Entries are saved in this browser only.</p>
     <div class="sources">
       <span class="note">Real data sources:</span>
-      <a href="https://data.humdata.org/dataset/wfp-food-prices-for-uganda" target="_blank" rel="noopener">WFP maize prices for Uganda (HDX)</a>
+      <a href="https://data.humdata.org/dataset/wfp-food-prices-for-uganda" target="_blank" rel="noopener">WFP food prices for Uganda (HDX)</a>
       <a href="https://data.humdata.org/dataset/uga-rainfall-subnational" target="_blank" rel="noopener">Uganda district rainfall, CHIRPS (HDX)</a>
       <a href="https://fews.net/east-africa/uganda" target="_blank" rel="noopener">FEWS NET Uganda</a>
       <a href="https://meteo.mwe.go.ug/climate/seasonal-forecasts" target="_blank" rel="noopener">Uganda Meteorological Services</a>
@@ -825,6 +925,7 @@ Feb 2024,58,1080,Fair</pre>
 
 <script>
 (function () {
+  'use strict';
   const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
   const MONTH_NAMES = ['January','February','March','April','May','June','July','August','September','October','November','December'];
   const LEVELS = [
@@ -833,29 +934,118 @@ Feb 2024,58,1080,Fair</pre>
     { name: 'Warning', cls: 'warning', sym: '!!', action: 'Prepare food bank stock. Inform the mosque Zakat committee.', sms: 'Prepare food stock now.' },
     { name: 'Crisis',  cls: 'crisis',  sym: '✕',  action: 'Begin food distribution to vulnerable families. Ask the community for Sadaqah.', sms: 'Start food distribution. Give Sadaqah.' }
   ];
-  const RAIN  = [62,58,135,180,150,72,63,88,120,145,130,90, 55,70,90,110,85,40,45,80,118,150,140,88];
-  const PRICE = [1050,1080,1100,1060,1000,980,1000,1020,1050,1040,1000,1020, 1040,1060,1120,1300,1450,1750,2050,2100,1900,1650,1400,1250];
-  const CROP  = ['Good','Fair','Good','Good','Good','Good','Good','Good','Good','Good','Good','Good',
-                 'Good','Good','Fair','Fair','Poor','Poor','Poor','Poor','Fair','Good','Good','Good'];
-  const SAMPLE = RAIN.map((r, i) => ({ y: 2024 + Math.floor(i / 12), m: i % 12, rain: r, price: PRICE[i], crop: CROP[i] }));
+
+  // ================= THE FOODS WE CAN TRACK =================
+  // id is the short name used in the CSV file. unit is the default unit for prices.
+  const FOODS = [
+    { id: 'maize',          name: 'Maize',          unit: 'kg' },
+    { id: 'beans',          name: 'Beans',          unit: 'kg' },
+    { id: 'matooke',        name: 'Matooke',        unit: 'bunch' },
+    { id: 'cassava',        name: 'Cassava',        unit: 'kg' },
+    { id: 'sorghum',        name: 'Sorghum',        unit: 'kg' },
+    { id: 'millet',         name: 'Millet',         unit: 'kg' },
+    { id: 'sweet_potatoes', name: 'Sweet potatoes', unit: 'kg' }
+  ];
+  const UNITS = ['kg', 'bunch'];
+  const PRICE_RANGE = { kg: [50, 50000], bunch: [500, 500000] };   // to catch typing mistakes
+  const CROPS = ['Good', 'Fair', 'Poor'];
+  // Region presets are starting suggestions for the students to check. They are not facts.
+  const PRESETS = {
+    all:      { name: 'All seven foods (default)', foods: ['maize', 'beans', 'matooke', 'cassava', 'sorghum', 'millet', 'sweet_potatoes'], staple: 'maize' },
+    central:  { name: 'Central: matooke, beans, sweet potatoes, maize', foods: ['matooke', 'beans', 'sweet_potatoes', 'maize'], staple: 'matooke' },
+    karamoja: { name: 'Karamoja: sorghum, maize, beans', foods: ['sorghum', 'maize', 'beans'], staple: 'sorghum' },
+    northern: { name: 'Northern: sorghum, millet, cassava, beans', foods: ['sorghum', 'millet', 'cassava', 'beans'], staple: 'sorghum' },
+    eastern:  { name: 'Eastern: maize, cassava, millet, beans', foods: ['maize', 'cassava', 'millet', 'beans'], staple: 'maize' }
+  };
+  const foodById = id => FOODS.find(f => f.id === id);
+  const foodName = id => (foodById(id) || { name: id }).name;
+
+  // ================= ILLUSTRATIVE SAMPLE DATA =================
+  // MADE-UP numbers that show a typical drought pattern, Jan 2024 to Dec 2025. NOT real prices.
+  // Maize prices and crops are the same as in version 4, so "maize only" gives the old results.
+  const RAIN = [62,58,135,180,150,72,63,88,120,145,130,90, 55,70,90,110,85,40,45,80,118,150,140,88];
+  const SAMPLE_PRICES = {
+    maize:          [1050,1080,1100,1060,1000,980,1000,1020,1050,1040,1000,1020, 1040,1060,1120,1300,1450,1750,2050,2100,1900,1650,1400,1250],
+    beans:          [3600,3650,3700,3750,3700,3600,3500,3550,3600,3650,3600,3600, 3670,3760,3920,4650,4880,5220,5600,5750,5330,4750,4070,3890],
+    matooke:        [20000,20500,21000,21000,20000,19500,19000,19500,20000,20500,20000,20500, 20000,20700,21600,23900,23600,24400,25100,26300,26000,24600,22000,21500],
+    cassava:        [1000,1020,1050,1050,1000,980,960,980,1000,1020,1000,1000, 1010,1040,1090,1280,1350,1520,1590,1670,1500,1350,1180,1100],
+    sorghum:        [1400,1420,1450,1450,1400,1380,1350,1380,1400,1420,1400,1400, 1430,1430,1520,1890,2100,2480,2540,2690,2380,2060,1750,1570],
+    millet:         [2400,2450,2500,2500,2450,2400,2350,2400,2450,2500,2450,2450, 2420,2520,2650,3150,3430,3840,4110,4270,3920,3500,2990,2740],
+    sweet_potatoes: [800,820,850,860,820,780,760,780,800,820,800,800, 800,840,890,1120,1130,1170,1170,1230,1080,970,850,820]
+  };
+  // One letter per month: G = Good, F = Fair, P = Poor
+  const SAMPLE_CROPS = {
+    maize:          'GFGGGGGGGGGG' + 'GGFFPPPPFGGG',
+    beans:          'GGGGGGGGGGGG' + 'GGFFPPPFFGGG',
+    matooke:        'GGGGGGGGGGGG' + 'GGGFFPPPFFGG',
+    cassava:        'GGGGGGGGGGGG' + 'GGGGFFFFFGGG',
+    sorghum:        'GGGGGGGGGGGG' + 'GGFFPPPPFGGG',
+    millet:         'GGGGGGGGGGGG' + 'GGFFPPPFFGGG',
+    sweet_potatoes: 'GGGGGGGGGGGG' + 'GGFFPPFFGGGG'
+  };
+  const CROP_WORD = { G: 'Good', F: 'Fair', P: 'Poor' };
+  const SAMPLE = RAIN.map((rain, i) => {
+    const foods = {};
+    FOODS.forEach(f => { foods[f.id] = { price: SAMPLE_PRICES[f.id][i], unit: f.unit, crop: CROP_WORD[SAMPLE_CROPS[f.id][i]] }; });
+    return { y: 2024 + Math.floor(i / 12), m: i % 12, rain, foods };
+  });
   const SAMPLE_SOURCE = 'Illustrative sample data, made up to show a typical drought pattern.';
-  const DEFAULTS = { region: 'Central Uganda (sample)', rainT: 0.8, priceT: 0.2, normals: [60,75,130,175,140,70,60,85,115,140,135,85], source: SAMPLE_SOURCE, local: '' };
-  const KEY = 'yusufs-warning-v2', OLD_KEY = 'yusufs-warning-v1';
+  function defaultFoodSettings() { const o = {}; FOODS.forEach(f => { o[f.id] = { on: true, unit: f.unit, weight: 1 }; }); return o; }
+  const DEFAULTS = { region: 'Central Uganda (sample)', rainT: 0.8, priceT: 0.2, normals: [60,75,130,175,140,70,60,85,115,140,135,85], source: SAMPLE_SOURCE, local: '', foods: defaultFoodSettings(), staple: 'maize', preset: 'all' };
+  const KEY = 'yusufs-warning-v3', OLD_KEYS = ['yusufs-warning-v2', 'yusufs-warning-v1'];
 
   const $ = id => document.getElementById(id);
   const clone = o => JSON.parse(JSON.stringify(o));
   const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
   const fmt = n => Math.round(n).toLocaleString('en-US');
-  const pct = n => (n >= 0 ? '+' : '') + Math.round(n * 100) + '%';
+  const pct = n => (n >= 0 ? '+' : '−') + Math.abs(Math.round(n * 100)) + '%';
+  const pct1 = n => (n >= 0 ? '+' : '−') + Math.abs(n * 100).toFixed(1) + '%';
   const label = r => MONTHS[r.m] + ' ' + r.y;
   const short = r => MONTHS[r.m] + ' ' + String(r.y).slice(2);
+  const unitText = u => 'UGX/' + u;
 
+  // ================= SAVED DATA AND UPGRADING OLD SAVES =================
+  // Version 4 saved one maize price per month. Version 5 saves a basket:
+  // { y, m, rain, foods: { maize: { price, unit, crop }, beans: {...} } }
+  function migrateMonth(mo) {
+    if (mo.foods) return mo;
+    const foods = {};
+    if (mo.price > 0) foods.maize = { price: mo.price, unit: 'kg', crop: CROPS.indexOf(mo.crop) >= 0 ? mo.crop : 'Good' };
+    return { y: mo.y, m: mo.m, rain: mo.rain, foods };
+  }
+  function isOldSample(months) {
+    return months.length === SAMPLE.length && months.every((mo, i) => {
+      const s = SAMPLE[i], a = mo.foods.maize, b = s.foods.maize;
+      return mo.y === s.y && mo.m === s.m && mo.rain === s.rain && Object.keys(mo.foods).length === 1 && a && a.price === b.price && a.crop === b.crop;
+    });
+  }
+  function normaliseSettings(s) {
+    const out = Object.assign(clone(DEFAULTS), s || {});
+    const foods = defaultFoodSettings();
+    FOODS.forEach(f => {
+      const saved = (s && s.foods && s.foods[f.id]) || {};
+      if (typeof saved.on === 'boolean') foods[f.id].on = saved.on;
+      if (UNITS.indexOf(saved.unit) >= 0) foods[f.id].unit = saved.unit;
+      if (saved.weight >= 0 && saved.weight <= 10) foods[f.id].weight = +saved.weight;
+    });
+    if (!FOODS.some(f => foods[f.id].on)) foods.maize.on = true;
+    out.foods = foods;
+    if (!foods[out.staple] || !foods[out.staple].on) out.staple = FOODS.find(f => foods[f.id].on).id;
+    if (!PRESETS[out.preset] && out.preset !== 'custom') out.preset = 'custom';
+    return out;
+  }
   function load() {
     try {
       const s = JSON.parse(localStorage.getItem(KEY));
-      if (s && Array.isArray(s.months) && s.settings) { s.settings = Object.assign(clone(DEFAULTS), s.settings); return s; }
-      const o = JSON.parse(localStorage.getItem(OLD_KEY));
-      if (o && Array.isArray(o.months) && o.settings) return { months: o.months, settings: Object.assign(clone(DEFAULTS), o.settings), team: {}, checks: {}, visitors: 0 };
+      if (s && Array.isArray(s.months) && s.settings) { s.months = s.months.map(migrateMonth); s.settings = normaliseSettings(s.settings); return s; }
+      for (const k of OLD_KEYS) {
+        const o = JSON.parse(localStorage.getItem(k));
+        if (o && Array.isArray(o.months) && o.settings) {
+          const months = o.months.map(migrateMonth);
+          // If the old save only held the old built-in sample, show the new 7-food sample instead.
+          return { months: isOldSample(months) ? clone(SAMPLE) : months, settings: normaliseSettings(o.settings), team: o.team || {}, checks: o.checks || {}, visitors: o.visitors || 0 };
+        }
+      }
     } catch (e) {}
     return null;
   }
@@ -865,31 +1055,102 @@ Feb 2024,58,1080,Fair</pre>
   state.team = state.team || {}; state.checks = state.checks || {}; state.visitors = state.visitors || 0;
   let demo = null, selected = null, soundOn = false, audio = null;
 
-  // ================= THE MODEL =================
-  // rule 'year' (v2): compare price with the same month last year, or the 3-month average if last year is missing.
-  // rule 'avg3' (v1): always compare with the 3-month average. Kept only to show the improvement on the Testing tab.
+  // =====================================================================
+  //  THE SCORING RULES
+  //  Everything that decides the alert level is in this one section.
+  //  The rest of the code only stores data and draws the screen.
+  //  The automatic tests on the Testing tab call these same functions.
+  // =====================================================================
+
+  // Turn a month into one number so we can count months: Jan 2025 → 2025 × 12 + 0.
+  // "The same month last year" is then simply that number minus 12.
+  const monthNo = mo => mo.y * 12 + mo.m;
+
+  // Round a change to one decimal place of a percent (0.2264 → 0.226, which is 22.6%),
+  // the same way you would round it by hand.
+  const roundPct = x => Math.round(x * 1000) / 1000;
+
+  // SIGN 1: RAIN. 1 point if rain is LESS THAN the limit (for example 80% of normal).
+  function rainSign(rain, normal, rainT) {
+    const limit = Math.round(rainT * normal * 10) / 10;
+    return { limit, point: rain < limit ? 1 : 0 };
+  }
+
+  // ONE FOOD: how much has its price changed?
+  // 1st choice: compare with the same food in the same month last year.
+  // 2nd choice: compare with the average of the 3 months before (if all 3 have a price).
+  // Prices are only compared in the SAME UNIT. We never compare a kilo with a bunch.
+  // rule 'avg3' is the old version 1 rule (always the 3-month average), kept for the Testing tab.
+  function compareFood(id, mo, byNo, rule) {
+    const now = mo.foods[id];
+    const usable = e => e && e.price > 0 && e.unit === now.unit;
+    const clash = e => e && e.price > 0 && e.unit !== now.unit;
+    const lastYear = byNo[monthNo(mo) - 12] && byNo[monthNo(mo) - 12].foods[id];
+    if (rule !== 'avg3' && usable(lastYear)) {
+      return { ref: lastYear.price, refType: 'year', change: roundPct(now.price / lastYear.price - 1), unitClash: false };
+    }
+    const before = [1, 2, 3].map(k => byNo[monthNo(mo) - k] && byNo[monthNo(mo) - k].foods[id]);
+    if (before.every(usable)) {
+      const avg = (before[0].price + before[1].price + before[2].price) / 3;
+      return { ref: avg, refType: 'avg', change: roundPct(now.price / avg - 1), unitClash: false };
+    }
+    return { ref: null, refType: null, change: null, unitClash: clash(lastYear) || before.some(clash) };
+  }
+
+  // SIGN 2: PRICES. Average the % changes of the foods (a weighted average).
+  // Weight 2 counts twice as much as weight 1. Foods with no comparison are left out.
+  function basketAverage(items) {
+    let top = 0, bottom = 0;
+    items.forEach(it => { if (it.change !== null && it.weight > 0) { top += it.weight * it.change; bottom += it.weight; } });
+    return bottom > 0 ? roundPct(top / bottom) : null;
+  }
+  // 1 point if the basket average is MORE THAN the limit (for example 20%).
+  const priceSign = (basket, priceT) => (basket !== null && basket > priceT ? 1 : 0);
+
+  // SIGN 3: CROPS. 1 point if half or more of the reported crops are Poor,
+  // OR if the main staple food's crop is Poor.
+  function cropSign(crops, staple) {
+    const reported = crops.filter(c => CROPS.indexOf(c.crop) >= 0);
+    const poor = reported.filter(c => c.crop === 'Poor').length;
+    const majority = reported.length > 0 && poor * 2 >= reported.length;
+    const st = reported.find(c => c.id === staple);
+    const stapleRule = !!st && st.crop === 'Poor';
+    return { reported: reported.length, poor, poorNames: reported.filter(c => c.crop === 'Poor').map(c => foodName(c.id)), majority, stapleRule, stapleCrop: st ? st.crop : null, point: majority || stapleRule ? 1 : 0 };
+  }
+
+  // SCORE EVERY MONTH: add the three signs. 0 Normal, 1 Watch, 2 Warning, 3 Crisis.
   function analyseWith(months, s, rule) {
-    rule = rule || 'year';
-    const byKey = {};
-    months.forEach(mo => { byKey[mo.y * 12 + mo.m] = mo; });
-    return months.map((mo, i) => {
+    const byNo = {};
+    months.forEach(mo => { byNo[monthNo(mo)] = mo; });
+    const tracked = FOODS.filter(f => s.foods[f.id] && s.foods[f.id].on);
+    return months.map(mo => {
       const normal = s.normals[mo.m];
-      const avg3 = i >= 3 ? (months[i-1].price + months[i-2].price + months[i-3].price) / 3 : null;
-      const ly = byKey[(mo.y - 1) * 12 + mo.m];
-      const lastYear = ly ? ly.price : null;
-      let ref = null, refType = null;
-      if (rule === 'year' && lastYear !== null) { ref = lastYear; refType = 'year'; }
-      else if (avg3 !== null) { ref = avg3; refType = 'avg'; }
-      const rainLimit = s.rainT * normal;
-      const priceLimit = ref !== null ? (1 + s.priceT) * ref : null;
-      const rainScore = mo.rain < rainLimit ? 1 : 0;
-      const priceScore = priceLimit !== null && mo.price > priceLimit ? 1 : 0;
-      const cropScore = mo.crop === 'Poor' ? 1 : 0;
-      const score = rainScore + priceScore + cropScore;
-      return Object.assign({}, mo, { normal, avg3, lastYear, ref, refType, rainLimit, priceLimit, rainScore, priceScore, cropScore, score, level: LEVELS[score] });
+      const rain = rainSign(mo.rain, normal, s.rainT);
+      // one item for each tracked food that has a price this month
+      const items = tracked.filter(f => mo.foods[f.id] && mo.foods[f.id].price > 0).map(f => {
+        const e = mo.foods[f.id];
+        return Object.assign({ id: f.id, name: f.name, unit: e.unit, price: e.price, crop: e.crop, weight: s.foods[f.id].weight }, compareFood(f.id, mo, byNo, rule));
+      });
+      const basket = basketAverage(items);
+      const counted = items.filter(it => it.change !== null && it.weight > 0);
+      const fastest = counted.length ? counted.reduce((a, b) => (b.change > a.change ? b : a)) : null;
+      const priceScore = priceSign(basket, s.priceT);
+      const crop = cropSign(items.map(it => ({ id: it.id, crop: it.crop })), s.staple);
+      const score = rain.point + priceScore + crop.point;
+      return Object.assign({}, mo, { normal, rainLimit: rain.limit, rainScore: rain.point, items, counted: counted.length, basket, fastest, priceScore, crop, cropScore: crop.point, score, level: LEVELS[score] });
     });
   }
   const analyse = months => analyseWith(months, state.settings);
+
+  // The same rules, but watching maize only (how version 4 worked). Used to compare on the Testing tab.
+  function maizeOnly(s) {
+    const foods = {};
+    FOODS.forEach(f => { foods[f.id] = { on: f.id === 'maize', unit: s.foods[f.id].unit, weight: 1 }; });
+    return Object.assign({}, s, { foods, staple: 'maize' });
+  }
+
+  // THE ALERT RULE: log every change of level, but only send an alert when the level
+  // RISES and reaches Warning or Crisis. This stops people getting tired of alerts.
   function buildLog(rows) {
     let prev = 0; const log = [];
     rows.forEach(r => {
@@ -897,20 +1158,28 @@ Feb 2024,58,1080,Fair</pre>
     });
     return log;
   }
+  // ====================== END OF THE SCORING RULES ======================
+
   function nextOf(months) {
     if (!months.length) return { y: 2024, m: 0 };
     const l = months[months.length - 1];
     return l.m === 11 ? { y: l.y + 1, m: 0 } : { y: l.y, m: l.m + 1 };
   }
-  function refText(r) {
-    if (r.refType === 'year') return pct(r.price / r.ref - 1) + ' vs same month last year (' + fmt(r.ref) + ')';
-    if (r.refType === 'avg') return pct(r.price / r.ref - 1) + ' vs 3-month average (' + fmt(r.ref) + ')';
-    return 'No earlier prices to compare with yet';
+  const trackedFoods = () => FOODS.filter(f => state.settings.foods[f.id].on);
+  function refShort(it) {
+    if (it.refType === 'year') return 'last yr ' + fmt(it.ref);
+    if (it.refType === 'avg') return '3-mo avg ' + fmt(it.ref);
+    return it.unitClash ? 'earlier prices in another unit' : 'no earlier price';
   }
-  // How many months before the highest price did the first Warning come?
+  function compareWord(r) {
+    const types = r.items.filter(it => it.change !== null).map(it => it.refType);
+    return types.length && types.every(t => t === 'year') ? 'vs same month last year' : 'vs last year (or 3-month average)';
+  }
+  // How many months before food prices peaked did the first Warning come?
   function leadTime(rows) {
-    if (rows.length < 2) return null;
-    let peak = 0; rows.forEach((r, i) => { if (r.price > rows[peak].price) peak = i; });
+    let peak = -1;
+    rows.forEach((r, i) => { if (r.basket !== null && (peak < 0 || r.basket > rows[peak].basket)) peak = i; });
+    if (peak < 0) return null;
     let first = -1;
     for (let i = Math.max(0, peak - 12); i <= peak; i++) { if (rows[i].score >= 2) { first = i; break; } }
     return { peak: rows[peak], first: first >= 0 ? rows[first] : null, months: first >= 0 ? peak - first : null };
@@ -927,19 +1196,23 @@ Feb 2024,58,1080,Fair</pre>
     renderLog(log);
     renderTable(rows);
     $('chartRain').innerHTML = chart(rows.slice(-24), 'rain', 'normal', 's-rain');
-    $('chartPrice').innerHTML = chart(rows.slice(-24), 'price', 'ref', 's-gold');
+    $('chartPrice').innerHTML = pctChart(rows.slice(-24));
+    $('limitLegend').textContent = '+' + Math.round(state.settings.priceT * 100) + '%';
+    renderBars(rows);
     const src = 'Data: ' + state.settings.source;
     $('sourceLine1').textContent = src; $('sourceLine2').textContent = src;
     renderExplainers(rows, log);
     return { rows, log };
   }
+  const viewIndex = rows => (selected === null || selected >= rows.length ? rows.length - 1 : selected);
 
   function renderStatus(rows) {
     const el = $('status');
     if (!rows.length) { el.innerHTML = '<div class="status-main" style="--lvl:var(--muted);--lvl-t:var(--surface)"><p class="eyebrow">No data yet</p><p class="level-name">No data</p><p>Enter the first month below.</p></div>'; return; }
-    const i = selected === null || selected >= rows.length ? rows.length - 1 : selected;
+    const i = viewIndex(rows);
     const r = rows[i];
     const isNewest = i === rows.length - 1;
+    const stapleName = foodName(state.settings.staple);
     el.innerHTML =
       '<div class="status-main" style="--lvl:var(--' + r.level.cls + ');--lvl-t:var(--' + r.level.cls + '-t)">' +
         '<p class="eyebrow">' + (isNewest ? 'Latest month' : 'Viewing') + ' · ' + label(r) + '</p>' +
@@ -952,8 +1225,11 @@ Feb 2024,58,1080,Fair</pre>
       '</div>' +
       '<div class="status-side">' +
         ind('Rainfall', fmt(r.rain) + ' mm', Math.round(r.rain / r.normal * 100) + '% of normal (' + fmt(r.normal) + ' mm)', r.rainScore) +
-        ind('Maize price', fmt(r.price) + ' UGX/kg', refText(r), r.priceScore) +
-        ind('Crop condition', r.crop, r.crop === 'Poor' ? 'Poor harvest expected' : 'No crop failure reported', r.cropScore) +
+        ind('Food basket prices', r.basket === null ? '—' : pct1(r.basket),
+          r.basket === null ? 'No earlier prices to compare with yet' :
+          'Average of ' + r.counted + (r.counted === 1 ? ' food ' : ' foods ') + compareWord(r) + (r.fastest ? '. Rising fastest: ' + r.fastest.name + ' ' + pct(r.fastest.change) : ''), r.priceScore) +
+        ind('Crop condition', r.crop.reported ? r.crop.poor + ' of ' + r.crop.reported + ' Poor' : 'Not reported',
+          'Main staple, ' + stapleName + ': ' + (r.crop.stapleCrop || 'not reported this month'), r.cropScore) +
       '</div>';
     const back = $('backLatest'); if (back) back.onclick = () => { selected = null; render(); };
   }
@@ -973,31 +1249,54 @@ Feb 2024,58,1080,Fair</pre>
       MONTHS.map((mn, m) => {
         const e = years[y][m];
         if (!e) return '<span class="cell empty" aria-hidden="true">' + mn.charAt(0) + '</span>';
-        return '<button type="button" class="cell lv-' + e.r.level.cls + (e.i === sel ? ' sel' : '') + '" style="--c:var(--' + e.r.level.cls + ')" data-i="' + e.i + '" title="' + label(e.r) + ': ' + e.r.level.name + '" aria-label="' + label(e.r) + ', ' + e.r.level.name + '">' + mn.charAt(0) + '<small>' + e.r.level.sym + '</small></button>';
+        return '<button type="button" class="cell lv-' + e.r.level.cls + (e.i === sel ? ' sel' : '') + '" style="--c:var(--' + e.r.level.cls + ')" data-i="' + e.i + '" title="' + label(e.r) + ': ' + e.r.level.name + '" aria-label="' + label(e.r) + ', ' + e.r.level.name + '"' + (e.i === sel ? ' aria-current="true"' : '') + '>' + mn.charAt(0) + '<small>' + e.r.level.sym + '</small></button>';
       }).join('') + '</div></div>').join('');
     $('strip').querySelectorAll('button.cell').forEach(b => b.onclick = () => { selected = +b.dataset.i; render(); window.scrollTo({ top: 0, behavior: 'smooth' }); });
   }
 
+  // ----- data entry form: one row per tracked food -----
+  let formSig = '';
+  function buildFoodRows() {
+    const keep = {};
+    document.querySelectorAll('#foodRows input, #foodRows select').forEach(el => { keep[el.id] = el.value; });
+    $('foodRows').innerHTML = trackedFoods().map(f =>
+      '<div class="food-row">' +
+        '<label for="fp-' + f.id + '">' + f.name + '<small id="fh-' + f.id + '"></small></label>' +
+        '<input id="fp-' + f.id + '" type="number" inputmode="decimal" min="0" step="any" aria-describedby="fh-' + f.id + '">' +
+        '<select id="fc-' + f.id + '" aria-label="' + f.name + ' crop condition">' + CROPS.map(c => '<option>' + c + '</option>').join('') + '</select>' +
+      '</div>').join('');
+    Object.keys(keep).forEach(id => { if ($(id)) $(id).value = keep[id]; });
+    $('foodRows').querySelectorAll('input, select').forEach(el => el.addEventListener('input', updatePreview));
+  }
   function candidate() {
-    const n = nextOf(state.months);
-    return { y: n.y, m: n.m, rain: parseFloat($('fRain').value), price: parseFloat($('fPrice').value), crop: $('fCrop').value };
+    const n = nextOf(state.months), foods = {};
+    trackedFoods().forEach(f => {
+      const v = parseFloat($('fp-' + f.id).value);
+      if (!isNaN(v)) foods[f.id] = { price: v, unit: state.settings.foods[f.id].unit, crop: $('fc-' + f.id).value };
+    });
+    return { y: n.y, m: n.m, rain: parseFloat($('fRain').value), foods };
   }
   function renderForm() {
     const n = nextOf(state.months), s = state.settings, normal = s.normals[n.m];
+    const sig = trackedFoods().map(f => f.id + ':' + s.foods[f.id].unit).join(',');
+    if (sig !== formSig) { formSig = sig; buildFoodRows(); }
     $('nextMonth').textContent = MONTHS[n.m] + ' ' + n.y;
-    $('rainHint').textContent = 'Normal for ' + MONTHS[n.m] + ': ' + normal + ' mm. Warning sign below ' + Math.round(s.rainT * normal) + ' mm.';
-    const probe = analyse(state.months.concat([{ y: n.y, m: n.m, rain: 0, price: 0, crop: 'Good' }])).pop();
-    $('priceHint').textContent = probe.refType === null ? 'Needs earlier prices before it can compare.' :
-      (probe.refType === 'year' ? 'Same month last year: ' : '3-month average: ') + fmt(probe.ref) + ' UGX. Warning sign above ' + fmt(probe.priceLimit) + ' UGX.';
+    $('rainHint').textContent = 'Normal for ' + MONTHS[n.m] + ': ' + normal + ' mm. Warning sign below ' + rainSign(0, normal, s.rainT).limit + ' mm.';
+    // Try a pretend month with a price of 1 for every food, just to find each food's comparison price.
+    const probeFoods = {};
+    trackedFoods().forEach(f => { probeFoods[f.id] = { price: 1, unit: s.foods[f.id].unit, crop: 'Good' }; });
+    const probe = analyse(state.months.concat([{ y: n.y, m: n.m, rain: 0, foods: probeFoods }])).pop();
+    probe.items.forEach(it => { const h = $('fh-' + it.id); if (h) h.textContent = unitText(it.unit) + ' · ' + refShort(it); });
+    $('priceHint').textContent = 'Leave a price empty if you have no figure for that food this month. Warning sign when the basket average is more than ' + Math.round(s.priceT * 100) + '% above last year.';
     updatePreview();
   }
   function updatePreview() {
     const c = candidate(), p = $('preview');
-    if (isNaN(c.rain) || isNaN(c.price)) { p.hidden = true; return; }
+    if (isNaN(c.rain) || !Object.keys(c.foods).length) { p.hidden = true; return; }
     const r = analyse(state.months.concat([c])).pop();
     p.hidden = false;
     p.className = 'preview lv-' + r.level.cls;
-    p.innerHTML = 'If you add this month: <span class="pill" style="background:var(--' + r.level.cls + ');color:var(--surface)">' + r.level.sym + ' ' + r.level.name + '</span> score ' + r.score + ' of 3';
+    p.innerHTML = 'If you add this month: <span class="pill" style="background:var(--' + r.level.cls + ');color:var(--surface)">' + r.level.sym + ' ' + r.level.name + '</span> score ' + r.score + ' of 3' + (r.basket !== null ? ' · basket ' + pct1(r.basket) : '');
   }
 
   function renderLog(log) {
@@ -1009,16 +1308,29 @@ Feb 2024,58,1080,Fair</pre>
   }
 
   function renderTable(rows) {
-    $('table').innerHTML = '<thead><tr><th>Month</th><th class="r">Rain (mm)</th><th class="r">Normal</th><th class="r">Maize (UGX/kg)</th><th class="r">Compared with</th><th>Crop</th><th>Signs (rain · price · crop)</th><th>Level</th></tr></thead><tbody>' +
-      rows.slice().reverse().map(r => '<tr><td>' + label(r) + '</td><td class="r num">' + fmt(r.rain) + '</td><td class="r num">' + fmt(r.normal) + '</td><td class="r num">' + fmt(r.price) + '</td><td class="r num">' + (r.ref ? fmt(r.ref) + (r.refType === 'year' ? ' (last yr)' : ' (3-mo)') : '—') + '</td><td>' + r.crop + '</td>' +
-        '<td><span class="dots"><b class="' + (r.rainScore ? 'on' : '') + '"></b><b class="' + (r.priceScore ? 'on' : '') + '"></b><b class="' + (r.cropScore ? 'on' : '') + '"></b></span></td>' +
+    const foods = trackedFoods();
+    const yes = b => (b ? 'yes' : 'no');
+    $('table').innerHTML = '<thead><tr><th>Month</th><th class="r">Rain (mm)</th><th class="r">Normal</th>' +
+      foods.map(f => '<th class="r">' + f.name + '</th>').join('') +
+      '<th class="r">Basket change</th><th>Rising fastest</th><th>Crops Poor</th><th>Signs (rain · price · crop)</th><th>Level</th></tr></thead><tbody>' +
+      rows.slice().reverse().map(r => '<tr><td>' + label(r) + '</td><td class="r num">' + fmt(r.rain) + '</td><td class="r num">' + fmt(r.normal) + '</td>' +
+        foods.map(f => { const e = r.foods[f.id]; return '<td class="r num">' + (e && e.price > 0 ? fmt(e.price) + (e.unit !== 'kg' ? '/' + e.unit : '') + '<span class="ct' + (e.crop === 'Poor' ? ' p' : '') + '">' + (e.crop || '?').charAt(0) + '</span>' : '—') + '</td>'; }).join('') +
+        '<td class="r num">' + (r.basket === null ? '—' : pct1(r.basket)) + '</td><td>' + (r.fastest ? r.fastest.name + ' ' + pct(r.fastest.change) : '—') + '</td>' +
+        '<td>' + (r.crop.reported ? r.crop.poor + ' of ' + r.crop.reported : '—') + '</td>' +
+        '<td><span class="dots" role="img" aria-label="Rain sign ' + yes(r.rainScore) + ', price sign ' + yes(r.priceScore) + ', crop sign ' + yes(r.cropScore) + '"><b class="' + (r.rainScore ? 'on' : '') + '"></b><b class="' + (r.priceScore ? 'on' : '') + '"></b><b class="' + (r.cropScore ? 'on' : '') + '"></b></span></td>' +
         '<td><span class="pill lv-' + r.level.cls + '">' + r.level.sym + ' ' + r.level.name + '</span></td></tr>').join('') + '</tbody>';
   }
 
+  // ----- charts (drawn as SVG by our own code, no library) -----
   function niceMax(v) {
     if (!(v > 0)) return 10;
     const p = Math.pow(10, Math.floor(Math.log10(v))), f = v / p;
     return (f <= 1 ? 1 : f <= 2 ? 2 : f <= 2.5 ? 2.5 : f <= 5 ? 5 : 10) * p;
+  }
+  function bands(rows, x, bw, L, R, T, W, ih) {
+    let s = '';
+    rows.forEach((r, i) => { if (r.score > 0) { const x0 = Math.max(L, x(i) - bw / 2); s += '<rect class="band-' + r.level.cls + '" x="' + x0 + '" y="' + T + '" width="' + Math.min(bw, W - R - x0) + '" height="' + ih + '"/>'; } });
+    return s;
   }
   function chart(rows, aKey, bKey, cls) {
     if (!rows.length) return '<p class="note">No data yet.</p>';
@@ -1030,21 +1342,79 @@ Feb 2024,58,1080,Fair</pre>
     const x = i => rows.length > 1 ? L + i * step : L + iw / 2;
     const y = v => T + ih - (v / max) * ih;
     const bw = rows.length > 1 ? step : iw;
-    let s = '<svg class="c" viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="' + (aKey === 'rain' ? 'Rainfall' : 'Maize price') + ' chart">';
-    rows.forEach((r, i) => { if (r.score > 0) { const x0 = Math.max(L, x(i) - bw / 2); s += '<rect class="band-' + r.level.cls + '" x="' + x0 + '" y="' + T + '" width="' + Math.min(bw, W - R - x0) + '" height="' + ih + '"/>'; } });
+    let s = '<svg class="c" viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Rainfall chart, ' + label(rows[0]) + ' to ' + label(rows[rows.length - 1]) + '">';
+    s += bands(rows, x, bw, L, R, T, W, ih);
     for (let k = 0; k <= 4; k++) {
       const v = max * k / 4, yy = y(v);
       s += '<line class="grid" x1="' + L + '" x2="' + (W - R) + '" y1="' + yy + '" y2="' + yy + '"/>';
       s += '<text x="' + (L - 8) + '" y="' + (yy + 4) + '" text-anchor="end">' + fmt(v) + '</text>';
     }
-    const every = rows.length > 12 ? 3 : 1;
-    rows.forEach((r, i) => { if (i % every === 0 || i === rows.length - 1) s += '<text x="' + x(i) + '" y="' + (H - 10) + '" text-anchor="middle">' + short(r) + '</text>'; });
-    const path = key => { let d = '', pen = false; rows.forEach((r, i) => { const v = r[key]; if (v === null || v === undefined || isNaN(v)) { pen = false; return; } d += (pen ? 'L' : 'M') + x(i).toFixed(1) + ' ' + y(v).toFixed(1); pen = true; }); return d; };
-    s += '<path class="s-ref" d="' + path(bKey) + '"/>';
-    s += '<path class="' + cls + '" d="' + path(aKey) + '" stroke-linejoin="round" stroke-linecap="round"/>';
+    s += xLabels(rows, x, H);
+    s += '<path class="s-ref" d="' + linePath(rows, r => r[bKey], x, y) + '"/>';
+    s += '<path class="' + cls + '" d="' + linePath(rows, r => r[aKey], x, y) + '" stroke-linejoin="round" stroke-linecap="round"/>';
     const last = rows.length - 1;
     s += '<circle class="' + cls + '-dot" cx="' + x(last) + '" cy="' + y(rows[last][aKey]) + '" r="4.5"/>';
     return s + '</svg>';
+  }
+  function xLabels(rows, x, H) {
+    const every = rows.length > 12 ? 3 : 1;
+    let s = '';
+    rows.forEach((r, i) => { if (i % every === 0 || i === rows.length - 1) s += '<text x="' + x(i) + '" y="' + (H - 10) + '" text-anchor="middle">' + short(r) + '</text>'; });
+    return s;
+  }
+  function linePath(rows, get, x, y) {
+    let d = '', pen = false;
+    rows.forEach((r, i) => { const v = get(r); if (v === null || v === undefined || isNaN(v)) { pen = false; return; } d += (pen ? 'L' : 'M') + x(i).toFixed(1) + ' ' + y(v).toFixed(1); pen = true; });
+    return d;
+  }
+  // Line chart of % change: thick line = basket average, thin grey lines = each food.
+  function pctChart(rows) {
+    if (!rows.length) return '<p class="note">No data yet.</p>';
+    const W = 640, H = 230, L = 54, R = 28, T = 12, B = 30, pt = state.settings.priceT;
+    const vals = [0, pt];
+    rows.forEach(r => { if (r.basket !== null) vals.push(r.basket); r.items.forEach(it => { if (it.change !== null) vals.push(it.change); }); });
+    const step = niceMax((Math.max.apply(null, vals) - Math.min.apply(null, vals)) / 4 || 0.1);
+    const lo = Math.floor(Math.min.apply(null, vals) / step) * step, hi = Math.ceil(Math.max.apply(null, vals) * 1.02 / step) * step;
+    const iw = W - L - R, ih = H - T - B;
+    const stepX = rows.length > 1 ? iw / (rows.length - 1) : 0;
+    const x = i => rows.length > 1 ? L + i * stepX : L + iw / 2;
+    const y = v => T + ih - ((v - lo) / (hi - lo)) * ih;
+    const bw = rows.length > 1 ? stepX : iw;
+    let s = '<svg class="c" viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Food price change chart, ' + label(rows[0]) + ' to ' + label(rows[rows.length - 1]) + '">';
+    s += bands(rows, x, bw, L, R, T, W, ih);
+    for (let v = lo; v <= hi + 1e-9; v += step) {
+      const yy = y(v);
+      s += '<line class="' + (Math.abs(v) < 1e-9 ? 'zero' : 'grid') + '" x1="' + L + '" x2="' + (W - R) + '" y1="' + yy + '" y2="' + yy + '"/>';
+      s += '<text x="' + (L - 8) + '" y="' + (yy + 4) + '" text-anchor="end">' + (v > 1e-9 ? '+' : '') + Math.round(v * 100) + '%</text>';
+    }
+    s += xLabels(rows, x, H);
+    trackedFoods().forEach(f => {
+      s += '<path class="s-food" d="' + linePath(rows, r => { const it = r.items.find(t => t.id === f.id); return it ? it.change : null; }, x, y) + '"/>';
+    });
+    s += '<path class="s-ref" d="M' + L + ' ' + y(pt).toFixed(1) + 'L' + (W - R) + ' ' + y(pt).toFixed(1) + '"/>';
+    s += '<path class="s-gold" d="' + linePath(rows, r => r.basket, x, y) + '" stroke-linejoin="round" stroke-linecap="round"/>';
+    const last = rows.length - 1;
+    if (rows[last].basket !== null) s += '<circle class="s-gold-dot" cx="' + x(last) + '" cy="' + y(rows[last].basket) + '" r="4.5"/>';
+    return s + '</svg>';
+  }
+  // Bar list of each food's change for the month shown at the top.
+  function renderBars(rows) {
+    if (!rows.length) { $('barsTitle').textContent = 'Each food this month'; $('chartBars').innerHTML = '<p class="note">No data yet.</p>'; return; }
+    const r = rows[viewIndex(rows)], pt = state.settings.priceT;
+    $('barsTitle').textContent = 'Each food in ' + label(r);
+    const items = r.items.filter(it => it.change !== null && it.weight > 0).sort((a, b) => b.change - a.change);
+    const skipped = r.items.filter(it => it.change === null || !(it.weight > 0));
+    if (!items.length) { $('chartBars').innerHTML = '<p class="note">No food could be compared with an earlier price in ' + label(r) + '.</p>'; return; }
+    const vals = items.map(it => it.change).concat([0, pt, r.basket]);
+    const lo = Math.min.apply(null, vals), hi = Math.max.apply(null, vals) * 1.05;
+    const pos = v => ((v - lo) / (hi - lo) * 100).toFixed(2) + '%';
+    $('chartBars').innerHTML = '<ul class="bars">' + items.map(it => {
+      const a = Math.min(0, it.change), b = Math.max(0, it.change);
+      return '<li><span class="bar-name">' + it.name + '</span><span class="bar-track"><span class="bar-fill" style="left:' + pos(a) + ';width:' + ((b - a) / (hi - lo) * 100).toFixed(2) + '%"></span></span><span class="bar-val num">' + pct(it.change) + '</span></li>';
+    }).join('') +
+      '<li aria-hidden="true" class="bars-lines"><i class="zero" style="left:' + pos(0) + '"></i><i class="lim" style="left:' + pos(pt) + '"></i><i class="avg" style="left:' + pos(r.basket) + '"></i></li></ul>' +
+      '<p class="note">Basket average ' + pct1(r.basket) + ', limit +' + Math.round(pt * 100) + '%.' +
+      (skipped.length ? ' Not counted this month: ' + skipped.map(it => it.name + ' (' + (it.change === null ? refShort(it) : 'weight 0') + ')').join(', ') + '.' : '') + '</p>';
   }
 
   // ================= ADDING A MONTH, ALERTS AND SMS =================
@@ -1062,18 +1432,22 @@ Feb 2024,58,1080,Fair</pre>
     } else toast(label(newest) + ': no change, still ' + newest.level.name + '.');
     return newest;
   }
+  const regionShort = () => state.settings.region.replace(/\s*\(sample\)\s*/i, '');
+  // The SMS must fit in 160 characters. We try the full wording first, then shorter wordings.
   function smsText(r) {
-    const region = state.settings.region.replace(/\s*\(sample\)\s*/i, '');
-    const signs = [];
-    if (r.rainScore) signs.push('Rain ' + Math.round(r.rain / r.normal * 100) + '% of normal');
-    if (r.priceScore) signs.push('Maize ' + pct(r.price / r.ref - 1) + (r.refType === 'year' ? ' vs last yr' : ''));
-    if (r.cropScore) signs.push('Crops poor');
-    return (r.level.name.toUpperCase() + ' food alert, ' + region + ', ' + label(r) + '. ' + signs.join('. ') + '. ' + r.level.sms).replace(/\.\./g, '.');
+    const versions = [0, 1, 2].map(k => {
+      const signs = [];
+      if (r.rainScore) signs.push('Rain ' + Math.round(r.rain / r.normal * 100) + '%' + (k < 1 ? ' of normal' : ''));
+      if (r.basket !== null) signs.push((k < 2 ? 'Food prices ' : 'Prices ') + pct(r.basket) + (r.fastest && r.fastest.change > 0 ? ' (' + r.fastest.name.toLowerCase() + ' ' + pct(r.fastest.change) + ')' : ''));
+      if (r.cropScore) signs.push('Crops poor');
+      return (r.level.name.toUpperCase() + ' food alert, ' + regionShort() + ', ' + label(r) + '. ' + (signs.length ? signs.join('. ') + '. ' : '') + r.level.sms).replace(/\.\./g, '.');
+    });
+    return versions.find(v => v.length <= 160) || versions[versions.length - 1];
   }
   function localText(r) {
     const t = (state.settings.local || '').trim();
     if (!t) return '';
-    return t.replace(/\{level\}/g, r.level.name).replace(/\{region\}/g, state.settings.region.replace(/\s*\(sample\)\s*/i, '')).replace(/\{month\}/g, label(r));
+    return t.replace(/\{level\}/g, r.level.name).replace(/\{region\}/g, regionShort()).replace(/\{month\}/g, label(r));
   }
   function showAlert(r, entry) {
     const top = $('alertTop');
@@ -1082,8 +1456,8 @@ Feb 2024,58,1080,Fair</pre>
     $('alertSub').textContent = state.settings.region + ' · ' + label(r) + ' · level rose from ' + entry.from;
     $('alertList').innerHTML =
       '<li>Rainfall ' + fmt(r.rain) + ' mm, ' + Math.round(r.rain / r.normal * 100) + '% of normal' + (r.rainScore ? ' (warning sign)' : '') + '</li>' +
-      '<li>Maize ' + fmt(r.price) + ' UGX/kg, ' + refText(r) + (r.priceScore ? ' (warning sign)' : '') + '</li>' +
-      '<li>Crop condition: ' + r.crop + (r.cropScore ? ' (warning sign)' : '') + '</li>';
+      '<li>Food basket ' + (r.basket === null ? 'not compared yet' : pct1(r.basket) + ' ' + compareWord(r)) + (r.priceScore ? ' (warning sign)' : '') + (r.fastest ? '. Rising fastest: ' + r.fastest.name + ' ' + pct(r.fastest.change) : '') + '</li>' +
+      '<li>Crops: ' + r.crop.poor + ' of ' + r.crop.reported + ' Poor. Main staple, ' + foodName(state.settings.staple) + ': ' + (r.crop.stapleCrop || 'not reported') + (r.cropScore ? ' (warning sign)' : '') + '</li>';
     $('alertAction').textContent = r.level.action;
     const sms = smsText(r), loc = localText(r);
     $('smsText').textContent = sms;
@@ -1125,19 +1499,24 @@ Feb 2024,58,1080,Fair</pre>
   function caption(r) {
     const parts = [];
     parts.push(r.rainScore ? 'Rain is only ' + Math.round(r.rain / r.normal * 100) + '% of normal: 1 point.' : 'Rain is fine (' + Math.round(r.rain / r.normal * 100) + '% of normal): 0 points.');
-    parts.push(r.priceScore ? 'Maize is ' + pct(r.price / r.ref - 1) + ' above ' + (r.refType === 'year' ? 'last year' : 'the 3-month average') + ': 1 point.' : 'Maize price is not a warning sign: 0 points.');
-    parts.push(r.cropScore ? 'Crops are Poor: 1 point.' : 'Crops are ' + r.crop + ': 0 points.');
+    if (r.basket === null) parts.push('No earlier food prices to compare with: 0 points.');
+    else parts.push('Food prices are ' + pct(r.basket) + ' on average' + (r.fastest ? ', ' + r.fastest.name.toLowerCase() + ' rising fastest (' + pct(r.fastest.change) + ')' : '') + ': ' + (r.priceScore ? '1 point.' : '0 points.'));
+    if (r.cropScore) parts.push(r.crop.majority ? r.crop.poor + ' of ' + r.crop.reported + ' crops are Poor: 1 point.' : 'The main staple, ' + foodName(state.settings.staple).toLowerCase() + ', is Poor: 1 point.');
+    else parts.push(r.crop.poor + ' of ' + r.crop.reported + ' crops are Poor: 0 points.');
     return label(r) + '. ' + parts.join(' ') + ' Total ' + r.score + ' = ' + r.level.name + '.';
   }
   function startDemo() {
     const start = 14;
-    demo = { backup: clone(state.months), queue: clone(SAMPLE.slice(start)), total: SAMPLE.length - start, timer: null, settings: clone(state.settings) };
+    stopAuto();
+    if (!demo) demo = { backup: clone(state.months), settings: clone(state.settings) };
+    demo.queue = clone(SAMPLE.slice(start)); demo.total = SAMPLE.length - start; demo.timer = null;
     state.months = clone(SAMPLE.slice(0, start));
     state.settings.normals = clone(DEFAULTS.normals); state.settings.rainT = DEFAULTS.rainT; state.settings.priceT = DEFAULTS.priceT; state.settings.source = SAMPLE_SOURCE;
     selected = null;
+    closeAlert();
     location.hash = '#dashboard';
     $('demoBar').hidden = false; $('demoBtn').hidden = true;
-    render(); updateDemoText();
+    initSettings(); render(); updateDemoText();
     $('demoCaption').textContent = 'The data stops at February 2025. Everything is Normal. Press Next month to see what happens as the drought builds.';
   }
   function updateDemoText() {
@@ -1173,20 +1552,21 @@ Feb 2024,58,1080,Fair</pre>
   function renderExplainers(rows, log) {
     const lt = leadTime(rows);
     if (lt && lt.first) {
+      const peakText = 'food prices peaked in ' + label(lt.peak) + ' (basket ' + pct(lt.peak.basket) + ' on last year)';
       $('leadStat').textContent = lt.months + (lt.months === 1 ? ' month' : ' months');
-      $('leadText').textContent = 'In the data loaded now, the first Warning came in ' + label(lt.first) + ', ' + lt.months + ' months before maize prices peaked in ' + label(lt.peak) + '.';
-      $('problemLead').textContent = 'In the data loaded now, Yusuf\'s Warning raised a Warning in ' + label(lt.first) + ', ' + lt.months + ' months before maize prices peaked at ' + fmt(lt.peak.price) + ' UGX/kg in ' + label(lt.peak) + '. That is time for a Zakat committee to collect food and for families to save grain.';
-      $('replayResult').textContent = 'Yes. The first Warning came in ' + label(lt.first) + ', ' + lt.months + ' months before the highest maize price (' + fmt(lt.peak.price) + ' UGX/kg in ' + label(lt.peak) + '). ' + log.filter(l => l.alerted).length + ' alerts were issued in total.';
+      $('leadText').textContent = 'In the data loaded now, the first Warning came in ' + label(lt.first) + ', ' + lt.months + (lt.months === 1 ? ' month' : ' months') + ' before ' + peakText + '.';
+      $('problemLead').textContent = 'In the data loaded now, Yusuf\'s Warning raised a Warning in ' + label(lt.first) + ', ' + lt.months + (lt.months === 1 ? ' month' : ' months') + ' before ' + peakText + '. That is time for a Zakat committee to collect food and for families to save grain.';
+      $('replayResult').textContent = 'Yes. The first Warning came in ' + label(lt.first) + ', ' + lt.months + (lt.months === 1 ? ' month' : ' months') + ' before ' + peakText + '. ' + log.filter(l => l.alerted).length + ' alerts were issued in total.';
     } else {
       $('leadStat').textContent = '–';
       $('leadText').textContent = 'Load data with a price rise to see how early the app warns.';
       $('problemLead').textContent = 'An early warning gives families time to save grain and gives the Zakat committee time to collect food before prices peak.';
-      $('replayResult').textContent = rows.length ? 'No Warning came before the highest price in the data loaded now. Try the sample drought or real data from a bad year.' : 'No data loaded yet.';
+      $('replayResult').textContent = rows.length ? 'No Warning came before food prices peaked in the data loaded now. Try the sample drought or real data from a bad year.' : 'No data loaded yet.';
     }
     renderWorking(rows);
     renderRuleTable();
     renderSensitivity();
-    renderCalc(log);
+    renderCalc();
   }
 
   function renderWorking(rows) {
@@ -1198,18 +1578,37 @@ Feb 2024,58,1080,Fair</pre>
     sel.value = prev !== '' && rows[+prev] ? prev : String(defaultIdx);
     const r = rows[+sel.value], s = state.settings;
     const rp = Math.round(s.rainT * 100), pp = Math.round(s.priceT * 100);
-    let priceStep;
-    if (r.refType === null) priceStep = '<strong>Maize price:</strong> ' + fmt(r.price) + ' UGX/kg. There are no earlier prices to compare with, so <strong>0 points</strong>.';
+    const num1 = v => (v * 100).toFixed(1);
+    // Step 2: prices
+    let priceStep = '<strong>Food prices:</strong> ';
+    if (!r.items.length) priceStep += 'no food prices this month, so <strong>0 points</strong>.';
     else {
-      const what = r.refType === 'year' ? 'Same month last year' : 'Average of the previous 3 months (no price for last year)';
-      priceStep = '<strong>Maize price:</strong> ' + fmt(r.price) + ' UGX/kg. ' + what + ': ' + fmt(r.ref) + ' UGX/kg.<br>' +
-        '<span class="calc">' + (100 + pp) + '% × ' + fmt(r.ref) + ' = ' + fmt(r.priceLimit) + '. Is ' + fmt(r.price) + ' > ' + fmt(r.priceLimit) + '? ' + (r.priceScore ? 'Yes → 1 point' : 'No → 0 points') + '</span><br>' +
-        '<span class="calc">Change = (' + fmt(r.price) + ' − ' + fmt(r.ref) + ') ÷ ' + fmt(r.ref) + ' × 100 = ' + ((r.price - r.ref) / r.ref * 100).toFixed(1) + '%</span>';
+      priceStep += 'each food is compared with itself, in the same unit.' +
+        '<div class="table-wrap"><table class="mini"><thead><tr><th>Food</th><th class="r">Now</th><th class="r">Compared with</th><th class="r">Change</th><th class="r">Weight</th></tr></thead><tbody>' +
+        r.items.map(it => '<tr><td>' + it.name + '</td><td class="r num">' + fmt(it.price) + ' ' + unitText(it.unit) + '</td><td class="r num">' +
+          (it.refType ? fmt(it.ref) + (it.refType === 'year' ? ' (last yr)' : ' (3-mo avg)') : (it.unitClash ? 'other unit' : 'none')) + '</td><td class="r num">' +
+          (it.change === null ? 'left out' : pct1(it.change)) + '</td><td class="r num">' + it.weight + '</td></tr>').join('') + '</tbody></table></div>';
+      const used = r.items.filter(it => it.change !== null && it.weight > 0);
+      if (!used.length) priceStep += 'No food can be compared with an earlier price yet, so <strong>0 points</strong>.';
+      else {
+        const equal = used.every(it => it.weight === used[0].weight);
+        const top = equal ? used.map(it => num1(it.change)).join(' + ') : used.map(it => it.weight + ' × ' + num1(it.change)).join(' + ');
+        const bottom = equal ? used.length : used.map(it => it.weight).join(' + ');
+        priceStep += '<span class="calc">Basket average = (' + top + ') ÷ ' + (equal ? bottom : '(' + bottom + ')') + ' = ' + num1(r.basket) + '%</span><br>' +
+          '<span class="calc">Is ' + num1(r.basket) + '% > ' + pp + '%? ' + (r.priceScore ? 'Yes → 1 point' : 'No → 0 points') + '</span>' +
+          (r.fastest ? '<br>Rising fastest: ' + r.fastest.name + ' ' + pct1(r.fastest.change) + '.' : '');
+      }
     }
+    // Step 3: crops
+    const c = r.crop, half = c.reported / 2;
+    const cropStep = '<strong>Crop condition:</strong> ' + (c.reported ? (c.poor ? 'Poor: ' + c.poorNames.join(', ') + ' (' + c.poor + ' of ' + c.reported + ').' : 'no crop is Poor (0 of ' + c.reported + ').') : 'not reported.') +
+      '<br><span class="calc">Half of ' + c.reported + ' is ' + half + '. Is ' + c.poor + ' ≥ ' + half + '? ' + (c.majority ? 'Yes' : 'No') + '</span>' +
+      '<br><span class="calc">Main staple, ' + foodName(s.staple) + ': ' + (c.stapleCrop || 'not reported') + '. Poor? ' + (c.stapleRule ? 'Yes' : 'No') + '</span>' +
+      '<br><span class="calc">' + (c.point ? 'At least one rule says yes → 1 point' : 'Both rules say no → 0 points') + '</span>';
     $('working').innerHTML =
-      '<div><p><strong>Rainfall:</strong> ' + fmt(r.rain) + ' mm. Normal for ' + MONTH_NAMES[r.m] + ': ' + fmt(r.normal) + ' mm.<br><span class="calc">' + rp + '% × ' + fmt(r.normal) + ' = ' + (r.rainLimit % 1 ? r.rainLimit.toFixed(1) : r.rainLimit) + '. Is ' + fmt(r.rain) + ' < ' + (r.rainLimit % 1 ? r.rainLimit.toFixed(1) : r.rainLimit) + '? ' + (r.rainScore ? 'Yes → 1 point' : 'No → 0 points') + '</span></p></div>' +
-      '<div><p>' + priceStep + '</p></div>' +
-      '<div><p><strong>Crop condition:</strong> ' + r.crop + '. <span class="calc">Poor? ' + (r.cropScore ? 'Yes → 1 point' : 'No → 0 points') + '</span></p></div>' +
+      '<div><p><strong>Rainfall:</strong> ' + fmt(r.rain) + ' mm. Normal for ' + MONTH_NAMES[r.m] + ': ' + fmt(r.normal) + ' mm.<br><span class="calc">' + rp + '% × ' + fmt(r.normal) + ' = ' + r.rainLimit + '. Is ' + fmt(r.rain) + ' < ' + r.rainLimit + '? ' + (r.rainScore ? 'Yes → 1 point' : 'No → 0 points') + '</span></p></div>' +
+      '<div><div style="display:grid;gap:8px">' + priceStep + '</div></div>' +
+      '<div><p>' + cropStep + '</p></div>' +
       '<div><p><strong>Total:</strong> <span class="calc">' + r.rainScore + ' + ' + r.priceScore + ' + ' + r.cropScore + ' = ' + r.score + '</span> → <span class="pill lv-' + r.level.cls + '">' + r.level.sym + ' ' + r.level.name + '</span><br>' + r.level.action + '</p></div>';
   }
 
@@ -1218,8 +1617,8 @@ Feb 2024,58,1080,Fair</pre>
     const newRows = analyse(state.months);
     const diff = newRows.map((r, i) => ({ r, o: oldRows[i] })).filter(d => d.r.score !== d.o.score);
     if (!diff.length) { $('ruleTable').innerHTML = '<tbody><tr><td class="muted">With the data loaded now, both rules give the same levels.</td></tr></tbody>'; return; }
-    $('ruleTable').innerHTML = '<thead><tr><th>Month</th><th class="r">Maize</th><th>Old rule (3-month)</th><th>New rule (last year)</th></tr></thead><tbody>' +
-      diff.map(d => '<tr><td>' + label(d.r) + '</td><td class="r num">' + fmt(d.r.price) + '</td><td><span class="pill lv-' + d.o.level.cls + '">' + d.o.level.name + '</span></td><td><span class="pill lv-' + d.r.level.cls + '">' + d.r.level.name + '</span></td></tr>').join('') + '</tbody>';
+    $('ruleTable').innerHTML = '<thead><tr><th>Month</th><th class="r">Old basket change</th><th>Old rule (3-month)</th><th class="r">New basket change</th><th>New rule (last year)</th></tr></thead><tbody>' +
+      diff.map(d => '<tr><td>' + label(d.r) + '</td><td class="r num">' + (d.o.basket === null ? '—' : pct(d.o.basket)) + '</td><td><span class="pill lv-' + d.o.level.cls + '">' + d.o.level.name + '</span></td><td class="r num">' + (d.r.basket === null ? '—' : pct(d.r.basket)) + '</td><td><span class="pill lv-' + d.r.level.cls + '">' + d.r.level.name + '</span></td></tr>').join('') + '</tbody>';
   }
 
   function renderSensitivity() {
@@ -1239,29 +1638,36 @@ Feb 2024,58,1080,Fair</pre>
     $('sensTable').innerHTML = h + '</tbody>';
   }
 
-  function renderCalc(log) {
+  function renderCalc() {
     const h = +$('cHouse').value || 0, l = +$('cLang').value || 1, a = +$('cAlerts').value || 0, p = +$('cPrice').value || 0;
     const perAlert = h * l * p, perYear = perAlert * a;
     const latest = state.months[state.months.length - 1];
-    const kg = latest && latest.price ? perYear / latest.price : null;
-    $('calcResult').innerHTML = '<p class="stat num">UGX ' + fmt(perYear) + ' a year</p><p>UGX ' + fmt(perAlert) + ' for each alert to ' + fmt(h) + ' households.' + (kg ? ' That is the price of about ' + fmt(kg) + ' kg of maize.' : '') + '</p>';
+    const mz = latest && latest.foods.maize && latest.foods.maize.unit === 'kg' ? latest.foods.maize.price : null;
+    const kg = mz ? perYear / mz : null;
+    $('calcResult').innerHTML = '<p class="stat num">UGX ' + fmt(perYear) + ' a year</p><p>UGX ' + fmt(perAlert) + ' for each alert to ' + fmt(h) + ' households.' + (kg ? ' That is the price of about ' + fmt(kg) + ' kg of maize in the latest month.' : '') + '</p>';
     $('costCell').textContent = fmt(perYear);
-    void log;
   }
-  ['cHouse', 'cLang', 'cAlerts', 'cPrice'].forEach(id => $(id).addEventListener('input', () => renderCalc()));
+  ['cHouse', 'cLang', 'cAlerts', 'cPrice'].forEach(id => $(id).addEventListener('input', renderCalc));
 
+  // Yusuf storage planner: plan for two or three foods
   function renderPlanner() {
-    const people = +$('pPeople').value || 0, kg = +$('pKg').value || 0, hard = +$('pHard').value || 0, good = +$('pGood').value || 1;
-    const total = people * kg * hard, perMonth = total / good;
-    $('planResult').innerHTML = '<p class="stat num">' + fmt(total) + ' kg to store</p><p>Set aside about <strong class="num">' + fmt(perMonth) + ' kg</strong> each good month for ' + good + ' months. That is about ' + (total / 100).toFixed(1) + ' bags of 100 kg.</p>';
+    const people = +$('pPeople').value || 0, hard = +$('pHard').value || 0, good = +$('pGood').value || 1;
+    const foods = [0, 1, 2].map(i => ({ name: $('pF' + i).value.trim(), kg: +$('pK' + i).value || 0 })).filter(f => f.name && f.kg > 0);
+    if (!foods.length || !people || !hard) { $('planResult').innerHTML = '<p>Type at least one food and an amount per person to see a plan.</p>'; return; }
+    const plan = foods.map(f => ({ name: f.name, total: people * f.kg * hard }));
+    const total = plan.reduce((t, f) => t + f.total, 0);
+    const list = arr => arr.length > 1 ? arr.slice(0, -1).join(', ') + ' and ' + arr[arr.length - 1] : arr[0];
+    $('planResult').innerHTML = '<p class="stat num">' + fmt(total) + ' kg to store</p>' +
+      '<p>' + list(plan.map(f => '<strong class="num">' + fmt(f.total) + ' kg</strong> of ' + esc(f.name.toLowerCase()))) + ' for ' + fmt(people) + ' people over ' + hard + (hard === 1 ? ' hard month.' : ' hard months.') + '</p>' +
+      '<p>Set aside about ' + list(plan.map(f => '<strong class="num">' + (f.total / good).toFixed(1).replace(/\.0$/, '') + ' kg</strong> of ' + esc(f.name.toLowerCase()))) + ' each good month for ' + good + (good === 1 ? ' month.' : ' months.') + '</p>';
   }
-  ['pPeople', 'pKg', 'pHard', 'pGood'].forEach(id => $(id).addEventListener('input', renderPlanner));
+  ['pPeople', 'pHard', 'pGood', 'pF0', 'pK0', 'pF1', 'pK1', 'pF2', 'pK2'].forEach(id => $(id).addEventListener('input', renderPlanner));
   $('workMonth').addEventListener('change', () => renderWorking(analyse(state.months)));
 
   // ================= AUTOMATIC TESTS =================
   function runTests() {
-    const S = { rainT: 0.8, priceT: 0.2, normals: Array(12).fill(100) };
-    const mk = (y, m, rain, price, crop) => ({ y, m, rain, price, crop: crop || 'Good' });
+    const S = { rainT: 0.8, priceT: 0.2, normals: Array(12).fill(100), foods: defaultFoodSettings(), staple: 'maize' };
+    const mk = (y, m, rain, price, crop) => ({ y, m, rain, foods: { maize: { price, unit: 'kg', crop: crop || 'Good' } } });
     const base = [mk(2024,0,100,1000), mk(2024,1,100,1000), mk(2024,2,100,1000), mk(2024,3,100,1000), mk(2024,4,100,1000), mk(2024,5,100,1000),
                   mk(2024,6,100,1000), mk(2024,7,100,1000), mk(2024,8,100,1000), mk(2024,9,100,1000), mk(2024,10,100,1000), mk(2024,11,100,1000)];
     const last = (extra) => analyseWith(base.concat(extra), S).pop();
@@ -1296,15 +1702,22 @@ Feb 2024,58,1080,Fair</pre>
   }
 
   // ================= VISITOR CHALLENGE =================
+  // Each question uses different foods. The answer is worked out by the same scoring rules as the app.
   const CH = [
-    { m: 'March', rain: 65, normal: 130, change: 3, crop: 'Good' },
-    { m: 'June', rain: 70, normal: 70, change: 8, crop: 'Poor' },
-    { m: 'April', rain: 100, normal: 175, change: 26, crop: 'Fair' },
-    { m: 'October', rain: 150, normal: 140, change: 5, crop: 'Good' },
-    { m: 'July', rain: 40, normal: 60, change: 45, crop: 'Poor' }
+    { m: 'March', region: 'Northern', rain: 65, normal: 130, staple: 'sorghum', foods: [['sorghum', 6, 'Good'], ['millet', 2, 'Good'], ['cassava', -1, 'Good'], ['beans', 5, 'Good']] },
+    { m: 'June', region: 'Central', rain: 70, normal: 70, staple: 'matooke', foods: [['matooke', 4, 'Poor'], ['beans', 6, 'Good'], ['sweet_potatoes', 3, 'Good'], ['maize', 7, 'Good']] },
+    { m: 'April', region: 'Eastern', rain: 100, normal: 175, staple: 'maize', foods: [['maize', 30, 'Fair'], ['cassava', 24, 'Fair'], ['millet', 22, 'Fair'], ['beans', 28, 'Fair']] },
+    { m: 'October', region: 'Karamoja', rain: 150, normal: 140, staple: 'sorghum', foods: [['maize', 36, 'Good'], ['sorghum', 2, 'Good'], ['beans', 4, 'Good']] },
+    { m: 'July', region: 'Karamoja', rain: 40, normal: 60, staple: 'sorghum', foods: [['sorghum', 55, 'Poor'], ['maize', 45, 'Poor'], ['beans', 38, 'Fair']] }
   ];
   let ch = { i: 0, score: 0, picked: false };
-  function chAnswer(q) { return (q.rain < 0.8 * q.normal ? 1 : 0) + (q.change > 20 ? 1 : 0) + (q.crop === 'Poor' ? 1 : 0); }
+  function chWork(q) {
+    const rain = rainSign(q.rain, q.normal, DEFAULTS.rainT);
+    const basket = basketAverage(q.foods.map(f => ({ change: f[1] / 100, weight: 1 })));
+    const price = priceSign(basket, DEFAULTS.priceT);
+    const crop = cropSign(q.foods.map(f => ({ id: f[0], crop: f[2] })), q.staple);
+    return { rain, basket, price, crop, score: rain.point + price + crop.point };
+  }
   function renderChallenge() {
     if (ch.i >= CH.length) {
       $('chProgress').textContent = 'Finished';
@@ -1312,22 +1725,26 @@ Feb 2024,58,1080,Fair</pre>
       $('chChoices').innerHTML = ''; $('chFeedback').hidden = true; $('chNext').hidden = true;
       return;
     }
-    const q = CH[ch.i];
+    const q = CH[ch.i], w = chWork(q);
     $('chProgress').textContent = 'Question ' + (ch.i + 1) + ' of ' + CH.length + ' · score ' + ch.score;
-    $('chScenario').innerHTML = '<p><strong>' + q.m + '</strong></p><ul><li>Rain: ' + q.rain + ' mm (normal ' + q.normal + ' mm)</li><li>Maize: ' + (q.change >= 0 ? '+' : '') + q.change + '% compared with last year</li><li>Crops: ' + q.crop + '</li></ul>';
+    $('chScenario').innerHTML = '<p><strong>' + q.m + ', ' + q.region + ' region</strong></p><ul>' +
+      '<li>Rain: ' + q.rain + ' mm (normal ' + q.normal + ' mm)</li>' +
+      '<li>Prices compared with last year: ' + q.foods.map(f => foodName(f[0]) + ' ' + (f[1] >= 0 ? '+' : '−') + Math.abs(f[1]) + '%').join(', ') + '. Basket average: ' + pct(w.basket) + '</li>' +
+      '<li>Crops: ' + q.foods.map(f => foodName(f[0]) + ' ' + f[2]).join(', ') + '. Main staple: ' + foodName(q.staple) + '</li></ul>';
     $('chChoices').innerHTML = LEVELS.map((L, k) => '<button type="button" class="lv-' + L.cls + '" data-k="' + k + '"' + (ch.picked ? ' disabled' : '') + '>' + L.sym + ' ' + L.name + '</button>').join('');
     $('chChoices').querySelectorAll('button').forEach(b => b.onclick = () => {
       if (ch.picked) return;
       ch.picked = true;
-      const k = +b.dataset.k, ans = chAnswer(q), ok = k === ans;
+      const k = +b.dataset.k, ans = w.score, ok = k === ans;
       if (ok) ch.score++;
       b.classList.add('picked');
       const why = [];
-      why.push(q.rain < 0.8 * q.normal ? 'rain is below 80% of normal (1)' : 'rain is fine (0)');
-      why.push(q.change > 20 ? 'maize is more than 20% up (1)' : 'maize is not more than 20% up (0)');
-      why.push(q.crop === 'Poor' ? 'crops are Poor (1)' : 'crops are not Poor (0)');
+      why.push(w.rain.point ? 'rain is below 80% of normal (1)' : 'rain is fine (0)');
+      why.push(w.price ? 'the basket average is more than 20% up (1)' : 'the basket average is not more than 20% up (0)');
+      why.push(w.crop.point ? (w.crop.majority ? 'half or more of the crops are Poor (1)' : 'the main staple is Poor (1)') : 'not enough crops are Poor (0)');
       const fb = $('chFeedback'); fb.hidden = false;
-      fb.innerHTML = '<p><strong>' + (ok ? 'Correct!' : 'Not quite.') + '</strong> The answer is ' + LEVELS[ans].name + ': ' + why.join(', ') + '.</p>';
+      fb.innerHTML = '<p><strong>' + (ok ? 'Correct!' : 'Not quite.') + '</strong> The answer is ' + LEVELS[ans].name + ': ' + why.join(', ') + '.</p>' +
+        (q.region === 'Karamoja' && q.m === 'October' ? '<p>Maize alone is up 36%, but the basket is only ' + pct(w.basket) + '. Families can switch to sorghum and beans, so this is not a warning sign yet.</p>' : '');
       $('chProgress').textContent = 'Question ' + (ch.i + 1) + ' of ' + CH.length + ' · score ' + ch.score;
       $('chChoices').querySelectorAll('button').forEach(x => x.disabled = true);
       $('chNext').hidden = false;
@@ -1343,10 +1760,12 @@ Feb 2024,58,1080,Fair</pre>
   // ================= TEAM =================
   const CHECKS = ['Poster has the title, SDG 2 logo and Surah Yusuf 12:47', 'Flowchart and a worked example printed large', 'Testing results and limitations on the board', 'App open on the laptop, demo reset', 'Offline copy on a second device and a USB stick', 'Printed screenshots in case the power fails', 'Laptop charged, charger and extension cable', 'Both of us can explain every part', 'Practised the judges\' questions at least 5 times'];
   const QA = [
-    ['Is the data real?', 'The drought replay uses made-up data to show how the alerts work, and it is labelled. The app can load real data from WFP and CHIRPS, and we explain where it comes from.'],
+    ['Is the data real?', 'The drought replay uses made-up (illustrative) rainfall and prices for seven foods, and it is labelled. The app can load real data from WFP and CHIRPS, and it shows the source under the charts.'],
+    ['Why track several foods, not just maize?', 'When one food gets expensive, families switch to another. Watching only maize can miss hunger when the main food of a region gets expensive, or exaggerate it when only maize rises.'],
+    ['How can you average a price per kilo and a price per bunch?', 'We do not average prices. We compare each food with itself a year ago in the same unit, which gives a percentage change. Then we average the percentages, which have no units.'],
     ['Why 80% and 20%?', 'They are starting values we chose and can change with the sliders. Our Testing tab shows that stricter limits give fewer alarms but can miss a crisis. It is a trade-off.'],
     ['How would a farmer get the alert?', 'Most Ugandans use basic phones, so the coordinator copies the short SMS and shares it by SMS, radio or announcement at the mosque.'],
-    ['How do you know it works?', 'Our automatic tests check every rule, and in the drought replay it warned four months before prices peaked. We also found and fixed a weakness in the price rule.'],
+    ['How do you know it works?', 'Our automatic tests check every rule, and the drought replay shows how many months before the price peak it warned. We also found and fixed a weakness in the price rule.'],
     ['What would you improve?', 'Add satellite vegetation and livestock data, more markets and districts, and send SMS automatically through a provider.'],
     ['How much does it cost?', 'Nothing to build or run. SMS alerts for 200 households cost about UGX 36,000 a year, which a mosque Sadaqah fund or a partner could pay.'],
     ['What is Islamic about it?', 'Yusuf (AS) planned ahead from a warning. Each alert level has an Islamic action: avoid Israf when times are good, Zakat when a Warning comes, Sadaqah and feeding others in a Crisis.']
@@ -1363,7 +1782,7 @@ Feb 2024,58,1080,Fair</pre>
     $('qa').innerHTML = QA.map(q => '<details class="qa"><summary>' + q[0] + '</summary><p>' + q[1] + '</p></details>').join('');
   }
 
-  // ================= SETTINGS AND DATA IMPORT =================
+  // ================= SETTINGS, FOOD BASKET AND DATA IMPORT =================
   function initSettings() {
     const s = state.settings;
     $('sRegion').value = s.region;
@@ -1373,42 +1792,191 @@ Feb 2024,58,1080,Fair</pre>
     $('sPrice').value = Math.round(s.priceT * 100); $('sPriceOut').textContent = $('sPrice').value + '%';
     $('normals').innerHTML = MONTHS.map((m, i) => '<label for="n' + i + '">' + m + '<input id="n' + i + '" type="number" min="1" max="1000" value="' + s.normals[i] + '" data-i="' + i + '"></label>').join('');
     $('normals').querySelectorAll('input').forEach(inp => inp.oninput = () => { const v = parseFloat(inp.value); if (!isNaN(v) && v > 0) { state.settings.normals[+inp.dataset.i] = v; render(); save(); } });
+    renderBasketSettings();
   }
+  function renderBasketSettings() {
+    const s = state.settings;
+    $('sPreset').innerHTML = Object.keys(PRESETS).map(k => '<option value="' + k + '">' + PRESETS[k].name + '</option>').join('') + '<option value="custom">Custom (my own choice)</option>';
+    $('sPreset').value = s.preset;
+    $('sStaple').innerHTML = trackedFoods().map(f => '<option value="' + f.id + '">' + f.name + '</option>').join('');
+    $('sStaple').value = s.staple;
+    $('foodSettings').innerHTML = FOODS.map(f => {
+      const fs = s.foods[f.id];
+      return '<div class="fs-row"><label for="fs-on-' + f.id + '"><input type="checkbox" id="fs-on-' + f.id + '" data-f="' + f.id + '"' + (fs.on ? ' checked' : '') + '>' + f.name + '</label>' +
+        '<select id="fs-unit-' + f.id + '" data-f="' + f.id + '" aria-label="' + f.name + ' price unit">' + UNITS.map(u => '<option value="' + u + '"' + (fs.unit === u ? ' selected' : '') + '>per ' + u + '</option>').join('') + '</select>' +
+        '<input id="fs-w-' + f.id + '" data-f="' + f.id + '" type="number" min="0" max="10" step="0.5" value="' + fs.weight + '" aria-label="' + f.name + ' weight in the basket average"></div>';
+    }).join('');
+    $('csvTemplate').textContent = csvTemplate();
+    $('csvText').placeholder = csvHeader(trackedFoods().map(f => ({ id: f.id, units: [s.foods[f.id].unit] })));
+  }
+  function basketChanged(msg) { renderBasketSettings(); render(); save(); if (msg) toast(msg); }
+  $('sPreset').addEventListener('change', e => {
+    const k = e.target.value, s = state.settings;
+    s.preset = k;
+    if (PRESETS[k]) {
+      FOODS.forEach(f => { s.foods[f.id].on = PRESETS[k].foods.indexOf(f.id) >= 0; });
+      s.staple = PRESETS[k].staple;
+      basketChanged('Now tracking ' + PRESETS[k].foods.map(foodName).join(', ') + '. Main staple: ' + foodName(s.staple) + '.');
+    }
+  });
+  $('sStaple').addEventListener('change', e => { state.settings.staple = e.target.value; state.settings.preset = 'custom'; basketChanged(); });
+  $('foodSettings').addEventListener('change', e => {
+    const id = e.target.dataset.f, s = state.settings; if (!id) return;
+    if (e.target.type === 'checkbox') {
+      if (!e.target.checked && trackedFoods().length === 1) { e.target.checked = true; toast('Keep at least one food in the basket.'); return; }
+      s.foods[id].on = e.target.checked;
+      if (!s.foods[s.staple].on) s.staple = trackedFoods()[0].id;
+      s.preset = 'custom';
+    } else if (e.target.tagName === 'SELECT') {
+      s.foods[id].unit = e.target.value;
+    } else {
+      const v = parseFloat(e.target.value);
+      if (isNaN(v) || v < 0 || v > 10) { e.target.value = s.foods[id].weight; toast('Weight must be a number from 0 to 10.'); return; }
+      s.foods[id].weight = v;
+    }
+    basketChanged();
+  });
   $('sRegion').oninput = e => { state.settings.region = e.target.value.trim() || 'Your region'; render(); save(); };
   $('sSource').oninput = e => { state.settings.source = e.target.value.trim() || 'Source not stated'; render(); save(); };
   $('sLocal').oninput = e => { state.settings.local = e.target.value; save(); };
   $('sRain').oninput = e => { state.settings.rainT = +e.target.value / 100; $('sRainOut').textContent = e.target.value + '%'; render(); save(); };
   $('sPrice').oninput = e => { state.settings.priceT = +e.target.value / 100; $('sPriceOut').textContent = e.target.value + '%'; render(); save(); };
 
+  // ----- CSV: one row per month, a price column and a crop column for each food -----
+  // Header example: month,rain_mm,maize_ugx_per_kg,maize_crop,matooke_ugx_per_bunch,matooke_crop
+  function csvHeader(cols) {
+    return ['month', 'rain_mm'].concat(cols.flatMap(c => c.units.map(u => c.id + '_ugx_per_' + u).concat([c.id + '_crop']))).join(',');
+  }
+  function csvTemplate() {
+    const foods = trackedFoods(), s = state.settings;
+    const rowOf = i => [label(SAMPLE[i]), SAMPLE[i].rain].concat(foods.flatMap(f => s.foods[f.id].unit === f.unit ? [SAMPLE[i].foods[f.id].price, SAMPLE[i].foods[f.id].crop] : ['', ''])).join(',');
+    return csvHeader(foods.map(f => ({ id: f.id, units: [s.foods[f.id].unit] }))) + '\n' + rowOf(0) + '\n' + rowOf(1);
+  }
+  function toCsv(months) {
+    const cols = FOODS.map(f => ({ id: f.id, units: UNITS.filter(u => months.some(mo => mo.foods[f.id] && mo.foods[f.id].unit === u)) })).filter(c => c.units.length);
+    return csvHeader(cols) + '\n' + months.map(mo => [label(mo), mo.rain].concat(cols.flatMap(c => {
+      const e = mo.foods[c.id];
+      return c.units.map(u => (e && e.unit === u ? e.price : '')).concat([e ? e.crop : '']);
+    })).join(',')).join('\n');
+  }
   function parseMonth(t) {
-    t = t.trim();
-    let m = t.match(/^(\d{4})-(\d{1,2})/);
+    t = String(t || '').trim();
+    let m = t.match(/^(\d{4})-(\d{1,2})(-\d{1,2})?$/);
     if (m) { const mo = +m[2] - 1; if (mo >= 0 && mo < 12) return { y: +m[1], m: mo }; }
-    m = t.match(/^([A-Za-z]{3})[A-Za-z]*\s+(\d{4})$/);
+    m = t.match(/^([A-Za-z]{3})[A-Za-z]*\.?\s+(\d{4})$/);
     if (m) { const k = MONTHS.findIndex(x => x.toLowerCase() === m[1].toLowerCase()); if (k >= 0) return { y: +m[2], m: k }; }
     return null;
   }
-  function parseCsv(text) {
-    const out = [], errors = [];
-    text.split(/\r?\n/).forEach((line, n) => {
-      if (!line.trim()) return;
-      const p = line.split(/[,;\t]/).map(x => x.trim().replace(/^"|"$/g, ''));
-      if (n === 0 && /month/i.test(p[0])) return;
-      const when = parseMonth(p[0] || ''), rain = parseFloat(p[1]), price = parseFloat((p[2] || '').replace(/\s/g, ''));
-      const crop = (p[3] || '').charAt(0).toUpperCase() + (p[3] || '').slice(1).toLowerCase();
-      if (!when) errors.push('Line ' + (n + 1) + ': month "' + p[0] + '" should look like Jan 2024 or 2024-01');
-      else if (isNaN(rain) || rain < 0) errors.push('Line ' + (n + 1) + ': rainfall should be a number of mm');
-      else if (isNaN(price) || price <= 0) errors.push('Line ' + (n + 1) + ': maize price should be a number of UGX');
-      else if (['Good', 'Fair', 'Poor'].indexOf(crop) < 0) errors.push('Line ' + (n + 1) + ': crop should be Good, Fair or Poor');
-      else out.push({ y: when.y, m: when.m, rain, price, crop });
-    });
-    out.sort((a, b) => (a.y * 12 + a.m) - (b.y * 12 + b.m));
-    for (let i = 1; i < out.length; i++) {
-      const gap = (out[i].y * 12 + out[i].m) - (out[i-1].y * 12 + out[i-1].m);
-      if (gap === 0) errors.push('Two rows for ' + label(out[i]) + '. Keep one.');
-      else if (gap > 1) errors.push('Missing month(s) before ' + label(out[i]) + '. Fill the gap or leave a note on your poster.');
+  // Split one line of a CSV file, keeping "quoted, values" together.
+  function splitLine(line, sep) {
+    const out = []; let cur = '', q = false;
+    for (let i = 0; i < line.length; i++) {
+      const c = line[i];
+      if (q) { if (c === '"') { if (line[i + 1] === '"') { cur += '"'; i++; } else q = false; } else cur += c; }
+      else if (c === '"') q = true;
+      else if (c === sep) { out.push(cur.trim()); cur = ''; }
+      else cur += c;
     }
-    return { out, errors };
+    out.push(cur.trim());
+    return out;
+  }
+  const toNumber = t => { const c = String(t).replace(/[\s_,]/g, ''); return /^-?\d+(\.\d+)?$/.test(c) ? parseFloat(c) : NaN; };
+  const FOOD_ALIASES = { sweet_potato: 'sweet_potatoes', sweetpotato: 'sweet_potatoes', sweetpotatoes: 'sweet_potatoes' };
+  const findFood = word => { const w = FOOD_ALIASES[word] || word; return foodById(w) ? w : null; };
+  function readHeader(cells) {
+    const cols = [], errors = [];
+    cells.forEach((raw, i) => {
+      const h = raw.toLowerCase().replace(/\s+/g, '_');
+      let m;
+      if (!h) cols.push({ type: 'skip' });
+      else if (h === 'month') cols.push({ type: 'month' });
+      else if (h === 'rain_mm' || h === 'rain' || h === 'rainfall' || h === 'rainfall_mm') cols.push({ type: 'rain' });
+      else if (h === 'crop') cols.push({ type: 'crop', food: '?' });
+      else if ((m = h.match(/^(.+)_ugx_per_([a-z]+)$/)) || (m = h.match(/^(.+)_price$/))) {
+        const food = findFood(m[1]);
+        const unit = m[2] || (food ? state.settings.foods[food].unit : 'kg');
+        if (!food) errors.push('Column ' + (i + 1) + ' "' + raw + '": "' + m[1] + '" is not one of our foods (' + FOODS.map(f => f.id).join(', ') + ').');
+        else if (UNITS.indexOf(unit) < 0) errors.push('Column ' + (i + 1) + ' "' + raw + '": the unit must be ' + UNITS.join(' or ') + '.');
+        else if (cols.some(c => c.type === 'price' && c.food === food && c.unit === unit)) errors.push('Column ' + (i + 1) + ' "' + raw + '" appears twice.');
+        cols.push({ type: food && UNITS.indexOf(unit) >= 0 ? 'price' : 'skip', food, unit });
+      }
+      else if ((m = h.match(/^(.+)_crop$/))) {
+        const food = findFood(m[1]);
+        if (!food) errors.push('Column ' + (i + 1) + ' "' + raw + '": "' + m[1] + '" is not one of our foods (' + FOODS.map(f => f.id).join(', ') + ').');
+        cols.push({ type: food ? 'crop' : 'skip', food });
+      }
+      else { errors.push('Column ' + (i + 1) + ' "' + raw + '" is not a column we know. Check the spelling against the template.'); cols.push({ type: 'skip' }); }
+    });
+    // An old version 4 file has one "crop" column for maize.
+    const priceFoods = Array.from(new Set(cols.filter(c => c.type === 'price').map(c => c.food)));
+    cols.filter(c => c.type === 'crop' && c.food === '?').forEach(c => {
+      if (priceFoods.length === 1) c.food = priceFoods[0];
+      else { c.type = 'skip'; errors.push('The column "crop" must say which food it is for, for example maize_crop.'); }
+    });
+    if (!cols.some(c => c.type === 'month')) errors.push('The header needs a "month" column.');
+    if (!cols.some(c => c.type === 'rain')) errors.push('The header needs a "rain_mm" column.');
+    if (!priceFoods.length) errors.push('The header needs at least one food price column, for example maize_ugx_per_kg.');
+    priceFoods.forEach(f => { if (!cols.some(c => c.type === 'crop' && c.food === f)) errors.push('Add a ' + f + '_crop column next to the ' + f + ' price.'); });
+    cols.filter(c => c.type === 'crop').forEach(c => { if (priceFoods.indexOf(c.food) < 0) errors.push('The column ' + c.food + '_crop has no ' + c.food + ' price column.'); });
+    return { cols, foods: priceFoods, errors };
+  }
+  // Check every row. errors stop the import; notes are things to know about (gaps).
+  function parseCsv(text) {
+    const errors = [], notes = [], out = [];
+    const lines = String(text || '').split(/\r?\n/).map((t, n) => ({ t, n: n + 1 })).filter(l => l.t.trim() && !/^\s*#/.test(l.t));
+    if (!lines.length) return { months: [], foods: [], errors: ['No rows found. Paste the header row and one row per month.'], notes };
+    const first = lines[0].t;
+    const sep = first.indexOf('\t') >= 0 ? '\t' : (first.indexOf(';') >= 0 && first.indexOf(',') < 0 ? ';' : ',');
+    if (!/month/i.test(first)) return { months: [], foods: [], errors: ['Line ' + lines[0].n + ': the first line must be the header row, starting with "month". Copy it from the template.'], notes };
+    const head = readHeader(splitLine(first, sep));
+    if (head.errors.length) return { months: [], foods: [], errors: head.errors, notes };
+    const width = head.cols.length;
+    lines.slice(1).forEach(({ t, n }) => {
+      const cells = splitLine(t, sep);
+      while (cells.length > width && cells[cells.length - 1] === '') cells.pop();
+      if (cells.length < width) { errors.push('Line ' + n + ': has ' + cells.length + ' values but the header has ' + width + '. A value or a comma is missing.'); return; }
+      if (cells.length > width) { errors.push('Line ' + n + ': has ' + cells.length + ' values but the header has ' + width + '. There is an extra value or comma.'); return; }
+      const get = type => cells[head.cols.findIndex(c => c.type === type)];
+      const when = parseMonth(get('month'));
+      if (!when) { errors.push('Line ' + n + ': month "' + get('month') + '" should look like Jan 2024 or 2024-01.'); return; }
+      const where = 'Line ' + n + ' (' + label(when) + '): ';
+      const rainTxt = get('rain'), rain = toNumber(rainTxt);
+      if (rainTxt === '') { errors.push(where + 'rainfall is missing.'); return; }
+      if (isNaN(rain) || rain < 0 || rain > 2000) { errors.push(where + 'rainfall "' + rainTxt + '" should be a number of mm from 0 to 2000.'); return; }
+      const foods = {}; let bad = false;
+      head.foods.forEach(f => {
+        const prices = head.cols.map((c, i) => ({ c, v: cells[i] })).filter(x => x.c.type === 'price' && x.c.food === f && x.v !== '');
+        const cropTxt = cells[head.cols.findIndex(c => c.type === 'crop' && c.food === f)];
+        const crop = CROPS.find(c => c.toLowerCase() === cropTxt.toLowerCase());
+        const name = foodName(f);
+        if (!prices.length && cropTxt === '') return;   // no figure for this food this month: allowed
+        if (prices.length > 1) { errors.push(where + name + ' has two prices in different units. Keep one.'); bad = true; return; }
+        if (!prices.length) { errors.push(where + name + ' has a crop but no price. Fill both or leave both empty.'); bad = true; return; }
+        if (cropTxt === '') { errors.push(where + name + ' has a price but no crop. Fill both or leave both empty.'); bad = true; return; }
+        const price = toNumber(prices[0].v), unit = prices[0].c.unit, range = PRICE_RANGE[unit];
+        if (isNaN(price) || price < range[0] || price > range[1]) { errors.push(where + name + ' price "' + prices[0].v + '" should be a number of UGX per ' + unit + ' from ' + fmt(range[0]) + ' to ' + fmt(range[1]) + '.'); bad = true; return; }
+        if (!crop) { errors.push(where + name + ' crop "' + cropTxt + '" should be Good, Fair or Poor.'); bad = true; return; }
+        foods[f] = { price, unit, crop };
+      });
+      if (bad) return;
+      if (!Object.keys(foods).length) { errors.push(where + 'no food prices. Each month needs at least one food.'); return; }
+      out.push({ y: when.y, m: when.m, rain, foods, line: n });
+    });
+    out.sort((a, b) => monthNo(a) - monthNo(b));
+    for (let i = 1; i < out.length; i++) {
+      const gap = monthNo(out[i]) - monthNo(out[i - 1]);
+      if (gap === 0) errors.push('Two rows for ' + label(out[i]) + ' (lines ' + out[i - 1].line + ' and ' + out[i].line + '). Keep one.');
+      else if (gap > 1) {
+        const a = monthNo(out[i - 1]) + 1, b = monthNo(out[i]) - 1, lab = k => MONTHS[k % 12] + ' ' + Math.floor(k / 12);
+        notes.push('Gap: no row for ' + (a === b ? lab(a) : lab(a) + ' to ' + lab(b)) + '. Fill it, or say so on your poster.');
+      }
+    }
+    head.foods.forEach(f => {
+      const missing = out.filter(mo => !mo.foods[f]);
+      if (missing.length) notes.push(foodName(f) + ': no figures for ' + missing.slice(0, 5).map(label).join(', ') + (missing.length > 5 ? ' and ' + (missing.length - 5) + ' more' : '') + '. That food is left out of those months.');
+    });
+    out.forEach(mo => { delete mo.line; });
+    return { months: out, foods: head.foods, errors, notes };
   }
   $('csvFile').addEventListener('change', e => {
     const f = e.target.files && e.target.files[0]; if (!f) return;
@@ -1417,17 +1985,22 @@ Feb 2024,58,1080,Fair</pre>
     rd.readAsText(f);
   });
   $('csvLoad').onclick = () => {
-    const { out, errors } = parseCsv($('csvText').value), err = $('csvError');
-    const blocking = errors.filter(x => !/^Missing month/.test(x));
-    if (!out.length || blocking.length) { err.textContent = blocking.length ? blocking.slice(0, 4).join(' · ') : 'No rows found. Paste rows like: Jan 2024,62,1050,Good'; err.hidden = false; return; }
+    const res = parseCsv($('csvText').value), err = $('csvError');
+    if (!res.months.length || res.errors.length) { err.innerHTML = (res.errors.length ? res.errors : ['No rows found.']).slice(0, 6).map(esc).join('<br>'); err.hidden = false; return; }
     if (demo) endDemo();
-    state.months = out; selected = null;
-    if (state.settings.source === SAMPLE_SOURCE) { state.settings.source = 'Real data loaded by the team. Type the source here, e.g. WFP prices (HDX), CHIRPS rainfall.'; $('sSource').value = state.settings.source; }
-    err.hidden = errors.length === 0; err.textContent = errors.join(' · ');
-    render(); save(); toast('Loaded ' + out.length + ' months. Update the data source and region in Settings.');
+    state.months = res.months; selected = null;
+    const s = state.settings;
+    // Track the foods that are in the file, using the unit of their latest price.
+    FOODS.forEach(f => { s.foods[f.id].on = res.foods.indexOf(f.id) >= 0; });
+    res.foods.forEach(f => { const lastE = res.months.slice().reverse().find(mo => mo.foods[f]); if (lastE) s.foods[f].unit = lastE.foods[f].unit; });
+    if (!s.foods[s.staple].on) s.staple = res.foods[0];
+    s.preset = Object.keys(PRESETS).find(k => PRESETS[k].foods.length === res.foods.length && PRESETS[k].foods.every(f => res.foods.indexOf(f) >= 0)) || 'custom';
+    if (s.source === SAMPLE_SOURCE) { s.source = 'Real data loaded by the team. Type the source here, e.g. WFP prices (HDX), CHIRPS rainfall.'; $('sSource').value = s.source; }
+    err.hidden = !res.notes.length; err.innerHTML = res.notes.map(esc).join('<br>');
+    renderBasketSettings(); render(); save(); toast('Loaded ' + res.months.length + ' months. Now tracking ' + res.foods.map(foodName).join(', ') + '.');
   };
   $('csvCopy').onclick = () => {
-    const text = 'month,rain_mm,maize_ugx_per_kg,crop\n' + state.months.map(r => label(r) + ',' + r.rain + ',' + r.price + ',' + r.crop).join('\n');
+    const text = toCsv(state.months);
     try { navigator.clipboard.writeText(text).then(() => toast('Copied ' + state.months.length + ' months as CSV.'), () => { $('csvText').value = text; toast('Copy blocked. The CSV is in the box: select it and copy.'); }); }
     catch (e) { $('csvText').value = text; toast('The CSV is in the box: select it and copy.'); }
   };
@@ -1441,19 +2014,25 @@ Feb 2024,58,1080,Fair</pre>
   };
 
   // ================= EVENTS =================
-  ['fRain', 'fPrice', 'fCrop'].forEach(id => $(id).addEventListener('input', updatePreview));
+  $('fRain').addEventListener('input', updatePreview);
   $('entry').addEventListener('submit', e => {
     e.preventDefault();
     const c = candidate(), err = $('formError');
     let msg = '';
     if (isNaN(c.rain) || c.rain < 0 || c.rain > 1000) msg = 'Type the rainfall in mm, between 0 and 1000.';
-    else if (isNaN(c.price) || c.price < 50 || c.price > 20000) msg = 'Type the maize price in UGX per kg, between 50 and 20,000.';
+    else if (!Object.keys(c.foods).length) msg = 'Type the price of at least one food.';
+    else {
+      const wrong = Object.keys(c.foods).find(id => { const e2 = c.foods[id], r = PRICE_RANGE[e2.unit]; return e2.price < r[0] || e2.price > r[1]; });
+      if (wrong) { const u = c.foods[wrong].unit, r = PRICE_RANGE[u]; msg = 'Check the ' + foodName(wrong).toLowerCase() + ' price: type UGX per ' + u + ', between ' + fmt(r[0]) + ' and ' + fmt(r[1]) + '.'; }
+    }
     if (msg) { err.textContent = msg; err.hidden = false; return; }
     err.hidden = true;
     if (demo) { stopAuto(); demo.queue = demo.queue.filter(q => !(q.y === c.y && q.m === c.m)); }
     addMonth(c);
     if (demo) updateDemoText();
-    $('fRain').value = ''; $('fPrice').value = ''; $('fCrop').value = 'Good'; updatePreview();
+    $('fRain').value = '';
+    trackedFoods().forEach(f => { $('fp-' + f.id).value = ''; $('fc-' + f.id).value = 'Good'; });
+    updatePreview();
   });
   $('undoBtn').onclick = () => {
     if (!state.months.length) return;
@@ -1504,6 +2083,7 @@ Feb 2024,58,1080,Fair</pre>
   initSettings();
   initTeam();
   render();
+  save();
   renderPlanner();
   renderChallenge();
   renderVisitors();
