@@ -1,0 +1,1513 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Yusuf's Warning</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: a field-station console. A tab bar that follows the expo assessment form; the Early warning tab is the live tool, the others explain it to judges. */
+:root {
+  --bg: #F1F4EE;
+  --surface: #FFFFFF;
+  --ink: #17211B;
+  --muted: #586860;
+  --line: #D6DDD3;
+  --accent: #2D6A4D;
+  --accent-ink: #FFFFFF;
+  --accent-t: #DCEBE2;
+  --rain: #2C6CA3;
+  --gold: #A86E10;
+  --normal: #2E8550; --normal-t: #DDEFE3;
+  --watch: #9A7500;  --watch-t: #FAF0C8;
+  --warning: #C85F0C; --warning-t: #FBE1C9;
+  --crisis: #C2302A; --crisis-t: #F7D4D1;
+  --shadow: 0 1px 2px rgba(23,33,27,.06), 0 8px 24px rgba(23,33,27,.06);
+  --f-display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --f-body: "Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
+  --f-data: "IBM Plex Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0E1411; --surface: #17201B; --ink: #E6ECE6; --muted: #9AAAA0; --line: #2A3630;
+    --accent: #6CC095; --accent-ink: #0E1411; --accent-t: #1A3327; --rain: #6FA9DD; --gold: #E2A84B;
+    --normal: #52BE82; --normal-t: #173527;
+    --watch: #E6C232; --watch-t: #39321A;
+    --warning: #F2923F; --warning-t: #3D2918;
+    --crisis: #F0625A; --crisis-t: #42201E;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.25);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0E1411; --surface: #17201B; --ink: #E6ECE6; --muted: #9AAAA0; --line: #2A3630;
+  --accent: #6CC095; --accent-ink: #0E1411; --accent-t: #1A3327; --rain: #6FA9DD; --gold: #E2A84B;
+  --normal: #52BE82; --normal-t: #173527;
+  --watch: #E6C232; --watch-t: #39321A;
+  --warning: #F2923F; --warning-t: #3D2918;
+  --crisis: #F0625A; --crisis-t: #42201E;
+  --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.25);
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html.big { font-size: 118%; }
+body {
+  background: var(--bg); color: var(--ink);
+  font-family: var(--f-body); font-size: 1rem; line-height: 1.5;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 0 48px;
+}
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
+.wrap { max-width: 1140px; margin: 0 auto; display: grid; gap: 24px; }
+.view { display: grid; gap: 24px; }
+h1, h2, h3 { font-family: var(--f-display); text-wrap: balance; margin: 0; line-height: 1.15; }
+h2 { font-size: 1.35rem; }
+h3 { font-size: 1.05rem; }
+p { margin: 0; }
+ul, ol { margin: 0; padding-left: 20px; display: grid; gap: 6px; }
+.eyebrow { font-size: .75rem; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); font-weight: 700; }
+.num { font-family: var(--f-data); font-variant-numeric: tabular-nums; }
+.muted { color: var(--muted); }
+.lead { font-size: 1.1rem; max-width: 62ch; }
+button, input, select, textarea { font: inherit; color: inherit; }
+button { cursor: pointer; }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+a { color: var(--accent); }
+
+/* top bar */
+.top { display: flex; flex-wrap: wrap; gap: 12px 20px; align-items: center; justify-content: space-between; padding-block: 20px 0; }
+.brand { display: flex; gap: 12px; align-items: center; }
+.mark { width: 40px; height: 40px; flex: none; }
+.brand h1 { font-size: 1.5rem; }
+.brand p { font-size: .85rem; color: var(--muted); }
+.top-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.btn { border: 1px solid var(--line); background: var(--surface); padding: 8px 14px; border-radius: 8px; font-weight: 700; font-size: .9rem; }
+.btn:hover { border-color: var(--muted); }
+.btn.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.btn.primary:hover { filter: brightness(1.08); }
+.btn.ghost { background: transparent; }
+.btn:disabled { opacity: .5; cursor: default; }
+
+/* tabs */
+.tabs { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: var(--bg); padding-block: 8px; margin-inline: -4px; overflow-x: auto; scrollbar-width: thin; }
+.tabs ol { list-style: none; padding: 0 4px; margin: 0; display: flex; gap: 6px; width: max-content; }
+.tabs a { display: flex; flex-direction: column; gap: 0; text-decoration: none; color: var(--ink); padding: 8px 14px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface); font-weight: 700; font-size: .9rem; white-space: nowrap; }
+.tabs a small { font-weight: 400; font-size: .7rem; color: var(--muted); }
+.tabs a[aria-current="page"] { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.tabs a[aria-current="page"] small { color: var(--accent-ink); opacity: .85; }
+
+/* demo bar */
+.demo { display: grid; gap: 10px; background: var(--ink); color: var(--bg); padding: 14px 16px; border-radius: 10px; }
+.demo-row { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center; justify-content: space-between; }
+.demo .btn { background: transparent; color: var(--bg); border-color: color-mix(in srgb, var(--bg) 40%, transparent); }
+.demo .btn.primary { background: var(--bg); color: var(--ink); border-color: var(--bg); }
+.demo-text { font-weight: 700; }
+.demo-text span { font-weight: 400; opacity: .8; }
+.demo-caption { font-size: 1.05rem; border-top: 1px solid color-mix(in srgb, var(--bg) 25%, transparent); padding-top: 10px; }
+
+/* hero status */
+.status { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); background: var(--surface); border-radius: 14px; box-shadow: var(--shadow); overflow: hidden; }
+.status-main { padding: 24px; display: grid; gap: 16px; align-content: start; border-left: 10px solid var(--lvl); background: linear-gradient(90deg, var(--lvl-t), var(--surface) 70%); }
+.level-name { font-family: var(--f-display); font-size: clamp(2.6rem, 7vw, 4.2rem); font-weight: 700; line-height: 1; color: var(--lvl); display: flex; gap: 14px; align-items: center; }
+.level-name .sym { font-size: .45em; border: 3px solid currentColor; border-radius: 999px; min-width: 1.6em; height: 1.6em; display: inline-grid; place-items: center; padding: 0 .2em; }
+.meter { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; max-width: 420px; }
+.meter div { height: 12px; border-radius: 3px; background: var(--line); }
+.meter div.on { background: var(--c); }
+.meter-labels { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; max-width: 420px; font-size: .75rem; color: var(--muted); }
+.action { font-size: 1.05rem; max-width: 46ch; }
+.action strong { display: block; font-size: .75rem; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
+.status-side { padding: 24px; display: grid; gap: 12px; align-content: start; border-left: 1px solid var(--line); }
+.ind { display: grid; grid-template-columns: 1fr auto; gap: 2px 12px; padding: 12px 14px; border: 1px solid var(--line); border-radius: 10px; }
+.ind-label { font-size: .85rem; color: var(--muted); font-weight: 700; }
+.ind-val { font-family: var(--f-data); font-size: 1.25rem; font-variant-numeric: tabular-nums; }
+.ind-sub { font-size: .85rem; color: var(--muted); grid-column: 1; }
+.flag { grid-row: 1 / span 3; grid-column: 2; align-self: center; font-size: .75rem; font-weight: 700; padding: 4px 10px; border-radius: 999px; white-space: nowrap; }
+.flag.ok { background: var(--normal-t); color: var(--normal); }
+.flag.bad { background: var(--crisis-t); color: var(--crisis); }
+.source-line { font-size: .8rem; color: var(--muted); }
+
+/* year strip */
+.strip { display: grid; gap: 10px; }
+.year-row { display: grid; grid-template-columns: 48px minmax(0, 1fr); gap: 10px; align-items: center; }
+.year-row .y { font-family: var(--f-data); font-size: .85rem; color: var(--muted); }
+.cells { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 4px; }
+.cell { height: 38px; border-radius: 5px; border: 2px solid transparent; font-size: .7rem; font-weight: 700; display: grid; place-items: center; padding: 0; line-height: 1.05; }
+.cell small { font-size: .65rem; display: block; }
+.cell.empty { background: transparent; border: 1px dashed var(--line); color: var(--muted); cursor: default; }
+.cell.sel { border-color: var(--ink); }
+.lv-normal { background: var(--normal-t); color: var(--normal); }
+.lv-watch { background: var(--watch-t); color: var(--watch); }
+.lv-warning { background: var(--warning-t); color: var(--warning); }
+.lv-crisis { background: var(--crisis-t); color: var(--crisis); }
+.cell.lv-warning, .cell.lv-crisis { background: var(--c); color: var(--surface); }
+
+/* panels */
+.cols { display: grid; grid-template-columns: minmax(0, 380px) minmax(0, 1fr); gap: 24px; align-items: start; }
+.two { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 24px; align-items: start; }
+.panel { background: var(--surface); border-radius: 14px; box-shadow: var(--shadow); padding: 22px; display: grid; gap: 16px; min-width: 0; align-content: start; }
+.panel-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+.crit { justify-self: start; display: inline-block; font-size: .75rem; font-weight: 700; color: var(--accent); background: var(--accent-t); padding: 3px 10px; border-radius: 999px; }
+form { display: grid; gap: 14px; }
+.field { display: grid; gap: 6px; }
+.field label { font-weight: 700; font-size: .9rem; }
+.field .hint { font-size: .8rem; color: var(--muted); }
+.field input, .field select, .field textarea { width: 100%; padding: 10px 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--bg); font-family: var(--f-data); font-size: 1rem; }
+.field textarea { font-family: var(--f-body); min-height: 80px; resize: vertical; }
+.next-month { font-family: var(--f-display); font-size: 1.5rem; font-weight: 700; }
+.preview { display: flex; gap: 10px; align-items: center; padding: 10px 12px; border-radius: 8px; font-size: .9rem; flex-wrap: wrap; }
+.pill { display: inline-block; padding: 2px 10px; border-radius: 999px; font-size: .8rem; font-weight: 700; white-space: nowrap; }
+.form-error { color: var(--crisis); font-size: .85rem; font-weight: 700; }
+.row-btns { display: flex; gap: 8px; flex-wrap: wrap; }
+
+.charts { display: grid; gap: 22px; }
+.chart h3 { margin-bottom: 4px; }
+.legend { display: flex; gap: 16px; flex-wrap: wrap; font-size: .8rem; color: var(--muted); margin-bottom: 6px; }
+.legend i { display: inline-block; width: 18px; height: 3px; vertical-align: middle; margin-right: 6px; border-radius: 2px; }
+.legend i.dash { background: repeating-linear-gradient(90deg, var(--muted) 0 4px, transparent 4px 7px); }
+svg.c { width: 100%; height: auto; display: block; }
+svg.c text { fill: var(--muted); font-family: var(--f-data); font-size: 11px; }
+svg.c .grid { stroke: var(--line); stroke-width: 1; }
+svg.c .band-watch { fill: var(--watch-t); }
+svg.c .band-warning { fill: var(--warning-t); }
+svg.c .band-crisis { fill: var(--crisis-t); }
+svg.c .s-rain { stroke: var(--rain); fill: none; stroke-width: 2.5; }
+svg.c .s-rain-dot { fill: var(--rain); }
+svg.c .s-gold { stroke: var(--gold); fill: none; stroke-width: 2.5; }
+svg.c .s-gold-dot { fill: var(--gold); }
+svg.c .s-ref { stroke: var(--muted); fill: none; stroke-width: 1.5; stroke-dasharray: 5 4; }
+
+/* log */
+.log { display: grid; gap: 0; margin: 0; padding: 0; list-style: none; }
+.log li { display: grid; grid-template-columns: 76px minmax(0, 1fr); gap: 10px; padding: 10px 0; border-top: 1px solid var(--line); font-size: .9rem; }
+.log li:first-child { border-top: 0; }
+.log .when { font-family: var(--f-data); color: var(--muted); font-size: .8rem; padding-top: 2px; }
+.log .sent { font-size: .8rem; font-weight: 700; color: var(--crisis); }
+.log .quiet { font-size: .8rem; color: var(--muted); }
+
+/* tables */
+.table-wrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: .9rem; }
+table.wide { min-width: 760px; }
+th, td { padding: 8px 10px; text-align: left; border-bottom: 1px solid var(--line); vertical-align: top; }
+table.wide th, table.wide td { white-space: nowrap; }
+th { font-size: .75rem; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+td.r, th.r { text-align: right; }
+.dots { display: inline-flex; gap: 4px; }
+.dots b { width: 10px; height: 10px; border-radius: 50%; background: var(--line); display: inline-block; }
+.dots b.on { background: var(--crisis); }
+.pass { color: var(--normal); font-weight: 700; }
+.fail { color: var(--crisis); font-weight: 700; }
+
+/* explain pages */
+.facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.fact { border-top: 4px solid var(--crisis); padding-top: 12px; display: grid; gap: 6px; align-content: start; }
+.fact .big { font-family: var(--f-display); font-size: 1.9rem; font-weight: 700; line-height: 1.05; }
+.fact .src { font-size: .8rem; color: var(--muted); }
+.people { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+.people div { display: grid; gap: 4px; align-content: start; }
+.people strong { font-family: var(--f-display); }
+.flow { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 0; align-items: stretch; }
+.flow .step { position: relative; background: var(--bg); border: 1px solid var(--line); border-radius: 10px; padding: 12px; display: grid; gap: 6px; align-content: start; margin-right: 22px; }
+.flow .step:last-child { margin-right: 0; }
+.flow .step:not(:last-child)::after { content: ""; position: absolute; right: -18px; top: 50%; width: 14px; height: 14px; border-top: 3px solid var(--accent); border-right: 3px solid var(--accent); transform: translateY(-50%) rotate(45deg); }
+.flow .step b { font-family: var(--f-display); }
+.flow .step span { font-size: .85rem; color: var(--muted); }
+.working { display: grid; gap: 10px; counter-reset: s; }
+.working > div { display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 10px; align-items: start; }
+.working > div::before { counter-increment: s; content: counter(s); width: 28px; height: 28px; border-radius: 50%; background: var(--accent); color: var(--accent-ink); display: grid; place-items: center; font-weight: 700; font-size: .85rem; }
+.working .calc { font-family: var(--f-data); font-size: .9rem; background: var(--bg); padding: 6px 10px; border-radius: 6px; display: inline-block; margin-top: 4px; overflow-wrap: anywhere; }
+.stem { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; }
+.stem div { border-top: 3px solid var(--accent); padding-top: 10px; display: grid; gap: 6px; align-content: start; }
+.stem .letter { font-family: var(--f-display); font-size: 2rem; font-weight: 700; color: var(--accent); line-height: 1; }
+.value3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.value3 div { display: grid; gap: 4px; align-content: start; }
+.stat { font-family: var(--f-display); font-size: 2.2rem; font-weight: 700; line-height: 1; }
+.versions { list-style: none; padding: 0; display: grid; gap: 0; }
+.versions li { display: grid; grid-template-columns: 70px minmax(0, 1fr); gap: 12px; padding: 10px 0; border-top: 1px solid var(--line); }
+.versions li:first-child { border-top: 0; }
+.versions .v { font-family: var(--f-data); font-weight: 700; color: var(--accent); }
+.calc-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+.result { background: var(--accent-t); border-radius: 10px; padding: 14px 16px; display: grid; gap: 4px; }
+.result .stat { color: var(--accent); }
+blockquote { margin: 0; font-family: var(--f-display); font-size: 1.25rem; line-height: 1.35; border-left: 4px solid var(--gold); padding-left: 16px; }
+blockquote cite { display: block; margin-top: 8px; font-family: var(--f-body); font-size: .85rem; font-style: normal; color: var(--muted); }
+.quotes { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
+.choices { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+.choices button { padding: 14px 8px; border-radius: 10px; border: 2px solid transparent; font-weight: 700; font-size: 1rem; }
+.choices button.picked { border-color: var(--ink); }
+.scenario { font-size: 1.1rem; display: grid; gap: 6px; }
+.scenario li { font-family: var(--f-data); }
+.check { list-style: none; padding: 0; display: grid; gap: 8px; }
+.check label { display: flex; gap: 10px; align-items: flex-start; }
+.check input { width: 20px; height: 20px; margin-top: 2px; accent-color: var(--accent); flex: none; }
+details.qa { border-top: 1px solid var(--line); padding: 10px 0; }
+details.qa summary { cursor: pointer; font-weight: 700; }
+details.qa p { margin-top: 8px; color: var(--muted); }
+
+/* settings */
+details.settings summary { cursor: pointer; font-weight: 700; font-family: var(--f-display); font-size: 1.1rem; }
+.set-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin-top: 16px; }
+.normals { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 8px; margin-top: 8px; }
+.normals label { font-size: .75rem; color: var(--muted); display: grid; gap: 2px; }
+.normals input { padding: 6px; border: 1px solid var(--line); border-radius: 6px; background: var(--bg); font-family: var(--f-data); width: 100%; }
+input[type=range] { width: 100%; accent-color: var(--accent); }
+.note { font-size: .85rem; color: var(--muted); }
+.sources { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: .85rem; }
+pre.csv { margin: 0; background: var(--bg); padding: 10px 12px; border-radius: 8px; font-family: var(--f-data); font-size: .85rem; overflow-x: auto; }
+
+/* alert overlay */
+.overlay { position: fixed; inset: 0; background: rgba(10,14,12,.55); display: grid; place-items: center; padding: 20px max(16px, env(safe-area-inset-right, 0px)) 20px max(16px, env(safe-area-inset-left, 0px)); z-index: 50; overflow-y: auto; }
+.alert-card { width: min(540px, 100%); background: var(--surface); border-radius: 16px; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,.35); }
+.alert-top { background: var(--lvl); color: #fff; padding: 18px 22px; display: grid; gap: 4px; }
+.alert-top .eyebrow { color: rgba(255,255,255,.85); }
+.alert-top h2 { font-size: 1.8rem; }
+.alert-body { padding: 20px 22px; display: grid; gap: 14px; }
+.sms { background: var(--bg); border: 1px solid var(--line); border-radius: 12px 12px 12px 2px; padding: 10px 12px; font-size: .95rem; display: grid; gap: 4px; }
+.sms small { color: var(--muted); font-family: var(--f-data); font-size: .75rem; }
+.pulse { animation: pulse 1.2s ease-in-out 2; }
+@keyframes pulse { 50% { filter: brightness(1.25); } }
+.toast { position: fixed; left: 50%; bottom: calc(20px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); background: var(--ink); color: var(--bg); padding: 10px 18px; border-radius: 999px; font-weight: 700; font-size: .9rem; z-index: 60; max-width: calc(100% - 32px); text-align: center; }
+
+@media (max-width: 900px) {
+  .status, .cols, .two, .quotes { grid-template-columns: minmax(0, 1fr); }
+  .status-side { border-left: 0; border-top: 1px solid var(--line); }
+  .set-grid, .facts, .value3 { grid-template-columns: minmax(0, 1fr); }
+  .people, .stem, .calc-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .flow { grid-template-columns: minmax(0, 1fr); gap: 22px; }
+  .flow .step { margin-right: 0; }
+  .flow .step:not(:last-child)::after { right: auto; left: 50%; top: auto; bottom: -19px; transform: translateX(-50%) rotate(135deg); }
+}
+@media (max-width: 520px) {
+  .normals { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .cell { height: 32px; font-size: .6rem; }
+  .cell small { display: none; }
+  .year-row { grid-template-columns: minmax(0, 1fr); gap: 4px; }
+  .people, .stem, .calc-grid, .choices { grid-template-columns: minmax(0, 1fr); }
+}
+@media (prefers-reduced-motion: reduce) { .pulse { animation: none; } }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div class="brand">
+      <svg class="mark" viewBox="0 0 40 40" aria-hidden="true">
+        <rect x="0" y="0" width="40" height="40" rx="9" fill="var(--accent)"/>
+        <path d="M20 8 C14 14 14 22 20 32 C26 22 26 14 20 8 Z" fill="var(--accent-ink)" opacity=".9"/>
+        <path d="M20 12 L20 32" stroke="var(--accent)" stroke-width="1.6"/>
+        <path d="M20 17 L16.5 14.5 M20 21 L16 18.5 M20 25 L16.5 23 M20 17 L23.5 14.5 M20 21 L24 18.5 M20 25 L23.5 23" stroke="var(--accent)" stroke-width="1.3" stroke-linecap="round" fill="none"/>
+      </svg>
+      <div>
+        <h1>Yusuf's Warning</h1>
+        <p>Food scarcity early warning · <span id="regionLabel"></span></p>
+      </div>
+    </div>
+    <div class="top-actions">
+      <button class="btn primary" id="demoBtn" type="button">Replay the 2025 drought</button>
+      <button class="btn" id="soundBtn" type="button" aria-pressed="false">Alert sound: off</button>
+      <button class="btn" id="bigBtn" type="button" aria-pressed="false">Larger text</button>
+    </div>
+  </header>
+
+  <nav class="tabs" aria-label="Sections">
+    <ol>
+      <li><a href="#dashboard">Early warning<small>Live tool</small></a></li>
+      <li><a href="#problem">The problem<small>Who goes hungry</small></a></li>
+      <li><a href="#how-it-works">How it works<small>Solution and STEM</small></a></li>
+      <li><a href="#testing">Testing<small>Results and limits</small></a></li>
+      <li><a href="#running-costs">Running it<small>Users, costs, funding</small></a></li>
+      <li><a href="#faith">Islamic perspective<small>Feeding others</small></a></li>
+      <li><a href="#challenge">Visitor challenge<small>Try it yourself</small></a></li>
+      <li><a href="#team">Our team<small>Who did what</small></a></li>
+    </ol>
+  </nav>
+
+  <div class="demo" id="demoBar" hidden>
+    <div class="demo-row">
+      <p class="demo-text" id="demoText"></p>
+      <div class="row-btns">
+        <button class="btn primary" id="demoNext" type="button">Next month</button>
+        <button class="btn" id="demoAuto" type="button">Auto-play</button>
+        <button class="btn" id="demoExit" type="button">End demo</button>
+      </div>
+    </div>
+    <p class="demo-caption" id="demoCaption"></p>
+  </div>
+
+  <!-- ===================== EARLY WARNING (live tool) ===================== -->
+  <main class="view" id="view-dashboard">
+    <section class="status" id="status" aria-live="polite"></section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <h2>Month by month</h2>
+        <p class="note">Tap a month to see its alert level above.</p>
+      </div>
+      <div class="strip" id="strip"></div>
+      <p class="source-line" id="sourceLine1"></p>
+    </section>
+
+    <div class="cols">
+      <div style="display:grid;gap:24px;min-width:0">
+        <section class="panel">
+          <div>
+            <p class="eyebrow">Enter data</p>
+            <p class="next-month" id="nextMonth"></p>
+          </div>
+          <form id="entry" novalidate>
+            <div class="field">
+              <label for="fRain">Rainfall this month (mm)</label>
+              <input id="fRain" type="number" inputmode="decimal" min="0" max="1000" step="1" placeholder="e.g. 110">
+              <span class="hint" id="rainHint"></span>
+            </div>
+            <div class="field">
+              <label for="fPrice">Maize price (UGX per kg)</label>
+              <input id="fPrice" type="number" inputmode="numeric" min="50" max="20000" step="10" placeholder="e.g. 1300">
+              <span class="hint" id="priceHint"></span>
+            </div>
+            <div class="field">
+              <label for="fCrop">Crop condition</label>
+              <select id="fCrop">
+                <option>Good</option>
+                <option>Fair</option>
+                <option>Poor</option>
+              </select>
+            </div>
+            <div class="preview" id="preview" hidden></div>
+            <p class="form-error" id="formError" hidden></p>
+            <div class="row-btns">
+              <button class="btn primary" type="submit">Add month and check alert</button>
+              <button class="btn ghost" type="button" id="undoBtn">Remove last month</button>
+            </div>
+          </form>
+        </section>
+
+        <section class="panel">
+          <div class="panel-head">
+            <h2>Alert log</h2>
+            <span class="note" id="logCount"></span>
+          </div>
+          <ul class="log" id="log"></ul>
+        </section>
+      </div>
+
+      <section class="panel charts">
+        <div class="panel-head">
+          <h2>The warning signs</h2>
+          <p class="note">Shaded columns are Watch, Warning and Crisis months.</p>
+        </div>
+        <div class="chart">
+          <h3>Rainfall against normal</h3>
+          <div class="legend"><span><i style="background:var(--rain)"></i>Rainfall (mm)</span><span><i class="dash"></i>Normal for that month (mm)</span></div>
+          <div id="chartRain"></div>
+        </div>
+        <div class="chart">
+          <h3>Maize price against its comparison price</h3>
+          <div class="legend"><span><i style="background:var(--gold)"></i>Maize price (UGX/kg)</span><span><i class="dash"></i>Same month last year, or 3-month average if no data</span></div>
+          <div id="chartPrice"></div>
+        </div>
+        <p class="source-line" id="sourceLine2"></p>
+      </section>
+    </div>
+
+    <section class="panel">
+      <div class="panel-head"><h2>All months</h2><span class="note">Newest first</span></div>
+      <div class="table-wrap"><table class="wide" id="table"></table></div>
+    </section>
+
+    <section class="panel">
+      <details class="settings" id="settings">
+        <summary>Settings, real data and thresholds</summary>
+        <div class="set-grid">
+          <div class="field">
+            <label for="sRegion">Region name</label>
+            <input id="sRegion" type="text" maxlength="60">
+          </div>
+          <div class="field">
+            <label for="sRain">Rain warning: below <span class="num" id="sRainOut"></span> of normal</label>
+            <input id="sRain" type="range" min="50" max="100" step="5">
+          </div>
+          <div class="field">
+            <label for="sPrice">Price warning: more than <span class="num" id="sPriceOut"></span> above comparison price</label>
+            <input id="sPrice" type="range" min="5" max="50" step="5">
+          </div>
+        </div>
+        <div class="field" style="margin-top:16px">
+          <label for="sSource">Data source (shown under the charts)</label>
+          <input id="sSource" type="text" maxlength="160">
+        </div>
+        <div style="margin-top:16px">
+          <p style="font-weight:700">Normal rainfall for each month (mm)</p>
+          <div class="normals" id="normals"></div>
+        </div>
+        <div class="field" style="margin-top:16px">
+          <label for="sLocal">Alert in a second language (write it with a fluent speaker)</label>
+          <textarea id="sLocal" maxlength="300" placeholder="Luganda version, e.g. using {level}, {region} and {month}, which the app fills in"></textarea>
+          <span class="hint">Use {level}, {region} and {month} where the app should fill in the details. It appears under the English SMS in each alert.</span>
+        </div>
+        <div style="margin-top:20px;display:grid;gap:10px">
+          <p style="font-weight:700">Load real data</p>
+          <p class="note">Paste rows in this format, one month per line, oldest first. Download real figures from WFP (maize prices) and CHIRPS (rainfall) on the Humanitarian Data Exchange, then type or paste them here.</p>
+          <pre class="csv">month,rain_mm,maize_ugx_per_kg,crop
+Jan 2024,62,1050,Good
+Feb 2024,58,1080,Fair</pre>
+          <div class="field">
+            <label for="csvText">Your data</label>
+            <textarea id="csvText" style="font-family:var(--f-data);min-height:120px" placeholder="month,rain_mm,maize_ugx_per_kg,crop"></textarea>
+          </div>
+          <div class="row-btns">
+            <label class="btn" for="csvFile" style="cursor:pointer">Choose a CSV file</label>
+            <input id="csvFile" type="file" accept=".csv,text/csv,text/plain" hidden>
+            <button class="btn primary" type="button" id="csvLoad">Replace data with these rows</button>
+            <button class="btn" type="button" id="csvCopy">Copy current data as CSV</button>
+          </div>
+          <p class="form-error" id="csvError" hidden></p>
+        </div>
+        <div class="row-btns" style="margin-top:20px">
+          <button class="btn" type="button" id="resetBtn">Reset to sample data</button>
+        </div>
+      </details>
+    </section>
+  </main>
+
+  <!-- ===================== THE PROBLEM ===================== -->
+  <main class="view" id="view-problem" hidden>
+    <section class="panel">
+      <span class="crit">Problem and Zero Hunger relevance</span>
+      <h2>Hunger arrives slowly, then all at once</h2>
+      <p class="lead">Food shortages build up over months. First the rains fail, then harvests shrink, then market prices climb. By the time families feel it at mealtimes, it is too late to prepare.</p>
+      <div class="facts">
+        <div class="fact">
+          <p class="big">Driest on record</p>
+          <p>In Karamoja, June to September 2026 was the driest second half of the rainy season on record. Most areas received about 200 mm less rain than average.</p>
+          <p class="src">Source: <a href="https://fews.net/east-africa/uganda/food-security-outlook-update/august-2026" target="_blank" rel="noopener">FEWS NET Uganda Food Security Outlook Update, August 2026</a></p>
+        </div>
+        <div class="fact">
+          <p class="big">Crisis to January 2027</p>
+          <p>FEWS NET expects Crisis-level food insecurity (IPC Phase 3) to continue across Karamoja through January 2027.</p>
+          <p class="src">Source: <a href="https://fews.net/east-africa/uganda/food-security-outlook-update/august-2026" target="_blank" rel="noopener">FEWS NET, August 2026</a></p>
+        </div>
+        <div class="fact">
+          <p class="big">600,000 people</p>
+          <p>In 2024, all nine Karamoja districts were classified in Crisis. About 600,000 people, 45% of those analysed, faced high levels of acute food insecurity.</p>
+          <p class="src">Source: IPC acute food insecurity analysis for Karamoja, June 2024</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Who is affected</h2>
+      <div class="people">
+        <div><strong>Farming families</strong><p class="muted">They eat what they grow. A failed season means an empty grain store.</p></div>
+        <div><strong>Herding families in Karamoja</strong><p class="muted">Drought hits their crops and their animals at the same time.</p></div>
+        <div><strong>Poor households in towns</strong><p class="muted">They buy all their food. When maize prices double, meals get smaller.</p></div>
+        <div><strong>Children and mothers</strong><p class="muted">They are the first to suffer from hunger and malnutrition.</p></div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Why an early warning matters</h2>
+      <p class="lead" id="problemLead"></p>
+      <p>SDG 2, Zero Hunger, aims to end hunger and make sure everyone has enough safe, nutritious food all year round. Warning early turns a crisis into something a community can plan for.</p>
+    </section>
+  </main>
+
+  <!-- ===================== HOW IT WORKS ===================== -->
+  <main class="view" id="view-how-it-works" hidden>
+    <section class="panel">
+      <span class="crit">Solution and innovation</span>
+      <h2>What makes Yusuf's Warning useful</h2>
+      <div class="value3">
+        <div><p class="stat" id="leadStat">–</p><strong>Early</strong><p class="muted" id="leadText"></p></div>
+        <div><p class="stat">3 signs</p><strong>Simple and offline</strong><p class="muted">Three warning signs and a points rule that anyone can check by hand. It runs in any browser, even with no internet.</p></div>
+        <div><p class="stat">4 actions</p><strong>Linked to action</strong><p class="muted">Every alert level comes with a community action, from storing grain to starting food distribution.</p></div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <span class="crit">STEM knowledge and application</span>
+      <h2>From data to action</h2>
+      <div class="flow">
+        <div class="step"><b>1. Collect</b><span>Rainfall (mm), maize price (UGX/kg), crop condition</span></div>
+        <div class="step"><b>2. Compare</b><span>Rain vs normal for that month. Price vs the same month last year.</span></div>
+        <div class="step"><b>3. Score</b><span>1 point for each warning sign. Total 0 to 3.</span></div>
+        <div class="step"><b>4. Alert level</b><span>0 Normal · 1 Watch · 2 Warning · 3 Crisis</span></div>
+        <div class="step"><b>5. Act</b><span>SMS, radio and mosque announcement with the recommended action</span></div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <h2>Show the working</h2>
+        <div class="field" style="min-width:180px">
+          <label for="workMonth">Month</label>
+          <select id="workMonth"></select>
+        </div>
+      </div>
+      <div class="working" id="working"></div>
+    </section>
+
+    <section class="panel">
+      <h2>The STEM inside the project</h2>
+      <div class="stem">
+        <div><span class="letter">S</span><strong>Science</strong><p class="muted">Crops need water for photosynthesis and growth. Too little rain at the wrong time means a poor harvest. Less food in markets pushes prices up (supply and demand).</p></div>
+        <div><span class="letter">T</span><strong>Technology</strong><p class="muted">A web app built with HTML, CSS and JavaScript. It saves data in the browser, draws its own charts and works offline.</p></div>
+        <div><span class="letter">E</span><strong>Engineering</strong><p class="muted">We followed the design process: define the problem, design, build, test, then improve. See the version history on the Testing tab.</p></div>
+        <div><span class="letter">M</span><strong>Mathematics</strong><p class="muted">Percentages, averages, percentage change, thresholds and inequalities (is the value above or below the limit?).</p></div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ===================== TESTING ===================== -->
+  <main class="view" id="view-testing" hidden>
+    <section class="panel">
+      <span class="crit">Testing and improvement</span>
+      <div class="panel-head">
+        <h2>Automatic tests</h2>
+        <span class="pill" id="testSummary"></span>
+      </div>
+      <p class="note">Each time this page opens, it runs these test cases through the same scoring code the app uses and checks the answers.</p>
+      <div class="table-wrap"><table class="wide" id="testTable"></table></div>
+    </section>
+
+    <div class="two">
+      <section class="panel">
+        <h2>Did it warn early enough?</h2>
+        <p class="lead" id="replayResult"></p>
+        <p class="note">Tested on the data currently loaded. If it is the sample drought, the result shows how the rules behave, not real-world accuracy.</p>
+      </section>
+      <section class="panel">
+        <h2>Improvement we made after testing</h2>
+        <p>Versions 1 and 2 compared each price with the average of the last 3 months. Testing showed a problem: once prices stayed high, the app went back to Normal while food was still expensive. Version 3 compares with the same month last year, like FEWS NET does.</p>
+        <div class="table-wrap"><table id="ruleTable"></table></div>
+      </section>
+    </div>
+
+    <section class="panel">
+      <h2>How the thresholds change the result</h2>
+      <p class="note">Number of months at Warning or Crisis for different rain and price limits, with the first warning month in brackets. Our chosen setting is highlighted.</p>
+      <div class="table-wrap"><table id="sensTable"></table></div>
+      <p class="note">Stricter limits give fewer false alarms but risk missing a real crisis. Looser limits warn more often. Choosing thresholds is a trade-off.</p>
+    </section>
+
+    <div class="two">
+      <section class="panel">
+        <h2>Version history</h2>
+        <ol class="versions">
+          <li><span class="v">v1</span><span>Google Sheet with formulas, colour coding and an Apps Script that emails alerts.</span></li>
+          <li><span class="v">v2</span><span>Web app: works offline, live charts, drought replay for demonstrations.</span></li>
+          <li><span class="v">v3</span><span>Price compared with the same month last year. Symbols added next to colours for colour-blind visitors.</span></li>
+          <li><span class="v">v4</span><span>Short SMS alert, real-data import, automatic tests and this testing page.</span></li>
+        </ol>
+      </section>
+      <section class="panel">
+        <h2>Limitations we know about</h2>
+        <ul>
+          <li>The sample replay data is made up. Real results depend on real data.</li>
+          <li>Only three warning signs. Professional systems also use vegetation from satellites and livestock condition.</li>
+          <li>Data is typed in by hand once a month, so mistakes are possible.</li>
+          <li>Crop condition (Good, Fair, Poor) is a judgement, not a measurement.</li>
+          <li>One region and one market at a time.</li>
+          <li>The app does not send SMS by itself. A person copies and shares the alert.</li>
+        </ul>
+      </section>
+    </div>
+  </main>
+
+  <!-- ===================== RUNNING IT ===================== -->
+  <main class="view" id="view-running-costs" hidden>
+    <section class="panel">
+      <span class="crit">Business perspective and sustainability</span>
+      <h2>Who uses it</h2>
+      <div class="table-wrap"><table>
+        <thead><tr><th>User</th><th>What they do with it</th></tr></thead>
+        <tbody>
+          <tr><td>Mosque Zakat committee</td><td>Enters data each month and prepares food stock when a Warning comes</td></tr>
+          <tr><td>School food bank or club</td><td>Collects food donations early and shares the alert with families</td></tr>
+          <tr><td>Farmer groups</td><td>Decide how much grain to store and when to sell</td></tr>
+          <tr><td>District and NGO staff</td><td>See which months need support and plan distribution</td></tr>
+        </tbody>
+      </table></div>
+      <p class="note">Most Ugandans still use basic phones, not smartphones (UCC counted 26.7 million feature phones and 18.2 million smartphones in 2024, <a href="https://www.monitor.co.ug/uganda/business/prosper/30-years-later-feature-phones-still-outstrip-smartphones--5065896" target="_blank" rel="noopener">Daily Monitor</a>), and many rural families get weather news from FM radio (<a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC10208246/" target="_blank" rel="noopener">study of rural Uganda</a>). So the app is for coordinators, and families receive the alert by SMS, radio or announcement.</p>
+    </section>
+
+    <div class="two">
+      <section class="panel">
+        <h2>What it costs</h2>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Item</th><th class="r">Cost (UGX)</th><th>Why</th></tr></thead>
+          <tbody>
+            <tr><td>Building the app</td><td class="r num">0</td><td>Free tools on a school laptop</td></tr>
+            <tr><td>Data</td><td class="r num">0</td><td>Free public data from WFP, CHIRPS and FEWS NET</td></tr>
+            <tr><td>Hosting</td><td class="r num">0</td><td>Works offline, or shared as a free link</td></tr>
+            <tr><td>Monthly update</td><td class="r num">0</td><td>About 15 minutes of volunteer time</td></tr>
+            <tr><td>SMS alerts</td><td class="r num" id="costCell">–</td><td>Per year, from the calculator</td></tr>
+          </tbody>
+        </table></div>
+      </section>
+      <section class="panel">
+        <h2>SMS cost calculator</h2>
+        <div class="calc-grid">
+          <div class="field"><label for="cHouse">Households</label><input id="cHouse" type="number" min="1" max="100000" value="200"></div>
+          <div class="field"><label for="cLang">SMS per alert</label><select id="cLang"><option value="1">1 (English)</option><option value="2" selected>2 (English + Luganda)</option></select></div>
+          <div class="field"><label for="cAlerts">Alerts per year</label><input id="cAlerts" type="number" min="1" max="50" value="3"></div>
+          <div class="field"><label for="cPrice">UGX per SMS</label><input id="cPrice" type="number" min="1" max="500" value="30"></div>
+        </div>
+        <div class="result" id="calcResult"></div>
+        <p class="note">Default price: bulk SMS in Uganda is about UGX 28–32 per message for under 10,000 messages (<a href="https://www.sent.dm/resources/uganda-sms-pricing" target="_blank" rel="noopener">sent.dm price guide</a>, checked January 2025). Ask a provider for a current quote.</p>
+      </section>
+    </div>
+
+    <div class="two">
+      <section class="panel">
+        <h2>Who pays</h2>
+        <ul>
+          <li><strong>Free for communities.</strong> We do not charge families or mosques to use it.</li>
+          <li><strong>Mosque Sadaqah fund</strong> covers SMS costs, which are small next to the cost of food aid.</li>
+          <li><strong>Partners</strong> such as an NGO, the district office or a telecom company could sponsor SMS for more households.</li>
+        </ul>
+      </section>
+      <section class="panel">
+        <h2>How it keeps going</h2>
+        <ul>
+          <li>No server, subscription or special equipment to pay for.</li>
+          <li>Free data sources that are updated every month.</li>
+          <li>One trained volunteer can update it in about 15 minutes a month.</li>
+          <li>Each year, students hand it over to the next group in the school club.</li>
+        </ul>
+      </section>
+    </div>
+  </main>
+
+  <!-- ===================== ISLAMIC PERSPECTIVE ===================== -->
+  <main class="view" id="view-faith" hidden>
+    <section class="panel">
+      <span class="crit">Islamic perspective</span>
+      <h2>Feeding others and avoiding waste</h2>
+      <div class="quotes">
+        <blockquote>"You will plant for seven years consecutively; and what you harvest leave in its spikes, except a little from which you will eat."<cite>Surah Yusuf 12:47. Prophet Yusuf (AS) read the warning signs and planned ahead. That is our model.</cite></blockquote>
+        <blockquote>"And they give food in spite of love for it to the needy, the orphan, and the captive."<cite>Surah Al-Insan 76:8. Feeding others is a mark of the righteous.</cite></blockquote>
+        <blockquote>"Eat and drink, but be not excessive. Indeed, He likes not those who commit excess."<cite>Surah Al-A'raf 7:31. Avoiding Israf: no waste in good times.</cite></blockquote>
+        <blockquote>"He is not a believer whose stomach is filled while his neighbour goes hungry."<cite>Hadith, Al-Adab al-Mufrad 112. Our responsibility reaches our neighbours.</cite></blockquote>
+      </div>
+      <p class="note">Translations: Sahih International. Check wording with your Islamic studies teacher.</p>
+    </section>
+
+    <section class="panel">
+      <h2>Every alert level has an Islamic action</h2>
+      <div class="table-wrap"><table>
+        <thead><tr><th>Level</th><th>Value</th><th>What the community does</th></tr></thead>
+        <tbody>
+          <tr><td><span class="pill lv-normal">✓ Normal</span></td><td>Khilafah and avoiding Israf</td><td>Look after the harvest. Store surplus grain instead of wasting or overselling it.</td></tr>
+          <tr><td><span class="pill lv-watch">! Watch</span></td><td>Planning like Yusuf (AS)</td><td>Households save some grain. The committee watches prices weekly.</td></tr>
+          <tr><td><span class="pill lv-warning">!! Warning</span></td><td>Zakat</td><td>The Zakat committee prepares food bank stock and identifies families in need.</td></tr>
+          <tr><td><span class="pill lv-crisis">✕ Crisis</span></td><td>Sadaqah and feeding others</td><td>Distribute food. Ask the community for Sadaqah so no neighbour goes hungry.</td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section class="panel">
+      <h2>Yusuf storage planner</h2>
+      <p class="muted">How much grain should a family set aside in the good months to get through a hard season?</p>
+      <div class="calc-grid">
+        <div class="field"><label for="pPeople">People in the household</label><input id="pPeople" type="number" min="1" max="50" value="6"></div>
+        <div class="field"><label for="pKg">Maize per person per month (kg)</label><input id="pKg" type="number" min="1" max="50" value="10"><span class="hint">Example value. Adjust for your family.</span></div>
+        <div class="field"><label for="pHard">Hard months to prepare for</label><input id="pHard" type="number" min="1" max="24" value="3"></div>
+        <div class="field"><label for="pGood">Good months to save over</label><input id="pGood" type="number" min="1" max="24" value="6"></div>
+      </div>
+      <div class="result" id="planResult"></div>
+      <p class="note">Store grain dry and off the floor so it does not spoil. Spoiled grain is also Israf.</p>
+    </section>
+  </main>
+
+  <!-- ===================== VISITOR CHALLENGE ===================== -->
+  <main class="view" id="view-challenge" hidden>
+    <section class="panel">
+      <div class="panel-head">
+        <h2>Can you spot a famine early?</h2>
+        <span class="note" id="chProgress"></span>
+      </div>
+      <p class="muted">Read the month's warning signs and choose the alert level. Rule: 1 point each for rain below 80% of normal, maize more than 20% above last year, and Poor crops.</p>
+      <div class="scenario" id="chScenario"></div>
+      <div class="choices" id="chChoices"></div>
+      <div class="result" id="chFeedback" hidden></div>
+      <div class="row-btns">
+        <button class="btn primary" type="button" id="chNext" hidden>Next question</button>
+        <button class="btn" type="button" id="chRestart">Start again for a new visitor</button>
+      </div>
+      <p class="note" id="chVisitors"></p>
+    </section>
+  </main>
+
+  <!-- ===================== TEAM ===================== -->
+  <main class="view" id="view-team" hidden>
+    <section class="panel">
+      <span class="crit">Teamwork and stall presentation</span>
+      <h2>Our team</h2>
+      <div class="two">
+        <div style="display:grid;gap:12px">
+          <div class="field"><label for="tA">Student A</label><input id="tA" type="text" maxlength="60" placeholder="Name"></div>
+          <div class="field"><label for="tARole">Student A did</label><textarea id="tARole" maxlength="300">Research on the problem, the Islamic perspective, the poster, collecting data</textarea></div>
+        </div>
+        <div style="display:grid;gap:12px">
+          <div class="field"><label for="tB">Student B</label><input id="tB" type="text" maxlength="60" placeholder="Name"></div>
+          <div class="field"><label for="tBRole">Student B did</label><textarea id="tBRole" maxlength="300">The scoring rules, testing the app, the costs, the live demonstration</textarea></div>
+        </div>
+      </div>
+      <div class="field"><label for="tT">Supervising teacher and the help we received</label><input id="tT" type="text" maxlength="160" placeholder="e.g. Mr/Ms …, ICT teacher: helped with coding and data"></div>
+    </section>
+
+    <div class="two">
+      <section class="panel">
+        <h2>Who does what at the stall</h2>
+        <div class="table-wrap"><table>
+          <thead><tr><th>Part</th><th>Time</th><th>Who</th></tr></thead>
+          <tbody>
+            <tr><td>Hook: Yusuf (AS) and Karamoja</td><td class="num">0:20</td><td>A</td></tr>
+            <tr><td>Problem and SDG 2</td><td class="num">0:25</td><td>A</td></tr>
+            <tr><td>Rules and maths</td><td class="num">0:40</td><td>B</td></tr>
+            <tr><td>Live drought replay</td><td class="num">0:40</td><td>B demonstrates, A explains</td></tr>
+            <tr><td>Testing, limits, costs, close</td><td class="num">0:25</td><td>A and B</td></tr>
+          </tbody>
+        </table></div>
+        <p class="note">Both students should be able to explain every part, because judges may ask either one.</p>
+      </section>
+      <section class="panel">
+        <h2>Stall checklist</h2>
+        <ul class="check" id="checklist"></ul>
+      </section>
+    </div>
+
+    <section class="panel">
+      <h2>Practise the judges' questions</h2>
+      <div id="qa"></div>
+    </section>
+  </main>
+
+  <footer style="display:grid;gap:10px">
+    <p class="note"><strong>About the data:</strong> the 2024–2025 figures and normal rainfall values loaded at the start are illustrative sample data, made up to show a typical drought pattern. Load real figures in Settings before presenting results as fact. Entries are saved in this browser only.</p>
+    <div class="sources">
+      <span class="note">Real data sources:</span>
+      <a href="https://data.humdata.org/dataset/wfp-food-prices-for-uganda" target="_blank" rel="noopener">WFP maize prices for Uganda (HDX)</a>
+      <a href="https://data.humdata.org/dataset/uga-rainfall-subnational" target="_blank" rel="noopener">Uganda district rainfall, CHIRPS (HDX)</a>
+      <a href="https://fews.net/east-africa/uganda" target="_blank" rel="noopener">FEWS NET Uganda</a>
+      <a href="https://meteo.mwe.go.ug/climate/seasonal-forecasts" target="_blank" rel="noopener">Uganda Meteorological Services</a>
+    </div>
+  </footer>
+</div>
+
+<div class="overlay" id="overlay" hidden>
+  <div class="alert-card" role="alertdialog" aria-labelledby="alertTitle" aria-modal="true">
+    <div class="alert-top" id="alertTop">
+      <p class="eyebrow">Early warning alert issued</p>
+      <h2 id="alertTitle"></h2>
+      <p id="alertSub"></p>
+    </div>
+    <div class="alert-body">
+      <ul id="alertList"></ul>
+      <div class="action"><strong>Recommended action</strong><span id="alertAction"></span></div>
+      <div style="display:grid;gap:8px">
+        <p class="eyebrow">SMS to send</p>
+        <div class="sms"><span id="smsText"></span><small id="smsCount"></small></div>
+        <div class="sms" id="smsLocalBox" hidden><span id="smsLocal"></span><small id="smsLocalCount"></small></div>
+      </div>
+      <p class="note">Share it with the mosque Zakat committee, the school food bank and local leaders by SMS, WhatsApp or radio announcement.</p>
+      <textarea id="alertText" readonly hidden style="width:100%;min-height:100px"></textarea>
+      <div class="row-btns">
+        <button class="btn primary" id="copyBtn" type="button">Copy SMS</button>
+        <button class="btn" id="closeAlert" type="button">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+(function () {
+  const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const MONTH_NAMES = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const LEVELS = [
+    { name: 'Normal',  cls: 'normal',  sym: '✓',  action: 'Keep monitoring. Store surplus grain while harvests are good.', sms: 'Store surplus grain.' },
+    { name: 'Watch',   cls: 'watch',   sym: '!',  action: 'Check market prices weekly. Encourage households to save some grain.', sms: 'Save some grain.' },
+    { name: 'Warning', cls: 'warning', sym: '!!', action: 'Prepare food bank stock. Inform the mosque Zakat committee.', sms: 'Prepare food stock now.' },
+    { name: 'Crisis',  cls: 'crisis',  sym: '✕',  action: 'Begin food distribution to vulnerable families. Ask the community for Sadaqah.', sms: 'Start food distribution. Give Sadaqah.' }
+  ];
+  const RAIN  = [62,58,135,180,150,72,63,88,120,145,130,90, 55,70,90,110,85,40,45,80,118,150,140,88];
+  const PRICE = [1050,1080,1100,1060,1000,980,1000,1020,1050,1040,1000,1020, 1040,1060,1120,1300,1450,1750,2050,2100,1900,1650,1400,1250];
+  const CROP  = ['Good','Fair','Good','Good','Good','Good','Good','Good','Good','Good','Good','Good',
+                 'Good','Good','Fair','Fair','Poor','Poor','Poor','Poor','Fair','Good','Good','Good'];
+  const SAMPLE = RAIN.map((r, i) => ({ y: 2024 + Math.floor(i / 12), m: i % 12, rain: r, price: PRICE[i], crop: CROP[i] }));
+  const SAMPLE_SOURCE = 'Illustrative sample data, made up to show a typical drought pattern.';
+  const DEFAULTS = { region: 'Central Uganda (sample)', rainT: 0.8, priceT: 0.2, normals: [60,75,130,175,140,70,60,85,115,140,135,85], source: SAMPLE_SOURCE, local: '' };
+  const KEY = 'yusufs-warning-v2', OLD_KEY = 'yusufs-warning-v1';
+
+  const $ = id => document.getElementById(id);
+  const clone = o => JSON.parse(JSON.stringify(o));
+  const esc = s => String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
+  const fmt = n => Math.round(n).toLocaleString('en-US');
+  const pct = n => (n >= 0 ? '+' : '') + Math.round(n * 100) + '%';
+  const label = r => MONTHS[r.m] + ' ' + r.y;
+  const short = r => MONTHS[r.m] + ' ' + String(r.y).slice(2);
+
+  function load() {
+    try {
+      const s = JSON.parse(localStorage.getItem(KEY));
+      if (s && Array.isArray(s.months) && s.settings) { s.settings = Object.assign(clone(DEFAULTS), s.settings); return s; }
+      const o = JSON.parse(localStorage.getItem(OLD_KEY));
+      if (o && Array.isArray(o.months) && o.settings) return { months: o.months, settings: Object.assign(clone(DEFAULTS), o.settings), team: {}, checks: {}, visitors: 0 };
+    } catch (e) {}
+    return null;
+  }
+  function save() { try { if (!demo) localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} }
+
+  let state = load() || { months: clone(SAMPLE), settings: clone(DEFAULTS), team: {}, checks: {}, visitors: 0 };
+  state.team = state.team || {}; state.checks = state.checks || {}; state.visitors = state.visitors || 0;
+  let demo = null, selected = null, soundOn = false, audio = null;
+
+  // ================= THE MODEL =================
+  // rule 'year' (v2): compare price with the same month last year, or the 3-month average if last year is missing.
+  // rule 'avg3' (v1): always compare with the 3-month average. Kept only to show the improvement on the Testing tab.
+  function analyseWith(months, s, rule) {
+    rule = rule || 'year';
+    const byKey = {};
+    months.forEach(mo => { byKey[mo.y * 12 + mo.m] = mo; });
+    return months.map((mo, i) => {
+      const normal = s.normals[mo.m];
+      const avg3 = i >= 3 ? (months[i-1].price + months[i-2].price + months[i-3].price) / 3 : null;
+      const ly = byKey[(mo.y - 1) * 12 + mo.m];
+      const lastYear = ly ? ly.price : null;
+      let ref = null, refType = null;
+      if (rule === 'year' && lastYear !== null) { ref = lastYear; refType = 'year'; }
+      else if (avg3 !== null) { ref = avg3; refType = 'avg'; }
+      const rainLimit = s.rainT * normal;
+      const priceLimit = ref !== null ? (1 + s.priceT) * ref : null;
+      const rainScore = mo.rain < rainLimit ? 1 : 0;
+      const priceScore = priceLimit !== null && mo.price > priceLimit ? 1 : 0;
+      const cropScore = mo.crop === 'Poor' ? 1 : 0;
+      const score = rainScore + priceScore + cropScore;
+      return Object.assign({}, mo, { normal, avg3, lastYear, ref, refType, rainLimit, priceLimit, rainScore, priceScore, cropScore, score, level: LEVELS[score] });
+    });
+  }
+  const analyse = months => analyseWith(months, state.settings);
+  function buildLog(rows) {
+    let prev = 0; const log = [];
+    rows.forEach(r => {
+      if (r.score !== prev) { log.push({ row: r, from: LEVELS[prev].name, to: r.level.name, alerted: r.score > prev && r.score >= 2 }); prev = r.score; }
+    });
+    return log;
+  }
+  function nextOf(months) {
+    if (!months.length) return { y: 2024, m: 0 };
+    const l = months[months.length - 1];
+    return l.m === 11 ? { y: l.y + 1, m: 0 } : { y: l.y, m: l.m + 1 };
+  }
+  function refText(r) {
+    if (r.refType === 'year') return pct(r.price / r.ref - 1) + ' vs same month last year (' + fmt(r.ref) + ')';
+    if (r.refType === 'avg') return pct(r.price / r.ref - 1) + ' vs 3-month average (' + fmt(r.ref) + ')';
+    return 'No earlier prices to compare with yet';
+  }
+  // How many months before the highest price did the first Warning come?
+  function leadTime(rows) {
+    if (rows.length < 2) return null;
+    let peak = 0; rows.forEach((r, i) => { if (r.price > rows[peak].price) peak = i; });
+    let first = -1;
+    for (let i = Math.max(0, peak - 12); i <= peak; i++) { if (rows[i].score >= 2) { first = i; break; } }
+    return { peak: rows[peak], first: first >= 0 ? rows[first] : null, months: first >= 0 ? peak - first : null };
+  }
+
+  // ================= RENDERING: EARLY WARNING =================
+  function render() {
+    const rows = analyse(state.months);
+    const log = buildLog(rows);
+    $('regionLabel').textContent = state.settings.region;
+    renderStatus(rows);
+    renderStrip(rows);
+    renderForm();
+    renderLog(log);
+    renderTable(rows);
+    $('chartRain').innerHTML = chart(rows.slice(-24), 'rain', 'normal', 's-rain');
+    $('chartPrice').innerHTML = chart(rows.slice(-24), 'price', 'ref', 's-gold');
+    const src = 'Data: ' + state.settings.source;
+    $('sourceLine1').textContent = src; $('sourceLine2').textContent = src;
+    renderExplainers(rows, log);
+    return { rows, log };
+  }
+
+  function renderStatus(rows) {
+    const el = $('status');
+    if (!rows.length) { el.innerHTML = '<div class="status-main" style="--lvl:var(--muted);--lvl-t:var(--surface)"><p class="eyebrow">No data yet</p><p class="level-name">No data</p><p>Enter the first month below.</p></div>'; return; }
+    const i = selected === null || selected >= rows.length ? rows.length - 1 : selected;
+    const r = rows[i];
+    const isNewest = i === rows.length - 1;
+    el.innerHTML =
+      '<div class="status-main" style="--lvl:var(--' + r.level.cls + ');--lvl-t:var(--' + r.level.cls + '-t)">' +
+        '<p class="eyebrow">' + (isNewest ? 'Latest month' : 'Viewing') + ' · ' + label(r) + '</p>' +
+        '<p class="level-name"><span class="sym" aria-hidden="true">' + r.level.sym + '</span>' + r.level.name + '</p>' +
+        '<div><div class="meter">' + LEVELS.map((L, k) => '<div class="' + (k <= r.score ? 'on' : '') + '" style="--c:var(--' + r.level.cls + ')"></div>').join('') + '</div>' +
+        '<div class="meter-labels">' + LEVELS.map(L => '<span>' + L.name + '</span>').join('') + '</div></div>' +
+        '<p class="num">Score ' + r.score + ' of 3</p>' +
+        '<p class="action"><strong>Recommended action</strong>' + r.level.action + '</p>' +
+        (isNewest ? '' : '<p><button class="btn" type="button" id="backLatest">Back to latest month</button></p>') +
+      '</div>' +
+      '<div class="status-side">' +
+        ind('Rainfall', fmt(r.rain) + ' mm', Math.round(r.rain / r.normal * 100) + '% of normal (' + fmt(r.normal) + ' mm)', r.rainScore) +
+        ind('Maize price', fmt(r.price) + ' UGX/kg', refText(r), r.priceScore) +
+        ind('Crop condition', r.crop, r.crop === 'Poor' ? 'Poor harvest expected' : 'No crop failure reported', r.cropScore) +
+      '</div>';
+    const back = $('backLatest'); if (back) back.onclick = () => { selected = null; render(); };
+  }
+  function ind(name, val, sub, bad) {
+    return '<div class="ind"><span class="ind-label">' + name + '</span><span class="ind-val">' + val + '</span><span class="ind-sub">' + sub + '</span>' +
+      '<span class="flag ' + (bad ? 'bad' : 'ok') + '">' + (bad ? '! Warning sign' : '✓ OK') + '</span></div>';
+  }
+
+  function renderStrip(rows) {
+    const years = {};
+    rows.forEach((r, i) => { (years[r.y] = years[r.y] || {})[r.m] = { r, i }; });
+    const n = nextOf(state.months);
+    if (!years[n.y]) years[n.y] = {};
+    const sel = selected === null ? rows.length - 1 : selected;
+    $('strip').innerHTML = Object.keys(years).sort().map(y =>
+      '<div class="year-row"><span class="y">' + y + '</span><div class="cells">' +
+      MONTHS.map((mn, m) => {
+        const e = years[y][m];
+        if (!e) return '<span class="cell empty" aria-hidden="true">' + mn.charAt(0) + '</span>';
+        return '<button type="button" class="cell lv-' + e.r.level.cls + (e.i === sel ? ' sel' : '') + '" style="--c:var(--' + e.r.level.cls + ')" data-i="' + e.i + '" title="' + label(e.r) + ': ' + e.r.level.name + '" aria-label="' + label(e.r) + ', ' + e.r.level.name + '">' + mn.charAt(0) + '<small>' + e.r.level.sym + '</small></button>';
+      }).join('') + '</div></div>').join('');
+    $('strip').querySelectorAll('button.cell').forEach(b => b.onclick = () => { selected = +b.dataset.i; render(); window.scrollTo({ top: 0, behavior: 'smooth' }); });
+  }
+
+  function candidate() {
+    const n = nextOf(state.months);
+    return { y: n.y, m: n.m, rain: parseFloat($('fRain').value), price: parseFloat($('fPrice').value), crop: $('fCrop').value };
+  }
+  function renderForm() {
+    const n = nextOf(state.months), s = state.settings, normal = s.normals[n.m];
+    $('nextMonth').textContent = MONTHS[n.m] + ' ' + n.y;
+    $('rainHint').textContent = 'Normal for ' + MONTHS[n.m] + ': ' + normal + ' mm. Warning sign below ' + Math.round(s.rainT * normal) + ' mm.';
+    const probe = analyse(state.months.concat([{ y: n.y, m: n.m, rain: 0, price: 0, crop: 'Good' }])).pop();
+    $('priceHint').textContent = probe.refType === null ? 'Needs earlier prices before it can compare.' :
+      (probe.refType === 'year' ? 'Same month last year: ' : '3-month average: ') + fmt(probe.ref) + ' UGX. Warning sign above ' + fmt(probe.priceLimit) + ' UGX.';
+    updatePreview();
+  }
+  function updatePreview() {
+    const c = candidate(), p = $('preview');
+    if (isNaN(c.rain) || isNaN(c.price)) { p.hidden = true; return; }
+    const r = analyse(state.months.concat([c])).pop();
+    p.hidden = false;
+    p.className = 'preview lv-' + r.level.cls;
+    p.innerHTML = 'If you add this month: <span class="pill" style="background:var(--' + r.level.cls + ');color:var(--surface)">' + r.level.sym + ' ' + r.level.name + '</span> score ' + r.score + ' of 3';
+  }
+
+  function renderLog(log) {
+    $('logCount').textContent = log.filter(l => l.alerted).length + ' alerts issued';
+    if (!log.length) { $('log').innerHTML = '<li><span class="when">—</span><span class="muted">No changes yet. Every month has been Normal.</span></li>'; return; }
+    $('log').innerHTML = log.slice().reverse().map(l =>
+      '<li><span class="when">' + short(l.row) + '</span><span>' + l.from + ' → <span class="pill lv-' + l.row.level.cls + '">' + l.row.level.sym + ' ' + l.to + '</span><br>' +
+      (l.alerted ? '<span class="sent">Alert issued to the community</span>' : '<span class="quiet">Logged only, no alert</span>') + '</span></li>').join('');
+  }
+
+  function renderTable(rows) {
+    $('table').innerHTML = '<thead><tr><th>Month</th><th class="r">Rain (mm)</th><th class="r">Normal</th><th class="r">Maize (UGX/kg)</th><th class="r">Compared with</th><th>Crop</th><th>Signs (rain · price · crop)</th><th>Level</th></tr></thead><tbody>' +
+      rows.slice().reverse().map(r => '<tr><td>' + label(r) + '</td><td class="r num">' + fmt(r.rain) + '</td><td class="r num">' + fmt(r.normal) + '</td><td class="r num">' + fmt(r.price) + '</td><td class="r num">' + (r.ref ? fmt(r.ref) + (r.refType === 'year' ? ' (last yr)' : ' (3-mo)') : '—') + '</td><td>' + r.crop + '</td>' +
+        '<td><span class="dots"><b class="' + (r.rainScore ? 'on' : '') + '"></b><b class="' + (r.priceScore ? 'on' : '') + '"></b><b class="' + (r.cropScore ? 'on' : '') + '"></b></span></td>' +
+        '<td><span class="pill lv-' + r.level.cls + '">' + r.level.sym + ' ' + r.level.name + '</span></td></tr>').join('') + '</tbody>';
+  }
+
+  function niceMax(v) {
+    if (!(v > 0)) return 10;
+    const p = Math.pow(10, Math.floor(Math.log10(v))), f = v / p;
+    return (f <= 1 ? 1 : f <= 2 ? 2 : f <= 2.5 ? 2.5 : f <= 5 ? 5 : 10) * p;
+  }
+  function chart(rows, aKey, bKey, cls) {
+    if (!rows.length) return '<p class="note">No data yet.</p>';
+    const W = 640, H = 230, L = 54, R = 28, T = 12, B = 30;
+    const vals = rows.flatMap(r => [r[aKey], r[bKey]]).filter(v => v !== null && !isNaN(v));
+    const max = niceMax(Math.max.apply(null, vals) * 1.05);
+    const iw = W - L - R, ih = H - T - B;
+    const step = rows.length > 1 ? iw / (rows.length - 1) : 0;
+    const x = i => rows.length > 1 ? L + i * step : L + iw / 2;
+    const y = v => T + ih - (v / max) * ih;
+    const bw = rows.length > 1 ? step : iw;
+    let s = '<svg class="c" viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="' + (aKey === 'rain' ? 'Rainfall' : 'Maize price') + ' chart">';
+    rows.forEach((r, i) => { if (r.score > 0) { const x0 = Math.max(L, x(i) - bw / 2); s += '<rect class="band-' + r.level.cls + '" x="' + x0 + '" y="' + T + '" width="' + Math.min(bw, W - R - x0) + '" height="' + ih + '"/>'; } });
+    for (let k = 0; k <= 4; k++) {
+      const v = max * k / 4, yy = y(v);
+      s += '<line class="grid" x1="' + L + '" x2="' + (W - R) + '" y1="' + yy + '" y2="' + yy + '"/>';
+      s += '<text x="' + (L - 8) + '" y="' + (yy + 4) + '" text-anchor="end">' + fmt(v) + '</text>';
+    }
+    const every = rows.length > 12 ? 3 : 1;
+    rows.forEach((r, i) => { if (i % every === 0 || i === rows.length - 1) s += '<text x="' + x(i) + '" y="' + (H - 10) + '" text-anchor="middle">' + short(r) + '</text>'; });
+    const path = key => { let d = '', pen = false; rows.forEach((r, i) => { const v = r[key]; if (v === null || v === undefined || isNaN(v)) { pen = false; return; } d += (pen ? 'L' : 'M') + x(i).toFixed(1) + ' ' + y(v).toFixed(1); pen = true; }); return d; };
+    s += '<path class="s-ref" d="' + path(bKey) + '"/>';
+    s += '<path class="' + cls + '" d="' + path(aKey) + '" stroke-linejoin="round" stroke-linecap="round"/>';
+    const last = rows.length - 1;
+    s += '<circle class="' + cls + '-dot" cx="' + x(last) + '" cy="' + y(rows[last][aKey]) + '" r="4.5"/>';
+    return s + '</svg>';
+  }
+
+  // ================= ADDING A MONTH, ALERTS AND SMS =================
+  function addMonth(mo) {
+    const before = buildLog(analyse(state.months)).length;
+    state.months.push(mo);
+    selected = null;
+    const { rows, log } = render();
+    save();
+    const newest = rows[rows.length - 1];
+    if (log.length > before) {
+      const entry = log[log.length - 1];
+      if (entry.alerted) showAlert(newest, entry);
+      else toast(label(newest) + ': changed from ' + entry.from + ' to ' + entry.to + '. Logged, no alert needed.');
+    } else toast(label(newest) + ': no change, still ' + newest.level.name + '.');
+    return newest;
+  }
+  function smsText(r) {
+    const region = state.settings.region.replace(/\s*\(sample\)\s*/i, '');
+    const signs = [];
+    if (r.rainScore) signs.push('Rain ' + Math.round(r.rain / r.normal * 100) + '% of normal');
+    if (r.priceScore) signs.push('Maize ' + pct(r.price / r.ref - 1) + (r.refType === 'year' ? ' vs last yr' : ''));
+    if (r.cropScore) signs.push('Crops poor');
+    return (r.level.name.toUpperCase() + ' food alert, ' + region + ', ' + label(r) + '. ' + signs.join('. ') + '. ' + r.level.sms).replace(/\.\./g, '.');
+  }
+  function localText(r) {
+    const t = (state.settings.local || '').trim();
+    if (!t) return '';
+    return t.replace(/\{level\}/g, r.level.name).replace(/\{region\}/g, state.settings.region.replace(/\s*\(sample\)\s*/i, '')).replace(/\{month\}/g, label(r));
+  }
+  function showAlert(r, entry) {
+    const top = $('alertTop');
+    top.style.setProperty('--lvl', 'var(--' + r.level.cls + ')');
+    $('alertTitle').textContent = r.level.sym + ' ' + r.level.name + ' alert';
+    $('alertSub').textContent = state.settings.region + ' · ' + label(r) + ' · level rose from ' + entry.from;
+    $('alertList').innerHTML =
+      '<li>Rainfall ' + fmt(r.rain) + ' mm, ' + Math.round(r.rain / r.normal * 100) + '% of normal' + (r.rainScore ? ' (warning sign)' : '') + '</li>' +
+      '<li>Maize ' + fmt(r.price) + ' UGX/kg, ' + refText(r) + (r.priceScore ? ' (warning sign)' : '') + '</li>' +
+      '<li>Crop condition: ' + r.crop + (r.cropScore ? ' (warning sign)' : '') + '</li>';
+    $('alertAction').textContent = r.level.action;
+    const sms = smsText(r), loc = localText(r);
+    $('smsText').textContent = sms;
+    $('smsCount').textContent = sms.length + ' of 160 characters' + (sms.length > 160 ? ': too long, shorten the region name' : '');
+    $('smsLocalBox').hidden = !loc;
+    $('smsLocal').textContent = loc; $('smsLocalCount').textContent = loc.length + ' of 160 characters';
+    $('alertText').value = sms + (loc ? '\n\n' + loc : '');
+    $('alertText').hidden = true;
+    $('copyBtn').textContent = 'Copy SMS';
+    $('overlay').hidden = false;
+    top.classList.remove('pulse'); void top.offsetWidth; top.classList.add('pulse');
+    beep(r.score);
+    $('closeAlert').focus();
+    if (demo && demo.timer) stopAuto();
+  }
+  function closeAlert() { $('overlay').hidden = true; }
+
+  function beep(score) {
+    if (!soundOn || !audio) return;
+    try {
+      const t0 = audio.currentTime, n = score >= 3 ? 3 : 2;
+      for (let k = 0; k < n; k++) {
+        const o = audio.createOscillator(), g = audio.createGain();
+        o.type = 'sine'; o.frequency.value = score >= 3 ? 880 : 660;
+        g.gain.setValueAtTime(0.0001, t0 + k * 0.32);
+        g.gain.exponentialRampToValueAtTime(0.25, t0 + k * 0.32 + 0.02);
+        g.gain.exponentialRampToValueAtTime(0.0001, t0 + k * 0.32 + 0.25);
+        o.connect(g).connect(audio.destination); o.start(t0 + k * 0.32); o.stop(t0 + k * 0.32 + 0.27);
+      }
+    } catch (e) {}
+  }
+  let toastTimer = null;
+  function toast(msg) {
+    const t = $('toast'); t.textContent = msg; t.hidden = false;
+    clearTimeout(toastTimer); toastTimer = setTimeout(() => { t.hidden = true; }, 3200);
+  }
+
+  // ================= DEMO MODE (with captions for presenting) =================
+  function caption(r) {
+    const parts = [];
+    parts.push(r.rainScore ? 'Rain is only ' + Math.round(r.rain / r.normal * 100) + '% of normal: 1 point.' : 'Rain is fine (' + Math.round(r.rain / r.normal * 100) + '% of normal): 0 points.');
+    parts.push(r.priceScore ? 'Maize is ' + pct(r.price / r.ref - 1) + ' above ' + (r.refType === 'year' ? 'last year' : 'the 3-month average') + ': 1 point.' : 'Maize price is not a warning sign: 0 points.');
+    parts.push(r.cropScore ? 'Crops are Poor: 1 point.' : 'Crops are ' + r.crop + ': 0 points.');
+    return label(r) + '. ' + parts.join(' ') + ' Total ' + r.score + ' = ' + r.level.name + '.';
+  }
+  function startDemo() {
+    const start = 14;
+    demo = { backup: clone(state.months), queue: clone(SAMPLE.slice(start)), total: SAMPLE.length - start, timer: null, settings: clone(state.settings) };
+    state.months = clone(SAMPLE.slice(0, start));
+    state.settings.normals = clone(DEFAULTS.normals); state.settings.rainT = DEFAULTS.rainT; state.settings.priceT = DEFAULTS.priceT; state.settings.source = SAMPLE_SOURCE;
+    selected = null;
+    location.hash = '#dashboard';
+    $('demoBar').hidden = false; $('demoBtn').hidden = true;
+    render(); updateDemoText();
+    $('demoCaption').textContent = 'The data stops at February 2025. Everything is Normal. Press Next month to see what happens as the drought builds.';
+  }
+  function updateDemoText() {
+    if (!demo) return;
+    const done = demo.total - demo.queue.length, n = demo.queue[0];
+    $('demoText').innerHTML = 'Demo: replaying the 2025 drought <span>· ' + (n ? 'next is ' + MONTHS[n.m] + ' ' + n.y + ' (' + (done + 1) + ' of ' + demo.total + ')' : 'all months replayed') + '</span>';
+    $('demoNext').disabled = !n; $('demoAuto').disabled = !n;
+  }
+  function demoNext() {
+    if (!demo || !demo.queue.length) return;
+    closeAlert();
+    const r = addMonth(demo.queue.shift());
+    $('demoCaption').textContent = caption(r);
+    updateDemoText();
+    if (!demo.queue.length) stopAuto();
+  }
+  function stopAuto() { if (demo && demo.timer) { clearInterval(demo.timer); demo.timer = null; } $('demoAuto').textContent = 'Auto-play'; }
+  function toggleAuto() {
+    if (!demo) return;
+    if (demo.timer) { stopAuto(); return; }
+    $('demoAuto').textContent = 'Pause';
+    demoNext();
+    demo.timer = setInterval(() => { if ($('overlay').hidden) demoNext(); }, 2600);
+  }
+  function endDemo() {
+    if (!demo) return;
+    stopAuto(); state.months = demo.backup; state.settings = demo.settings; demo = null; selected = null;
+    $('demoBar').hidden = true; $('demoBtn').hidden = false;
+    closeAlert(); initSettings(); render(); toast('Demo ended. Your data is back.');
+  }
+
+  // ================= EXPLAINER TABS (follow the assessment form) =================
+  function renderExplainers(rows, log) {
+    const lt = leadTime(rows);
+    if (lt && lt.first) {
+      $('leadStat').textContent = lt.months + (lt.months === 1 ? ' month' : ' months');
+      $('leadText').textContent = 'In the data loaded now, the first Warning came in ' + label(lt.first) + ', ' + lt.months + ' months before maize prices peaked in ' + label(lt.peak) + '.';
+      $('problemLead').textContent = 'In the data loaded now, Yusuf\'s Warning raised a Warning in ' + label(lt.first) + ', ' + lt.months + ' months before maize prices peaked at ' + fmt(lt.peak.price) + ' UGX/kg in ' + label(lt.peak) + '. That is time for a Zakat committee to collect food and for families to save grain.';
+      $('replayResult').textContent = 'Yes. The first Warning came in ' + label(lt.first) + ', ' + lt.months + ' months before the highest maize price (' + fmt(lt.peak.price) + ' UGX/kg in ' + label(lt.peak) + '). ' + log.filter(l => l.alerted).length + ' alerts were issued in total.';
+    } else {
+      $('leadStat').textContent = '–';
+      $('leadText').textContent = 'Load data with a price rise to see how early the app warns.';
+      $('problemLead').textContent = 'An early warning gives families time to save grain and gives the Zakat committee time to collect food before prices peak.';
+      $('replayResult').textContent = rows.length ? 'No Warning came before the highest price in the data loaded now. Try the sample drought or real data from a bad year.' : 'No data loaded yet.';
+    }
+    renderWorking(rows);
+    renderRuleTable();
+    renderSensitivity();
+    renderCalc(log);
+  }
+
+  function renderWorking(rows) {
+    const sel = $('workMonth');
+    const prev = sel.value;
+    sel.innerHTML = rows.map((r, i) => '<option value="' + i + '">' + label(r) + ' (' + r.level.name + ')</option>').slice().reverse().join('');
+    if (!rows.length) { $('working').innerHTML = '<p class="muted">No data yet.</p>'; return; }
+    const defaultIdx = (() => { const i = rows.findIndex(r => r.score >= 2); return i >= 0 ? i : rows.length - 1; })();
+    sel.value = prev !== '' && rows[+prev] ? prev : String(defaultIdx);
+    const r = rows[+sel.value], s = state.settings;
+    const rp = Math.round(s.rainT * 100), pp = Math.round(s.priceT * 100);
+    let priceStep;
+    if (r.refType === null) priceStep = '<strong>Maize price:</strong> ' + fmt(r.price) + ' UGX/kg. There are no earlier prices to compare with, so <strong>0 points</strong>.';
+    else {
+      const what = r.refType === 'year' ? 'Same month last year' : 'Average of the previous 3 months (no price for last year)';
+      priceStep = '<strong>Maize price:</strong> ' + fmt(r.price) + ' UGX/kg. ' + what + ': ' + fmt(r.ref) + ' UGX/kg.<br>' +
+        '<span class="calc">' + (100 + pp) + '% × ' + fmt(r.ref) + ' = ' + fmt(r.priceLimit) + '. Is ' + fmt(r.price) + ' > ' + fmt(r.priceLimit) + '? ' + (r.priceScore ? 'Yes → 1 point' : 'No → 0 points') + '</span><br>' +
+        '<span class="calc">Change = (' + fmt(r.price) + ' − ' + fmt(r.ref) + ') ÷ ' + fmt(r.ref) + ' × 100 = ' + ((r.price - r.ref) / r.ref * 100).toFixed(1) + '%</span>';
+    }
+    $('working').innerHTML =
+      '<div><p><strong>Rainfall:</strong> ' + fmt(r.rain) + ' mm. Normal for ' + MONTH_NAMES[r.m] + ': ' + fmt(r.normal) + ' mm.<br><span class="calc">' + rp + '% × ' + fmt(r.normal) + ' = ' + (r.rainLimit % 1 ? r.rainLimit.toFixed(1) : r.rainLimit) + '. Is ' + fmt(r.rain) + ' < ' + (r.rainLimit % 1 ? r.rainLimit.toFixed(1) : r.rainLimit) + '? ' + (r.rainScore ? 'Yes → 1 point' : 'No → 0 points') + '</span></p></div>' +
+      '<div><p>' + priceStep + '</p></div>' +
+      '<div><p><strong>Crop condition:</strong> ' + r.crop + '. <span class="calc">Poor? ' + (r.cropScore ? 'Yes → 1 point' : 'No → 0 points') + '</span></p></div>' +
+      '<div><p><strong>Total:</strong> <span class="calc">' + r.rainScore + ' + ' + r.priceScore + ' + ' + r.cropScore + ' = ' + r.score + '</span> → <span class="pill lv-' + r.level.cls + '">' + r.level.sym + ' ' + r.level.name + '</span><br>' + r.level.action + '</p></div>';
+  }
+
+  function renderRuleTable() {
+    const oldRows = analyseWith(state.months, state.settings, 'avg3');
+    const newRows = analyse(state.months);
+    const diff = newRows.map((r, i) => ({ r, o: oldRows[i] })).filter(d => d.r.score !== d.o.score);
+    if (!diff.length) { $('ruleTable').innerHTML = '<tbody><tr><td class="muted">With the data loaded now, both rules give the same levels.</td></tr></tbody>'; return; }
+    $('ruleTable').innerHTML = '<thead><tr><th>Month</th><th class="r">Maize</th><th>Old rule (3-month)</th><th>New rule (last year)</th></tr></thead><tbody>' +
+      diff.map(d => '<tr><td>' + label(d.r) + '</td><td class="r num">' + fmt(d.r.price) + '</td><td><span class="pill lv-' + d.o.level.cls + '">' + d.o.level.name + '</span></td><td><span class="pill lv-' + d.r.level.cls + '">' + d.r.level.name + '</span></td></tr>').join('') + '</tbody>';
+  }
+
+  function renderSensitivity() {
+    const rains = [0.7, 0.8, 0.9], prices = [0.1, 0.2, 0.3];
+    let h = '<thead><tr><th>Rain limit ↓ / Price limit →</th>' + prices.map(p => '<th>' + Math.round(p * 100) + '% above</th>').join('') + '</tr></thead><tbody>';
+    rains.forEach(rt => {
+      h += '<tr><th>Below ' + Math.round(rt * 100) + '% of normal</th>';
+      prices.forEach(pt => {
+        const s = Object.assign({}, state.settings, { rainT: rt, priceT: pt });
+        const rows = analyseWith(state.months, s);
+        const alerts = rows.filter(r => r.score >= 2);
+        const chosen = Math.abs(rt - state.settings.rainT) < 1e-9 && Math.abs(pt - state.settings.priceT) < 1e-9;
+        h += '<td' + (chosen ? ' style="background:var(--accent-t);font-weight:700"' : '') + '><span class="num">' + alerts.length + ' months</span>' + (alerts.length ? ' <span class="muted">(' + short(alerts[0]) + ')</span>' : '') + '</td>';
+      });
+      h += '</tr>';
+    });
+    $('sensTable').innerHTML = h + '</tbody>';
+  }
+
+  function renderCalc(log) {
+    const h = +$('cHouse').value || 0, l = +$('cLang').value || 1, a = +$('cAlerts').value || 0, p = +$('cPrice').value || 0;
+    const perAlert = h * l * p, perYear = perAlert * a;
+    const latest = state.months[state.months.length - 1];
+    const kg = latest && latest.price ? perYear / latest.price : null;
+    $('calcResult').innerHTML = '<p class="stat num">UGX ' + fmt(perYear) + ' a year</p><p>UGX ' + fmt(perAlert) + ' for each alert to ' + fmt(h) + ' households.' + (kg ? ' That is the price of about ' + fmt(kg) + ' kg of maize.' : '') + '</p>';
+    $('costCell').textContent = fmt(perYear);
+    void log;
+  }
+  ['cHouse', 'cLang', 'cAlerts', 'cPrice'].forEach(id => $(id).addEventListener('input', () => renderCalc()));
+
+  function renderPlanner() {
+    const people = +$('pPeople').value || 0, kg = +$('pKg').value || 0, hard = +$('pHard').value || 0, good = +$('pGood').value || 1;
+    const total = people * kg * hard, perMonth = total / good;
+    $('planResult').innerHTML = '<p class="stat num">' + fmt(total) + ' kg to store</p><p>Set aside about <strong class="num">' + fmt(perMonth) + ' kg</strong> each good month for ' + good + ' months. That is about ' + (total / 100).toFixed(1) + ' bags of 100 kg.</p>';
+  }
+  ['pPeople', 'pKg', 'pHard', 'pGood'].forEach(id => $(id).addEventListener('input', renderPlanner));
+  $('workMonth').addEventListener('change', () => renderWorking(analyse(state.months)));
+
+  // ================= AUTOMATIC TESTS =================
+  function runTests() {
+    const S = { rainT: 0.8, priceT: 0.2, normals: Array(12).fill(100) };
+    const mk = (y, m, rain, price, crop) => ({ y, m, rain, price, crop: crop || 'Good' });
+    const base = [mk(2024,0,100,1000), mk(2024,1,100,1000), mk(2024,2,100,1000), mk(2024,3,100,1000), mk(2024,4,100,1000), mk(2024,5,100,1000),
+                  mk(2024,6,100,1000), mk(2024,7,100,1000), mk(2024,8,100,1000), mk(2024,9,100,1000), mk(2024,10,100,1000), mk(2024,11,100,1000)];
+    const last = (extra) => analyseWith(base.concat(extra), S).pop();
+    const tests = [
+      { name: 'Everything normal', input: 'Rain 100% of normal, price same as last year, Good', expect: 'Normal', got: () => last([mk(2025,0,100,1000)]).level.name },
+      { name: 'Rain exactly at the limit', input: 'Rain 80 mm, limit 80 mm', expect: 'Normal', got: () => last([mk(2025,0,80,1000)]).level.name },
+      { name: 'Rain just below the limit', input: 'Rain 79 mm, limit 80 mm', expect: 'Watch', got: () => last([mk(2025,0,79,1000)]).level.name },
+      { name: 'Price exactly at the limit', input: 'Price 1,200, last year 1,000', expect: 'Normal', got: () => last([mk(2025,0,100,1200)]).level.name },
+      { name: 'Price above the limit', input: 'Price 1,250, last year 1,000', expect: 'Watch', got: () => last([mk(2025,0,100,1250)]).level.name },
+      { name: 'Poor crops only', input: 'Rain and price normal, Poor', expect: 'Watch', got: () => last([mk(2025,0,100,1000,'Poor')]).level.name },
+      { name: 'Two signs', input: 'Rain 50 mm, price 1,300', expect: 'Warning', got: () => last([mk(2025,0,50,1300)]).level.name },
+      { name: 'All three signs', input: 'Rain 50 mm, price 1,300, Poor', expect: 'Crisis', got: () => last([mk(2025,0,50,1300,'Poor')]).level.name },
+      { name: 'No last-year price uses 3-month average', input: 'Months 1–3 at 1,000, month 4 at 1,300', expect: 'Watch', got: () => analyseWith(base.slice(0, 3).concat([mk(2024,3,100,1300)]), S).pop().level.name },
+      { name: 'Too little history: no price point', input: 'Only 2 earlier months', expect: 'Normal', got: () => analyseWith(base.slice(0, 2).concat([mk(2024,2,100,5000)]), S).pop().level.name },
+      { name: 'Alerts only when rising to Warning or Crisis', input: 'Normal → Watch → Warning → Crisis → Warning', expect: '2 alerts', got: () => {
+          const seq = base.concat([mk(2025,0,50,1000), mk(2025,1,50,1300), mk(2025,2,50,1300,'Poor'), mk(2025,3,50,1300)]);
+          return buildLog(analyseWith(seq, S)).filter(l => l.alerted).length + ' alerts';
+        } },
+      { name: 'SMS fits in one message', input: 'Crisis alert for the region name', expect: '≤ 160', got: () => smsText(last([mk(2025,0,50,1300,'Poor')])).length <= 160 ? '≤ 160' : '> 160' }
+    ];
+    let passed = 0;
+    const rowsHtml = tests.map(t => {
+      let g; try { g = t.got(); } catch (e) { g = 'Error'; }
+      const ok = g === t.expect; if (ok) passed++;
+      return '<tr><td>' + t.name + '</td><td>' + t.input + '</td><td>' + t.expect + '</td><td>' + esc(g) + '</td><td class="' + (ok ? 'pass' : 'fail') + '">' + (ok ? '✓ Pass' : '✕ Fail') + '</td></tr>';
+    }).join('');
+    $('testTable').innerHTML = '<thead><tr><th>Test</th><th>Input</th><th>Expected</th><th>Got</th><th>Result</th></tr></thead><tbody>' + rowsHtml + '</tbody>';
+    const sum = $('testSummary');
+    sum.textContent = passed + ' of ' + tests.length + ' tests passed';
+    sum.className = 'pill ' + (passed === tests.length ? 'lv-normal' : 'lv-crisis');
+    return { passed, total: tests.length };
+  }
+
+  // ================= VISITOR CHALLENGE =================
+  const CH = [
+    { m: 'March', rain: 65, normal: 130, change: 3, crop: 'Good' },
+    { m: 'June', rain: 70, normal: 70, change: 8, crop: 'Poor' },
+    { m: 'April', rain: 100, normal: 175, change: 26, crop: 'Fair' },
+    { m: 'October', rain: 150, normal: 140, change: 5, crop: 'Good' },
+    { m: 'July', rain: 40, normal: 60, change: 45, crop: 'Poor' }
+  ];
+  let ch = { i: 0, score: 0, picked: false };
+  function chAnswer(q) { return (q.rain < 0.8 * q.normal ? 1 : 0) + (q.change > 20 ? 1 : 0) + (q.crop === 'Poor' ? 1 : 0); }
+  function renderChallenge() {
+    if (ch.i >= CH.length) {
+      $('chProgress').textContent = 'Finished';
+      $('chScenario').innerHTML = '<p class="stat">' + ch.score + ' of ' + CH.length + ' correct</p><p>' + (ch.score === CH.length ? 'Excellent. You think like an early warning analyst.' : ch.score >= 3 ? 'Well done. You spotted most of the warning signs.' : 'Good try. Hunger signs are easy to miss, which is why a system helps.') + '</p>';
+      $('chChoices').innerHTML = ''; $('chFeedback').hidden = true; $('chNext').hidden = true;
+      return;
+    }
+    const q = CH[ch.i];
+    $('chProgress').textContent = 'Question ' + (ch.i + 1) + ' of ' + CH.length + ' · score ' + ch.score;
+    $('chScenario').innerHTML = '<p><strong>' + q.m + '</strong></p><ul><li>Rain: ' + q.rain + ' mm (normal ' + q.normal + ' mm)</li><li>Maize: ' + (q.change >= 0 ? '+' : '') + q.change + '% compared with last year</li><li>Crops: ' + q.crop + '</li></ul>';
+    $('chChoices').innerHTML = LEVELS.map((L, k) => '<button type="button" class="lv-' + L.cls + '" data-k="' + k + '"' + (ch.picked ? ' disabled' : '') + '>' + L.sym + ' ' + L.name + '</button>').join('');
+    $('chChoices').querySelectorAll('button').forEach(b => b.onclick = () => {
+      if (ch.picked) return;
+      ch.picked = true;
+      const k = +b.dataset.k, ans = chAnswer(q), ok = k === ans;
+      if (ok) ch.score++;
+      b.classList.add('picked');
+      const why = [];
+      why.push(q.rain < 0.8 * q.normal ? 'rain is below 80% of normal (1)' : 'rain is fine (0)');
+      why.push(q.change > 20 ? 'maize is more than 20% up (1)' : 'maize is not more than 20% up (0)');
+      why.push(q.crop === 'Poor' ? 'crops are Poor (1)' : 'crops are not Poor (0)');
+      const fb = $('chFeedback'); fb.hidden = false;
+      fb.innerHTML = '<p><strong>' + (ok ? 'Correct!' : 'Not quite.') + '</strong> The answer is ' + LEVELS[ans].name + ': ' + why.join(', ') + '.</p>';
+      $('chProgress').textContent = 'Question ' + (ch.i + 1) + ' of ' + CH.length + ' · score ' + ch.score;
+      $('chChoices').querySelectorAll('button').forEach(x => x.disabled = true);
+      $('chNext').hidden = false;
+      $('chNext').textContent = ch.i === CH.length - 1 ? 'See my score' : 'Next question';
+      if (ch.i === CH.length - 1) { state.visitors++; save(); renderVisitors(); }
+    });
+    $('chFeedback').hidden = true; $('chNext').hidden = true;
+  }
+  function renderVisitors() { $('chVisitors').textContent = state.visitors + (state.visitors === 1 ? ' visitor has' : ' visitors have') + ' completed the challenge on this device.'; }
+  $('chNext').onclick = () => { ch.i++; ch.picked = false; renderChallenge(); };
+  $('chRestart').onclick = () => { ch = { i: 0, score: 0, picked: false }; renderChallenge(); };
+
+  // ================= TEAM =================
+  const CHECKS = ['Poster has the title, SDG 2 logo and Surah Yusuf 12:47', 'Flowchart and a worked example printed large', 'Testing results and limitations on the board', 'App open on the laptop, demo reset', 'Offline copy on a second device and a USB stick', 'Printed screenshots in case the power fails', 'Laptop charged, charger and extension cable', 'Both of us can explain every part', 'Practised the judges\' questions at least 5 times'];
+  const QA = [
+    ['Is the data real?', 'The drought replay uses made-up data to show how the alerts work, and it is labelled. The app can load real data from WFP and CHIRPS, and we explain where it comes from.'],
+    ['Why 80% and 20%?', 'They are starting values we chose and can change with the sliders. Our Testing tab shows that stricter limits give fewer alarms but can miss a crisis. It is a trade-off.'],
+    ['How would a farmer get the alert?', 'Most Ugandans use basic phones, so the coordinator copies the short SMS and shares it by SMS, radio or announcement at the mosque.'],
+    ['How do you know it works?', 'Our automatic tests check every rule, and in the drought replay it warned four months before prices peaked. We also found and fixed a weakness in the price rule.'],
+    ['What would you improve?', 'Add satellite vegetation and livestock data, more markets and districts, and send SMS automatically through a provider.'],
+    ['How much does it cost?', 'Nothing to build or run. SMS alerts for 200 households cost about UGX 36,000 a year, which a mosque Sadaqah fund or a partner could pay.'],
+    ['What is Islamic about it?', 'Yusuf (AS) planned ahead from a warning. Each alert level has an Islamic action: avoid Israf when times are good, Zakat when a Warning comes, Sadaqah and feeding others in a Crisis.']
+  ];
+  function initTeam() {
+    const t = state.team;
+    [['tA', 'a'], ['tARole', 'aRole'], ['tB', 'b'], ['tBRole', 'bRole'], ['tT', 'teacher']].forEach(([id, k]) => {
+      const el = $(id);
+      if (t[k] !== undefined) el.value = t[k];
+      el.addEventListener('input', () => { state.team[k] = el.value; save(); });
+    });
+    $('checklist').innerHTML = CHECKS.map((c, i) => '<li><label for="ck' + i + '"><input type="checkbox" id="ck' + i + '"' + (state.checks[i] ? ' checked' : '') + '><span>' + c + '</span></label></li>').join('');
+    CHECKS.forEach((c, i) => $('ck' + i).addEventListener('change', e => { state.checks[i] = e.target.checked; save(); }));
+    $('qa').innerHTML = QA.map(q => '<details class="qa"><summary>' + q[0] + '</summary><p>' + q[1] + '</p></details>').join('');
+  }
+
+  // ================= SETTINGS AND DATA IMPORT =================
+  function initSettings() {
+    const s = state.settings;
+    $('sRegion').value = s.region;
+    $('sSource').value = s.source;
+    $('sLocal').value = s.local || '';
+    $('sRain').value = Math.round(s.rainT * 100); $('sRainOut').textContent = $('sRain').value + '%';
+    $('sPrice').value = Math.round(s.priceT * 100); $('sPriceOut').textContent = $('sPrice').value + '%';
+    $('normals').innerHTML = MONTHS.map((m, i) => '<label for="n' + i + '">' + m + '<input id="n' + i + '" type="number" min="1" max="1000" value="' + s.normals[i] + '" data-i="' + i + '"></label>').join('');
+    $('normals').querySelectorAll('input').forEach(inp => inp.oninput = () => { const v = parseFloat(inp.value); if (!isNaN(v) && v > 0) { state.settings.normals[+inp.dataset.i] = v; render(); save(); } });
+  }
+  $('sRegion').oninput = e => { state.settings.region = e.target.value.trim() || 'Your region'; render(); save(); };
+  $('sSource').oninput = e => { state.settings.source = e.target.value.trim() || 'Source not stated'; render(); save(); };
+  $('sLocal').oninput = e => { state.settings.local = e.target.value; save(); };
+  $('sRain').oninput = e => { state.settings.rainT = +e.target.value / 100; $('sRainOut').textContent = e.target.value + '%'; render(); save(); };
+  $('sPrice').oninput = e => { state.settings.priceT = +e.target.value / 100; $('sPriceOut').textContent = e.target.value + '%'; render(); save(); };
+
+  function parseMonth(t) {
+    t = t.trim();
+    let m = t.match(/^(\d{4})-(\d{1,2})/);
+    if (m) { const mo = +m[2] - 1; if (mo >= 0 && mo < 12) return { y: +m[1], m: mo }; }
+    m = t.match(/^([A-Za-z]{3})[A-Za-z]*\s+(\d{4})$/);
+    if (m) { const k = MONTHS.findIndex(x => x.toLowerCase() === m[1].toLowerCase()); if (k >= 0) return { y: +m[2], m: k }; }
+    return null;
+  }
+  function parseCsv(text) {
+    const out = [], errors = [];
+    text.split(/\r?\n/).forEach((line, n) => {
+      if (!line.trim()) return;
+      const p = line.split(/[,;\t]/).map(x => x.trim().replace(/^"|"$/g, ''));
+      if (n === 0 && /month/i.test(p[0])) return;
+      const when = parseMonth(p[0] || ''), rain = parseFloat(p[1]), price = parseFloat((p[2] || '').replace(/\s/g, ''));
+      const crop = (p[3] || '').charAt(0).toUpperCase() + (p[3] || '').slice(1).toLowerCase();
+      if (!when) errors.push('Line ' + (n + 1) + ': month "' + p[0] + '" should look like Jan 2024 or 2024-01');
+      else if (isNaN(rain) || rain < 0) errors.push('Line ' + (n + 1) + ': rainfall should be a number of mm');
+      else if (isNaN(price) || price <= 0) errors.push('Line ' + (n + 1) + ': maize price should be a number of UGX');
+      else if (['Good', 'Fair', 'Poor'].indexOf(crop) < 0) errors.push('Line ' + (n + 1) + ': crop should be Good, Fair or Poor');
+      else out.push({ y: when.y, m: when.m, rain, price, crop });
+    });
+    out.sort((a, b) => (a.y * 12 + a.m) - (b.y * 12 + b.m));
+    for (let i = 1; i < out.length; i++) {
+      const gap = (out[i].y * 12 + out[i].m) - (out[i-1].y * 12 + out[i-1].m);
+      if (gap === 0) errors.push('Two rows for ' + label(out[i]) + '. Keep one.');
+      else if (gap > 1) errors.push('Missing month(s) before ' + label(out[i]) + '. Fill the gap or leave a note on your poster.');
+    }
+    return { out, errors };
+  }
+  $('csvFile').addEventListener('change', e => {
+    const f = e.target.files && e.target.files[0]; if (!f) return;
+    const rd = new FileReader();
+    rd.onload = () => { $('csvText').value = String(rd.result); toast('File loaded. Check the rows, then press Replace data.'); };
+    rd.readAsText(f);
+  });
+  $('csvLoad').onclick = () => {
+    const { out, errors } = parseCsv($('csvText').value), err = $('csvError');
+    const blocking = errors.filter(x => !/^Missing month/.test(x));
+    if (!out.length || blocking.length) { err.textContent = blocking.length ? blocking.slice(0, 4).join(' · ') : 'No rows found. Paste rows like: Jan 2024,62,1050,Good'; err.hidden = false; return; }
+    if (demo) endDemo();
+    state.months = out; selected = null;
+    if (state.settings.source === SAMPLE_SOURCE) { state.settings.source = 'Real data loaded by the team. Type the source here, e.g. WFP prices (HDX), CHIRPS rainfall.'; $('sSource').value = state.settings.source; }
+    err.hidden = errors.length === 0; err.textContent = errors.join(' · ');
+    render(); save(); toast('Loaded ' + out.length + ' months. Update the data source and region in Settings.');
+  };
+  $('csvCopy').onclick = () => {
+    const text = 'month,rain_mm,maize_ugx_per_kg,crop\n' + state.months.map(r => label(r) + ',' + r.rain + ',' + r.price + ',' + r.crop).join('\n');
+    try { navigator.clipboard.writeText(text).then(() => toast('Copied ' + state.months.length + ' months as CSV.'), () => { $('csvText').value = text; toast('Copy blocked. The CSV is in the box: select it and copy.'); }); }
+    catch (e) { $('csvText').value = text; toast('The CSV is in the box: select it and copy.'); }
+  };
+  let resetArmed = false;
+  $('resetBtn').onclick = () => {
+    if (!resetArmed) { resetArmed = true; $('resetBtn').textContent = 'Click again to replace all data with the sample'; setTimeout(() => { resetArmed = false; $('resetBtn').textContent = 'Reset to sample data'; }, 4000); return; }
+    resetArmed = false; $('resetBtn').textContent = 'Reset to sample data';
+    if (demo) endDemo();
+    state.months = clone(SAMPLE); state.settings = clone(DEFAULTS); selected = null;
+    initSettings(); render(); save(); toast('Sample data restored.');
+  };
+
+  // ================= EVENTS =================
+  ['fRain', 'fPrice', 'fCrop'].forEach(id => $(id).addEventListener('input', updatePreview));
+  $('entry').addEventListener('submit', e => {
+    e.preventDefault();
+    const c = candidate(), err = $('formError');
+    let msg = '';
+    if (isNaN(c.rain) || c.rain < 0 || c.rain > 1000) msg = 'Type the rainfall in mm, between 0 and 1000.';
+    else if (isNaN(c.price) || c.price < 50 || c.price > 20000) msg = 'Type the maize price in UGX per kg, between 50 and 20,000.';
+    if (msg) { err.textContent = msg; err.hidden = false; return; }
+    err.hidden = true;
+    if (demo) { stopAuto(); demo.queue = demo.queue.filter(q => !(q.y === c.y && q.m === c.m)); }
+    addMonth(c);
+    if (demo) updateDemoText();
+    $('fRain').value = ''; $('fPrice').value = ''; $('fCrop').value = 'Good'; updatePreview();
+  });
+  $('undoBtn').onclick = () => {
+    if (!state.months.length) return;
+    const gone = state.months.pop(); selected = null;
+    if (demo) { demo.queue.unshift(gone); updateDemoText(); }
+    render(); save(); toast('Removed ' + MONTHS[gone.m] + ' ' + gone.y + '.');
+  };
+  $('demoBtn').onclick = startDemo;
+  $('demoNext').onclick = demoNext;
+  $('demoAuto').onclick = toggleAuto;
+  $('demoExit').onclick = endDemo;
+  $('closeAlert').onclick = closeAlert;
+  $('overlay').addEventListener('click', e => { if (e.target === $('overlay')) closeAlert(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && !$('overlay').hidden) closeAlert(); });
+  $('copyBtn').onclick = () => {
+    const text = $('alertText').value;
+    const fallback = () => { const ta = $('alertText'); ta.hidden = false; ta.focus(); ta.select(); $('copyBtn').textContent = 'Select the text and copy it'; };
+    try { navigator.clipboard.writeText(text).then(() => { $('copyBtn').textContent = 'Copied'; }, fallback); } catch (e) { fallback(); }
+  };
+  $('soundBtn').onclick = () => {
+    soundOn = !soundOn;
+    if (soundOn && !audio) { try { audio = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) { audio = null; } }
+    if (audio && audio.state === 'suspended') audio.resume();
+    $('soundBtn').textContent = 'Alert sound: ' + (soundOn ? 'on' : 'off');
+    $('soundBtn').setAttribute('aria-pressed', String(soundOn));
+    if (soundOn) beep(2);
+  };
+  $('bigBtn').onclick = () => {
+    const on = document.documentElement.classList.toggle('big');
+    $('bigBtn').setAttribute('aria-pressed', String(on));
+    try { localStorage.setItem('yw-big', on ? '1' : '0'); } catch (e) {}
+  };
+  try { if (localStorage.getItem('yw-big') === '1') { document.documentElement.classList.add('big'); $('bigBtn').setAttribute('aria-pressed', 'true'); } } catch (e) {}
+
+  // ================= ROUTING (one tab per assessment criterion) =================
+  const VIEWS = ['dashboard', 'problem', 'how-it-works', 'testing', 'running-costs', 'faith', 'challenge', 'team'];
+  function route() {
+    const h = (location.hash || '').slice(1);
+    const v = VIEWS.indexOf(h) >= 0 ? h : 'dashboard';
+    VIEWS.forEach(n => { $('view-' + n).hidden = n !== v; });
+    document.querySelectorAll('.tabs a').forEach(a => {
+      if (a.getAttribute('href') === '#' + v) { a.setAttribute('aria-current', 'page'); a.scrollIntoView({ block: 'nearest', inline: 'nearest' }); }
+      else a.removeAttribute('aria-current');
+    });
+  }
+  window.addEventListener('hashchange', () => { route(); window.scrollTo({ top: 0 }); });
+
+  initSettings();
+  initTeam();
+  render();
+  renderPlanner();
+  renderChallenge();
+  renderVisitors();
+  window.__tests = runTests();
+  route();
+})();
+</script>
