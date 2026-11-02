@@ -1962,6 +1962,15 @@ table.mini th, table.mini td { padding: 4px 8px; }
     const base = [mk(2024,0,100,1000), mk(2024,1,100,1000), mk(2024,2,100,1000), mk(2024,3,100,1000), mk(2024,4,100,1000), mk(2024,5,100,1000),
                   mk(2024,6,100,1000), mk(2024,7,100,1000), mk(2024,8,100,1000), mk(2024,9,100,1000), mk(2024,10,100,1000), mk(2024,11,100,1000)];
     const last = (extra) => analyseWith(base.concat(extra), S).pop();
+    // Helpers for the food basket tests: mkB(year, month, { food: [price, crop, unit] })
+    const mkB = (y, m, foods) => { const f = {}; Object.keys(foods).forEach(id => { const a = foods[id]; f[id] = { price: a[0], crop: a[1] || 'Good', unit: a[2] || 'kg' }; }); return { y, m, rain: 100, foods: f }; };
+    // Maize, beans and cassava all cost 1,000 last year; prices = this year's three prices.
+    const basketTest = (prices, set, raw) => {
+      const r = analyseWith([mkB(2024, 0, { maize: [1000], beans: [1000], cassava: [1000] }), mkB(2025, 0, { maize: [prices[0]], beans: [prices[1]], cassava: [prices[2]] })], set || S).pop();
+      return raw ? r.basket : pct1(r.basket) + ' · ' + r.priceScore + (r.priceScore === 1 ? ' point' : ' points');
+    };
+    const H = 'month,rain_mm,maize_ugx_per_kg,maize_crop';
+    const csvMsg = text => { const r = parseCsv(text); return r.errors.length ? 'Stopped: ' + r.errors[0] : 'Not stopped'; };
     const tests = [
       { name: 'Everything normal', input: 'Rain 100% of normal, price same as last year, Good', expect: 'Normal', got: () => last([mk(2025,0,100,1000)]).level.name },
       { name: 'Rain exactly at the limit', input: 'Rain 80 mm, limit 80 mm', expect: 'Normal', got: () => last([mk(2025,0,80,1000)]).level.name },
@@ -1977,20 +1986,96 @@ table.mini th, table.mini td { padding: 4px 8px; }
           const seq = base.concat([mk(2025,0,50,1000), mk(2025,1,50,1300), mk(2025,2,50,1300,'Poor'), mk(2025,3,50,1300)]);
           return buildLog(analyseWith(seq, S)).filter(l => l.alerted).length + ' alerts';
         } },
-      { name: 'SMS fits in one message', input: 'Crisis alert for the region name', expect: '≤ 160', got: () => smsText(last([mk(2025,0,50,1300,'Poor')])).length <= 160 ? '≤ 160' : '> 160' }
+      { name: 'SMS fits in one message', input: 'Crisis alert for the region name', expect: '≤ 160', got: () => smsText(last([mk(2025,0,50,1300,'Poor')])).length <= 160 ? '≤ 160' : '> 160' },
+
+      { group: 'Food basket' },
+      { name: 'Basket average of three foods', input: 'Maize +30%, beans +10%, cassava +5%', expect: '+15.0% · 0 points', got: () => basketTest([1300, 1100, 1050]) },
+      { name: 'Basket average above the limit', input: 'Maize +30%, beans +25%, cassava +20%', expect: '+25.0% · 1 point', got: () => basketTest([1300, 1250, 1200]) },
+      { name: 'Weights', input: 'Maize +40% (weight 3), beans 0%, cassava +5% (weight 1 each)', expect: 'weighted +25.0%, equal +15.0%', got: () => {
+          const w = clone(S); w.foods.maize.weight = 3;
+          return 'weighted ' + pct1(basketTest([1400, 1000, 1050], w, true)) + ', equal ' + pct1(basketTest([1400, 1000, 1050], S, true));
+        } },
+      { name: 'Food with no price last year', input: 'Maize +30%; beans has no earlier price at all', expect: '+30.0% from 1 food, beans left out', got: () => {
+          const r = analyseWith([mkB(2024, 0, { maize: [1000] }), mkB(2025, 0, { maize: [1300], beans: [3600] })], S).pop();
+          const beans = r.items.find(it => it.id === 'beans');
+          return pct1(r.basket) + ' from ' + r.counted + (r.counted === 1 ? ' food' : ' foods') + (beans.change === null ? ', beans left out' : ', beans counted');
+        } },
+      { name: 'No last-year price: 3-month average for that food', input: 'Beans 3,000 in Oct–Dec 2024, 3,900 in Jan 2025, none in Jan 2024', expect: '3-month average, +30.0%', got: () => {
+          const r = analyseWith([mkB(2024, 0, { maize: [1000] }), mkB(2024, 9, { beans: [3000] }), mkB(2024, 10, { beans: [3000] }), mkB(2024, 11, { beans: [3000] }), mkB(2025, 0, { maize: [1000], beans: [3900] })], S).pop();
+          const it = r.items.find(x => x.id === 'beans');
+          return (it.refType === 'avg' ? '3-month average' : String(it.refType)) + ', ' + pct1(it.change);
+        } },
+      { name: 'Mixed units are never compared', input: 'Matooke 20,000 per bunch last year, 1,000 per kg now; maize +10%', expect: 'matooke left out (other unit), basket +10.0%', got: () => {
+          const r = analyseWith([mkB(2024, 0, { maize: [1000], matooke: [20000, 'Good', 'bunch'] }), mkB(2025, 0, { maize: [1100], matooke: [1000, 'Good', 'kg'] })], S).pop();
+          const it = r.items.find(x => x.id === 'matooke');
+          return 'matooke ' + (it.change === null && it.unitClash ? 'left out (other unit)' : 'compared ' + pct1(it.change)) + ', basket ' + pct1(r.basket);
+        } },
+      { name: 'Crop majority rule', input: '4 crops, main staple Good: 2 Poor, then 1 Poor', expect: '2 of 4 → 1 point, 1 of 4 → 0 points', got: () => {
+          const c = poor => cropSign(['maize', 'beans', 'cassava', 'sorghum'].map((id, i) => ({ id, crop: i > 0 && i <= poor ? 'Poor' : 'Good' })), 'maize').point;
+          return '2 of 4 → ' + c(2) + (c(2) === 1 ? ' point' : ' points') + ', 1 of 4 → ' + c(1) + (c(1) === 1 ? ' point' : ' points');
+        } },
+      { name: 'Main staple rule', input: '1 of 4 Poor: first it is the staple, then it is not', expect: 'staple Poor → 1, other food Poor → 0', got: () => {
+          const crops = [{ id: 'sorghum', crop: 'Poor' }, { id: 'maize', crop: 'Good' }, { id: 'beans', crop: 'Good' }, { id: 'millet', crop: 'Good' }];
+          return 'staple Poor → ' + cropSign(crops, 'sorghum').point + ', other food Poor → ' + cropSign(crops, 'maize').point;
+        } },
+      { name: 'Worked example in "About the code"', input: 'Apr 2025, maize, beans and cassava', expect: '+22.8% · score 2 Warning · Beans fastest · alert sent', got: () => {
+          const w = clone(DEFAULTS); FOODS.forEach(f => { w.foods[f.id].on = ['maize', 'beans', 'cassava'].indexOf(f.id) >= 0; });
+          const rows = analyseWith(SAMPLE, w), r = rows[15], entry = buildLog(rows).find(l => l.row === r);
+          return pct1(r.basket) + ' · score ' + r.score + ' ' + r.level.name + ' · ' + r.fastest.name + ' fastest · ' + (entry && entry.alerted ? 'alert sent' : 'no alert');
+        } },
+      { name: 'Maize only gives the same levels as version 4', input: 'Illustrative sample, 24 months', expect: '24 of 24 months match', got: () => {
+          const v4 = [0,1,0,0,0,0,0,0,0,0,0,0, 0,0,1,2,3,3,3,2,1,1,1,1];
+          return analyseWith(SAMPLE, maizeOnly(clone(DEFAULTS))).filter((r, i) => r.score === v4[i]).length + ' of 24 months match';
+        } },
+      { name: 'Drought replay: first alert', input: 'Illustrative sample, default basket', expect: 'Warning in Apr 2025', got: () => { const l = buildLog(analyseWith(SAMPLE, clone(DEFAULTS))).find(x => x.alerted); return l ? l.to + ' in ' + label(l.row) : 'no alert'; } },
+      { name: 'Drought replay works for every region preset', input: 'All seven foods, Central, Karamoja, Northern, Eastern', expect: '5 of 5 presets warn in Apr 2025', got: () => {
+          const ok = Object.keys(PRESETS).filter(k => {
+            const w = clone(DEFAULTS); FOODS.forEach(f => { w.foods[f.id].on = PRESETS[k].foods.indexOf(f.id) >= 0; }); w.staple = PRESETS[k].staple;
+            const l = buildLog(analyseWith(SAMPLE, w)).find(x => x.alerted);
+            return l && l.to === 'Warning' && label(l.row) === 'Apr 2025';
+          }).length;
+          return ok + ' of ' + Object.keys(PRESETS).length + ' presets warn in Apr 2025';
+        } },
+      { name: 'SMS names the food rising fastest', input: 'Sample May 2025 (Crisis), all seven foods', expect: '≤ 160 and names sorghum', got: () => { const t = smsText(analyseWith(SAMPLE, clone(DEFAULTS))[16]); return (t.length <= 160 ? '≤ 160' : '> 160') + (/sorghum/.test(t) ? ' and names sorghum' : ' and does not name sorghum'); } },
+      { name: 'Old maize-only saves are upgraded', input: 'Version 4 month: price 1,000, crop Poor', expect: 'maize only: 1,000 per kg, Poor', got: () => {
+          const mo = migrateMonth({ y: 2024, m: 0, rain: 60, price: 1000, crop: 'Poor' }), k = Object.keys(mo.foods);
+          return (k.length === 1 && k[0] === 'maize' ? 'maize only: ' : k.join('+') + ': ') + fmt(mo.foods.maize.price) + ' per ' + mo.foods.maize.unit + ', ' + mo.foods.maize.crop;
+        } },
+
+      { group: 'CSV import checks' },
+      { name: 'Bad month', input: 'Januray 24', expect: 'Stopped, month explained', got: () => csvMsg(H + '\nJanuray 24,60,1000,Good'), pass: g => /should look like Jan 2024/.test(g) },
+      { name: 'Missing value: rainfall empty', input: 'Jan 2024,,1000,Good', expect: 'Stopped, says rainfall is missing', got: () => csvMsg(H + '\nJan 2024,,1000,Good'), pass: g => /rainfall is missing/.test(g) },
+      { name: 'Missing value: short row', input: 'Jan 2024,60,1000 (no crop)', expect: 'Stopped, says a value is missing', got: () => csvMsg(H + '\nJan 2024,60,1000'), pass: g => /value or a comma is missing/.test(g) },
+      { name: 'Unknown food', input: 'Column rice_ugx_per_kg', expect: 'Stopped, names the food', got: () => csvMsg('month,rain_mm,rice_ugx_per_kg,rice_crop\nJan 2024,60,1000,Good'), pass: g => /"rice" is not one of our foods/.test(g) },
+      { name: 'Two units for one food', input: 'Matooke per bunch and per kg in one row', expect: 'Stopped, keep one price', got: () => csvMsg('month,rain_mm,matooke_ugx_per_bunch,matooke_ugx_per_kg,matooke_crop\nJan 2024,60,20000,1000,Good'), pass: g => /two prices in different units/.test(g) },
+      { name: 'Gap in the months', input: 'Jan 2024 and Mar 2024 only', expect: 'Loads, notes the gap', got: () => { const r = parseCsv(H + '\nJan 2024,60,1000,Good\nMar 2024,60,1000,Good'); return r.errors.length ? 'Stopped: ' + r.errors[0] : 'Loads. ' + r.notes.join(' '); }, pass: g => /^Loads\..*no row for Feb 2024/.test(g) },
+      { name: 'Duplicate month', input: 'Jan 2024 twice', expect: 'Stopped, names both lines', got: () => csvMsg(H + '\nJan 2024,60,1000,Good\nJan 2024,61,1000,Good'), pass: g => /Two rows for Jan 2024 \(lines 2 and 3\)/.test(g) },
+      { name: 'Export then import gives the same data', input: 'Illustrative sample, 7 foods, 24 months', expect: '24 months, 0 problems, identical', got: () => {
+          const r = parseCsv(toCsv(SAMPLE));
+          return r.months.length + ' months, ' + r.errors.length + ' problems, ' + (JSON.stringify(r.months) === JSON.stringify(SAMPLE) ? 'identical' : 'different');
+        } },
+
+      { group: 'Backtest' },
+      { name: 'Hits, misses and false alarms', input: 'Scores 0,2,2,0,0,2; phases 1,1,3,3,1,1', expect: '2 hits, 2 misses, 1 false alarm, 1 correct normal', got: () => {
+          const rows = [0, 2, 2, 0, 0, 2].map((score, m) => ({ y: 2024, m, score }));
+          const c = backtest(rows, [{ from: 2024 * 12, to: 2024 * 12 + 1, phase: 1 }, { from: 2024 * 12 + 2, to: 2024 * 12 + 3, phase: 3 }, { from: 2024 * 12 + 4, to: 2024 * 12 + 5, phase: 1 }]);
+          return plural(c.hit, 'hit', 'hits') + ', ' + plural(c.miss, 'miss', 'misses') + ', ' + plural(c.falseAlarm, 'false alarm', 'false alarms') + ', ' + c.normal + ' correct normal';
+        } }
     ];
-    let passed = 0;
-    const rowsHtml = tests.map(t => {
-      let g; try { g = t.got(); } catch (e) { g = 'Error'; }
-      const ok = g === t.expect; if (ok) passed++;
-      return '<tr><td>' + t.name + '</td><td>' + t.input + '</td><td>' + t.expect + '</td><td>' + esc(g) + '</td><td class="' + (ok ? 'pass' : 'fail') + '">' + (ok ? '✓ Pass' : '✕ Fail') + '</td></tr>';
+    let passed = 0, count = 0;
+    const rowsHtml = '<tr><th colspan="5">The original rules (version 4)</th></tr>' + tests.map(t => {
+      if (t.group) return '<tr><th colspan="5">' + t.group + '</th></tr>';
+      count++;
+      let g; try { g = t.got(); } catch (e) { g = 'Error: ' + e.message; }
+      const ok = t.pass ? t.pass(g) : g === t.expect; if (ok) passed++;
+      return '<tr><td>' + count + '. ' + t.name + '</td><td>' + esc(t.input) + '</td><td>' + esc(t.expect) + '</td><td>' + esc(g) + '</td><td class="' + (ok ? 'pass' : 'fail') + '">' + (ok ? '✓ Pass' : '✕ Fail') + '</td></tr>';
     }).join('');
     $('testTable').innerHTML = '<thead><tr><th>Test</th><th>Input</th><th>Expected</th><th>Got</th><th>Result</th></tr></thead><tbody>' + rowsHtml + '</tbody>';
     const sum = $('testSummary');
-    sum.textContent = passed + ' of ' + tests.length + ' tests passed';
-    sum.className = 'pill ' + (passed === tests.length ? 'lv-normal' : 'lv-crisis');
-    $('testCount').textContent = tests.length;
-    return { passed, total: tests.length };
+    sum.textContent = passed + ' of ' + count + ' tests passed';
+    sum.className = 'pill ' + (passed === count ? 'lv-normal' : 'lv-crisis');
+    $('testCount').textContent = count;
+    return { passed, total: count };
   }
 
   // ================= VISITOR CHALLENGE =================
