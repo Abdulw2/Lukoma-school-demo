@@ -284,6 +284,14 @@ fieldset.foods .hint { font-size: .8rem; color: var(--muted); }
 .bar-fill { position: absolute; top: 2px; bottom: 2px; background: var(--gold); border-radius: 4px; min-width: 2px; }
 .bar-val { text-align: right; }
 .bars + .note { margin-top: 10px; }
+/* CSV check report */
+.csv-report { border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; display: grid; gap: 8px; font-size: .9rem; }
+.csv-report.ok { border-color: var(--normal); background: var(--normal-t); }
+.csv-report.bad { border-color: var(--crisis); background: var(--crisis-t); }
+.csv-report h3 { font-size: 1rem; }
+.csv-report ul { gap: 4px; }
+.csv-report .lbl { font-weight: 700; }
+code { font-family: var(--f-data); font-size: .85em; background: var(--bg); padding: 1px 5px; border-radius: 4px; overflow-wrap: anywhere; }
 .bars-lines { position: absolute; top: -4px; bottom: -4px; left: calc(7.5rem + 8px); right: calc(3.75rem + 8px); pointer-events: none; }
 .bars-lines i { position: absolute; top: 0; bottom: 0; width: 0; }
 .bars-lines .lim { border-left: 2px dashed var(--muted); }
@@ -512,21 +520,43 @@ table.mini th, table.mini td { padding: 4px 8px; }
           <textarea id="sLocal" maxlength="300" placeholder="Luganda version, e.g. using {level}, {region} and {month}, which the app fills in"></textarea>
           <span class="hint">Use {level}, {region} and {month} where the app should fill in the details. It appears under the English SMS in each alert.</span>
         </div>
-        <div style="margin-top:20px;display:grid;gap:10px">
+        <div style="margin-top:20px;display:grid;gap:12px" id="importBox">
           <p style="font-weight:700">Load real data</p>
-          <p class="note">Paste rows in this format, one month per line. Download real figures from WFP (food prices) and CHIRPS (rainfall) on the Humanitarian Data Exchange, then type or paste them here.</p>
-          <pre class="csv" id="csvTemplate"></pre>
+          <p class="note">Download real monthly figures, for example food prices from WFP and rainfall from CHIRPS on the Humanitarian Data Exchange. Put them in a spreadsheet with one row per month, save it as CSV, then choose the file or paste the rows here. Never type in made-up numbers as if they were real.</p>
+          <div style="display:grid;gap:6px">
+            <p style="font-weight:700;font-size:.9rem">Template for the foods you track</p>
+            <pre class="csv" id="csvTemplate"></pre>
+            <p class="note">The first line is the header. The two rows under it are only an example, copied from the made-up sample data.</p>
+            <div class="row-btns"><button class="btn" type="button" id="csvTemplateCopy">Copy the template</button></div>
+          </div>
+          <details class="qa">
+            <summary>What goes in each column</summary>
+            <ul style="margin-top:8px">
+              <li><code>month</code>: the month, written like <code>Jan 2024</code> or <code>2024-01</code>. One row per month, no month twice.</li>
+              <li><code>rain_mm</code>: total rainfall that month in mm. It must not be empty.</li>
+              <li><code>maize_ugx_per_kg</code>: the price in UGX for one kg. For matooke you can use <code>matooke_ugx_per_bunch</code>. Only kg and bunch are allowed.</li>
+              <li><code>maize_crop</code>: Good, Fair or Poor.</li>
+              <li>For each food, fill both the price and the crop, or leave both empty if you have no figure that month.</li>
+              <li>Food names allowed: <span id="csvFoodNames"></span>.</li>
+            </ul>
+          </details>
           <div class="field">
             <label for="csvText">Your data</label>
-            <textarea id="csvText" style="font-family:var(--f-data);min-height:120px"></textarea>
+            <textarea id="csvText" style="font-family:var(--f-data);min-height:140px" spellcheck="false"></textarea>
+          </div>
+          <div class="field">
+            <label for="csvSource">Data source (required for real data)</label>
+            <input id="csvSource" type="text" maxlength="160" placeholder="e.g. WFP food prices, Lira market (HDX), downloaded 3 Nov 2026; CHIRPS rainfall">
+            <span class="hint">Say where the figures came from, which market or district, and when you downloaded them. It is shown under the charts.</span>
           </div>
           <div class="row-btns">
-            <label class="btn" for="csvFile" style="cursor:pointer">Choose a CSV file</label>
-            <input id="csvFile" type="file" accept=".csv,text/csv,text/plain" hidden>
+            <button class="btn" type="button" id="csvChoose">Choose a CSV file</button>
+            <input id="csvFile" type="file" accept=".csv,text/csv,text/plain" hidden tabindex="-1">
+            <button class="btn" type="button" id="csvCheck">Check the rows</button>
             <button class="btn primary" type="button" id="csvLoad">Replace data with these rows</button>
             <button class="btn" type="button" id="csvCopy">Copy current data as CSV</button>
           </div>
-          <p class="form-error" id="csvError" hidden></p>
+          <div class="csv-report" id="csvReport" role="status" aria-live="polite" hidden></div>
         </div>
         <div class="row-btns" style="margin-top:20px">
           <button class="btn" type="button" id="resetBtn">Reset to sample data</button>
@@ -1199,7 +1229,7 @@ table.mini th, table.mini td { padding: 4px 8px; }
     $('chartPrice').innerHTML = pctChart(rows.slice(-24));
     $('limitLegend').textContent = '+' + Math.round(state.settings.priceT * 100) + '%';
     renderBars(rows);
-    const src = 'Data: ' + state.settings.source;
+    const src = state.settings.source === SAMPLE_SOURCE ? 'Data: ' + SAMPLE_SOURCE + ' These are not real prices.' : 'Data source: ' + state.settings.source;
     $('sourceLine1').textContent = src; $('sourceLine2').textContent = src;
     renderExplainers(rows, log);
     return { rows, log };
@@ -1808,6 +1838,8 @@ table.mini th, table.mini td { padding: 4px 8px; }
     }).join('');
     $('csvTemplate').textContent = csvTemplate();
     $('csvText').placeholder = csvHeader(trackedFoods().map(f => ({ id: f.id, units: [s.foods[f.id].unit] })));
+    $('csvFoodNames').innerHTML = FOODS.map(f => '<code>' + f.id + '</code>').join(', ');
+    if (s.source !== SAMPLE_SOURCE && !$('csvSource').value) $('csvSource').value = s.source;
   }
   function basketChanged(msg) { renderBasketSettings(); render(); save(); if (msg) toast(msg); }
   $('sPreset').addEventListener('change', e => {
@@ -1930,16 +1962,17 @@ table.mini th, table.mini td { padding: 4px 8px; }
     if (!/month/i.test(first)) return { months: [], foods: [], errors: ['Line ' + lines[0].n + ': the first line must be the header row, starting with "month". Copy it from the template.'], notes };
     const head = readHeader(splitLine(first, sep));
     if (head.errors.length) return { months: [], foods: [], errors: head.errors, notes };
-    const width = head.cols.length;
+    const width = head.cols.length, whens = [];
     lines.slice(1).forEach(({ t, n }) => {
       const cells = splitLine(t, sep);
       while (cells.length > width && cells[cells.length - 1] === '') cells.pop();
-      if (cells.length < width) { errors.push('Line ' + n + ': has ' + cells.length + ' values but the header has ' + width + '. A value or a comma is missing.'); return; }
-      if (cells.length > width) { errors.push('Line ' + n + ': has ' + cells.length + ' values but the header has ' + width + '. There is an extra value or comma.'); return; }
-      const get = type => cells[head.cols.findIndex(c => c.type === type)];
+      const get = type => cells[head.cols.findIndex(c => c.type === type)] || '';
       const when = parseMonth(get('month'));
       if (!when) { errors.push('Line ' + n + ': month "' + get('month') + '" should look like Jan 2024 or 2024-01.'); return; }
+      whens.push({ no: monthNo(when), line: n });
       const where = 'Line ' + n + ' (' + label(when) + '): ';
+      if (cells.length < width) { errors.push(where + 'has ' + cells.length + ' values but the header has ' + width + '. A value or a comma is missing.'); return; }
+      if (cells.length > width) { errors.push(where + 'has ' + cells.length + ' values but the header has ' + width + '. There is an extra value or comma.'); return; }
       const rainTxt = get('rain'), rain = toNumber(rainTxt);
       if (rainTxt === '') { errors.push(where + 'rainfall is missing.'); return; }
       if (isNaN(rain) || rain < 0 || rain > 2000) { errors.push(where + 'rainfall "' + rainTxt + '" should be a number of mm from 0 to 2000.'); return; }
@@ -1962,12 +1995,15 @@ table.mini th, table.mini td { padding: 4px 8px; }
       if (!Object.keys(foods).length) { errors.push(where + 'no food prices. Each month needs at least one food.'); return; }
       out.push({ y: when.y, m: when.m, rain, foods, line: n });
     });
+    // Duplicates and gaps are checked on every row that has a month we can read.
     out.sort((a, b) => monthNo(a) - monthNo(b));
-    for (let i = 1; i < out.length; i++) {
-      const gap = monthNo(out[i]) - monthNo(out[i - 1]);
-      if (gap === 0) errors.push('Two rows for ' + label(out[i]) + ' (lines ' + out[i - 1].line + ' and ' + out[i].line + '). Keep one.');
+    whens.sort((a, b) => a.no - b.no);
+    const lab = k => MONTHS[k % 12] + ' ' + Math.floor(k / 12);
+    for (let i = 1; i < whens.length; i++) {
+      const gap = whens[i].no - whens[i - 1].no;
+      if (gap === 0) errors.push('Two rows for ' + lab(whens[i].no) + ' (lines ' + whens[i - 1].line + ' and ' + whens[i].line + '). Keep one.');
       else if (gap > 1) {
-        const a = monthNo(out[i - 1]) + 1, b = monthNo(out[i]) - 1, lab = k => MONTHS[k % 12] + ' ' + Math.floor(k / 12);
+        const a = whens[i - 1].no + 1, b = whens[i].no - 1;
         notes.push('Gap: no row for ' + (a === b ? lab(a) : lab(a) + ' to ' + lab(b)) + '. Fill it, or say so on your poster.');
       }
     }
@@ -1978,15 +2014,39 @@ table.mini th, table.mini td { padding: 4px 8px; }
     out.forEach(mo => { delete mo.line; });
     return { months: out, foods: head.foods, errors, notes };
   }
+  // Show the result of checking the rows: problems (stop the import) and gaps (just notes).
+  function showCsvReport(res, blocked, done) {
+    const box = $('csvReport'), ok = res.months.length > 0 && !res.errors.length && !blocked;
+    const list = arr => '<ul>' + arr.slice(0, 12).map(e => '<li>' + esc(e) + '</li>').join('') + (arr.length > 12 ? '<li>…and ' + (arr.length - 12) + ' more</li>' : '') + '</ul>';
+    let h;
+    if (res.errors.length) h = '<h3>✕ ' + res.errors.length + (res.errors.length === 1 ? ' problem' : ' problems') + ' to fix before loading</h3>' + list(res.errors);
+    else if (!res.months.length) h = '<h3>✕ No months found</h3><p>Paste the header row and one row per month.</p>';
+    else h = '<h3>' + (blocked ? '✕ ' : '✓ ') + res.months.length + ' months ' + (done ? 'loaded' : 'look fine') + ': ' + label(res.months[0]) + ' to ' + label(res.months[res.months.length - 1]) + '</h3>' +
+      '<p>Foods: ' + res.foods.map(foodName).join(', ') + '.</p>' + (blocked ? '<p><strong>' + esc(blocked) + '</strong></p>' : '');
+    if (res.notes.length) h += '<p class="lbl">Gaps to know about (these do not stop the import)</p>' + list(res.notes);
+    if (done) h += '<p>' + esc(done) + '</p>';
+    box.className = 'csv-report ' + (ok ? 'ok' : 'bad');
+    box.innerHTML = h; box.hidden = false;
+    return ok;
+  }
+  $('csvChoose').onclick = () => $('csvFile').click();
   $('csvFile').addEventListener('change', e => {
     const f = e.target.files && e.target.files[0]; if (!f) return;
     const rd = new FileReader();
-    rd.onload = () => { $('csvText').value = String(rd.result); toast('File loaded. Check the rows, then press Replace data.'); };
+    rd.onload = () => { $('csvText').value = String(rd.result); showCsvReport(parseCsv($('csvText').value)); toast('File opened. Read the check below.'); };
     rd.readAsText(f);
+    e.target.value = '';
   });
+  $('csvTemplateCopy').onclick = () => {
+    const text = csvTemplate().split('\n')[0];
+    try { navigator.clipboard.writeText(text).then(() => toast('Header row copied. Paste it into the first row of your spreadsheet.'), () => { $('csvText').value = csvTemplate(); toast('Copy blocked. The template is in the box.'); }); }
+    catch (e) { $('csvText').value = csvTemplate(); toast('The template is in the box.'); }
+  };
+  $('csvCheck').onclick = () => showCsvReport(parseCsv($('csvText').value));
   $('csvLoad').onclick = () => {
-    const res = parseCsv($('csvText').value), err = $('csvError');
-    if (!res.months.length || res.errors.length) { err.innerHTML = (res.errors.length ? res.errors : ['No rows found.']).slice(0, 6).map(esc).join('<br>'); err.hidden = false; return; }
+    const res = parseCsv($('csvText').value), src = $('csvSource').value.trim();
+    if (!res.months.length || res.errors.length) { showCsvReport(res); return; }
+    if (src.length < 5 || src === SAMPLE_SOURCE || /illustrative|made up/i.test(src)) { showCsvReport(res, 'Write the data source first: where the figures came from, which market or district, and when.'); $('csvSource').focus(); return; }
     if (demo) endDemo();
     state.months = res.months; selected = null;
     const s = state.settings;
@@ -1995,9 +2055,10 @@ table.mini th, table.mini td { padding: 4px 8px; }
     res.foods.forEach(f => { const lastE = res.months.slice().reverse().find(mo => mo.foods[f]); if (lastE) s.foods[f].unit = lastE.foods[f].unit; });
     if (!s.foods[s.staple].on) s.staple = res.foods[0];
     s.preset = Object.keys(PRESETS).find(k => PRESETS[k].foods.length === res.foods.length && PRESETS[k].foods.every(f => res.foods.indexOf(f) >= 0)) || 'custom';
-    if (s.source === SAMPLE_SOURCE) { s.source = 'Real data loaded by the team. Type the source here, e.g. WFP prices (HDX), CHIRPS rainfall.'; $('sSource').value = s.source; }
-    err.hidden = !res.notes.length; err.innerHTML = res.notes.map(esc).join('<br>');
-    renderBasketSettings(); render(); save(); toast('Loaded ' + res.months.length + ' months. Now tracking ' + res.foods.map(foodName).join(', ') + '.');
+    s.source = src; $('sSource').value = src;
+    renderBasketSettings(); render(); save();
+    showCsvReport(res, '', 'Check the region name and the normal rainfall above, and the main staple food. The source now shows under the charts.');
+    toast('Loaded ' + res.months.length + ' months. Now tracking ' + res.foods.map(foodName).join(', ') + '.');
   };
   $('csvCopy').onclick = () => {
     const text = toCsv(state.months);
